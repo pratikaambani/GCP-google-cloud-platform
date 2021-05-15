@@ -1,0 +1,1763 @@
+X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X-X
+X--	Google Cloud Platform Fundamentals: Core Infrastructure --X
+X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X-X
+
+--------------------------------------
+| Week 1 Welcome to GCP Fundamentals |
+--------------------------------------
+
+* Objectives:
+Advantages of GCP
+Compare IAAS and PAAS
+Define the components of Google's network infrastructure, including: Points of presence, data centers, regions, and zones
+
+------------------------------------
+1. Introducing Google Cloud Platform
+------------------------------------
+
+Don't shoot deadlines
+Join the discussion
+Take notes
+Learn with Peers
+Coursera App
+Certificate #LinkedIn
+Learner Help Center
+
+
+1.01 Welcome to GCP Fundamentals
+----
+Offers 4 main services:
+Compute
+Storage 
+Big Data - Not covered in this course
+Machine Learning - Not covered in this course
+
+1.02 What is cloud computing?
+----
+Should cover below 5 points -
+	On-demand Service: No human intervention
+	Broad Network Access: Access from anywhere
+	Resource Pooling: Provider shares resources to customers
+	Rapid Elasticity: Get more resources quickly as possible
+	Measured Service: Pay only for what you consume
+
+1.03 Video: How did we get here?
+----
+Initially Apps were hosted on local infra
+Gradually we move, Physical --> Virtualizatopn --> Serverless
+
+Physical: User Configured, managed, maintained
+Virtualized: User Configured, Provider managed, maintained
+Serverless: Fully Automated
+
+1.04 Video: Every company is a data company
+----
+Data is future
+
+1.05 Practice Quiz: Cloud Computing Services
+----
+GRADE - 100%
+
+1.06 Video: GCP computing architectures
+----
+Virtual Data Centers provides us IAAS and PAAS services
+
+IAAS: Pay for what you Allocate - Compute Engine
+PAAS: Pay for what you Use		- App Engine
+Kubernetes: Hybrid
+Cloud Functions: Serverless
+
+SAAS: Already there, Gmail, Search, Drive, Drive
+
+1.07 Video: The Google network
+----
+Carries ~40% of Internet traffic daily
+
+1.08 Video: GCP regions and zones
+----
+Zones: 
+	Deployment area for GCP resources
+	Not always a GCP Data Center
+	Grouped in Regions
+	faster connectivity among zones of same region
+	<5ms
+
+Region:
+	Natural Disaster issue
+	~15 regions
+	We can run resources in different regions #multiRegion
+
+1.09 Video: Environmental responsibility
+----
+Blah...Blah...Blah...
+
+1.10 Video: Pricing innovations
+----
+per second billing
+Automatic discount on sustained use
+Pay only for the resources needed in application
+
+1.11 Video: Open APIs
+----
+APIs to migrate to other cloud vendors in future
+
+1.12 Practice Quiz: GCP Regions and Zones
+----
+Done
+
+1.13 Video: Why choose Google Cloud Platform
+----
+Provides: Computing, Storage, Big Data, ML, App services 
+For: Web, Mobile, Analytics, and Backend solutions
+To: Build, Test, Deploy em
+
+Services Covered in this course:
+
+Compute: Compute Engine, Kubernetes Engine, App Engine, Cloud Functions
+
+1.14 Video: Multi-layered security approach
+----
+Security is designed into Google's technical infrastructure
+
+Layer						Security Measures
+-----						-----------------	
+Operational Security		Intrusion Detection system
+							Techniques to reduce insider risk
+							Employee U2F use
+							Software Development Practices
+
+Internal Communication		Google Front End
+							DDOS Protection
+
+Storage Services			Encryption at REST
+
+User Identity				Central identity service with U2F
+
+Service deployment			Encryption at inter-service communication
+
+Hardware Infrastructure		HW Design and provenance
+							Secure boot stack
+							Premises security
+
+1.15 Quiz: Introducing Google Cloud Platform
+--------------------------------------------
+Done
+
+
+---------------------------------------------
+2. Getting Started with Google Cloud Platform
+---------------------------------------------
+
+2.1 Video: Module introduction
+------------------------------
+Principle of least privileges
+
+4 Ways to interact with GCP Console:
+Web Console, SDK, CMD, APIs, Mobile App
+
+Check image: GCP-Training-2.1.jpg
+
+2.2 The Google Cloud Platform resource hierarchy
+-------------------------------------------------
+2.2.1 Video: The Google Cloud Platform resource hierarchy
+-----
+Understand from bottom up
+Policies inherited downwards in hierarchy
+All resources belong to project
+
+Organizational Node --> (Nested) Folders --> Projects --> Resources
+
+Project:
+	To track resources and quota usage
+	Enable billing
+	Manage permissions and creds
+	Enables services and APIs
+	
+	Three identifying attributes:
+		Project ID		Globally Unique		We mention		Immutable
+		Project Name	Not unique			We mention		Mutable
+		Project Number	Globally Unique		Auto assigned	Immutable
+		
+Different roles provided
+	Policy Administrator role
+	Project creator role
+	
+APIs and Policies are set at project level
+
+For example:
+Check image: GCP-Training-2.2.jpg
+
+Important Rule:
+Policies implemented at a higher level in this hierarchy can't take away access that's granted at a lower level. 
+For example: suppose that a policy applied on the bookshelf project gives user Pat the right to modify a cloud storage bucket, but a policy at the organization level says that Pat can only view cloud storage buckets not change them. The more generous policy is the one that takes effect. Keep this in mind as you design your policies.
+
+2.2.2 Practice Quiz: The Google Cloud Platform resource hierarchy
+-----
+Done - 3 questions
+
+
+2.3 Identity and Access Management (IAM)
+----------------------------------------
+2.3.1 Video: Identity and Access Management (IAM)
+-----
+Who can take action on What resources?
+
+WHO can do WHAT(Activity) on WHICH resources(Compute, App etc)?
+WHO: Google Account, Group, Service Account, G-Suite, Cloud Identity domain
+WHAT: Defined by IAM role
+
+Role: Collection of permissions
+Three roles: Primitive, Predefined, Custom
+
+Check image: GCP-Training-2.3.jpg
+
+A project can have multiple owners, editors, viewers and billing admins.
+
+2.3.2 Video: IAM roles
+-----
+Compute InstanceAdmin Role lets perform:
+	Listing, Reading, Starting, Stopping	
+
+Custom Roles:
+	Some companies decide to stay with default provided roles
+	Can be applied at Project or Org levels, not at folder level
+	
+Service Accounts use cryptographic keys instead of passwords
+
+start vm in GC
+
+Cloud Shell
+
+Current Project: gcloud config get-value project
+
+
+gcloud compute instances list
+
+
+List of services
+gcloud services list
+gcloud services list --help
+gcloud services list --enabled (default)
+gcloud services list --available
+gcloud services list --available | grep compute
+gcloud services enabled serviceName 
+
+
+Console:
+Go to, Google API --> API Library
+
+IAM & Admin
+gcp.user is admin
+we can add other also
+
+Go to
+Service Accounts: nothing
+
+
+Go back to GCP --> Compute Engine. 
+we can enable from here
+
+gcloud services list
+now compute.googleapis.com is available
+but
+oslogin.googleapis.com
+and if we go to IAM section on console, multiple accounts are added
+
+
+Service Accounts
+	Represent a non-human user that needs to authenticate and be authorized to access data in Google APIs
+	Used when,
+		running VM
+		call Google APIs
+	Types - 
+		Resource: You can grant roles to other users to access or manage that service account.
+		Identity: You can grant a role to a service account, allowing it to access a resource (such as a project)
+	
+	Impersonating Service Account
+		Authentication using RSA private keys
+		Authorization using Cloud IAM policies
+		Deploying jobs on GCP services
+		
+	Managing service account keys
+		GCP-managed keys
+			They cannot be downloaded
+			Automatically rotated and used for signing for a maximum of two weeks
+		User-managed keys
+			These keys are created, downloadable, and managed by users
+			Expire 10 years from creation, and cease authenticating successfully when they are deleted from the service account
+
+Using resource hierarchy for access control
+
+2.3.3 Practice Quiz: Resources and IAM
+-----
+Done - 3 questions
+
+
+2.4 Interacting with Google Cloud Platform
+------------------------------------------
+2.4.1 Video: Interacting with Google Cloud Platform
+-----
+Ways to interact with GCP(4):
+	Web Console
+	Mobile App
+		Manage VM and DB instances
+		Manage Apps
+		Manage Billing
+		Customizable dashboard
+	GC Shell and SDK: 
+		Via Cloud Shell
+		Can be installed on local, local servers, VMs, other clouds
+		Ex gcloud, gsutil, bq
+	REST APIs
+		Enabled via GCP Console
+		API Explorer
+			Helps learn APIs interactively
+			What APIs are available in which version
+			They expect parameters
+			Documents names are built in
+
+Client Libraries: To control GCP resources from within code
+1. Cloud Client Libraries:
+	Community owned
+	handcrafted client libraries
+	Sometimes they do not support new services and features
+
+2. Google API Client Libraries:
+	Open sourced, Generated
+	Supports multiple languages
+	
+2.5 Cloud Marketplace (formerly Cloud Launcher)
+-----------------------------------------------
+2.5.1 Video: Cloud Marketplace (formerly Cloud Launcher)
+-----
+For quickly deploying functional sw packages on GCP
+Ex. To start with GCP with minimal efforts
+
+Also provided by Third parties
+Note: 
+	Their estimation does not contain network costs
+	GCP updates base images for sw packages to fix critical issues and vulnerabilities, but it doesn't sw update after it is deployed
+
+2.6 Demonstration, lab activity, and quiz
+-----------------------------------------
+2.6.1 Video: Demonstration: Getting Started with Cloud Launcher
+-----
+https://console.cloud.google.com/dm/deployments/details/lampstack-1?project=challenge-lab-gce-248419&authuser=1&folder&organizationId
+
+Console - Marketplace/Cloud Launcher - search for lamp - LAMP Certified by Bitnami - Launch - See URL - 
+
+2.6.2 Video: Getting Started with Google Cloud Platform and Qwiklabs
+-----
+How to use Qwiklabs
+
+2.6.3 Graded External Tool: Graded External ToolGetting Started with Cloud Marketplace (formerly Cloud Launcher)
+----------------------------------------------------------------------------------------------------------------
+Demo
+
+2.6.4 Quiz: Getting Started with Google Cloud Platform
+-----
+Done - 8 questions
+
+
+--------------------------------
+3. Virtual Machines in the Cloud
+--------------------------------
+
+Compute Engine lets you run virtual machines on Google’s global infrastructure. This module covers how Compute Engine works, with a focus on Google virtual networking.
+
+* Objectives:
+	Identify the purpose of and use cases for Google Compute Engine
+	Summarize the various Google Cloud Platform networking and operational tools and services
+	Build a Compute Engine virtual machine using the Google Cloud Platform (GCP) Console.
+	Build a Compute Engine virtual machine using the gcloud command-line interface.
+
+3.1 Video: Module introduction
+------------------------------
+Compute engine lets VL run in Google Infra
+How it works with focus on Google virtual networking
+
+3.2 Virtual Private Cloud (VPC) Network
+---------------------------------------
+
+3.2.1 Video: Virtual Private Cloud (VPC) Network
+-----
+Each VPC network is contained in GCP Project
+We can,
+	segment network
+	use firewall rules
+	crate static routes to forward traffic with specific destinations
+
+GC VPC networks are Global
+Subnets are regional
+
+3.2.2 Practice Quiz: Virtual Private Cloud (VPC) Network
+-----
+Done - 2 questions
+
+3.3 Compute Engine
+------------------
+
+3.3.1 Video: Compute Engine
+-----
+Lets us create and run VMs in Google Infrastructure
+
+No direct investment
+Fast and consistent performance
+
+Creating:
+	GC Console
+	gcloud via cloud shell
+	Run images of Linux or Windows Server
+
+	Memory:
+		Choose memory and CPU
+		Choose GPU of required
+
+	Storage:
+		Persistent disks: standard or SSD
+		Local SSD for scratch space
+	Image:
+		Boot image: Linux or Windows
+
+	Define startup script if required
+
+	Take disk snapshots as backup or as migration tools
+
+	Max number of virtual CPUs: 90
+	Max memory size: 624 GB
+	
+Preemptible VMs
+Same as ordinary Compute Engine VM except: They can shutdown anytime and the freed memory will be utilized elsewhere
+Preemptible VM  customers are notified by an Advanced Configuration and Power Interface (ACPI) 30 seconds before their service terminates.
+Cheaper than normal VMs
+Customers must understand, however, that Google doesn’t guarantee availability and PVMs are explicitly excluded from GC Engine service level agreements (SLAs)
+
+Usage Example:	Suppose you have a workload that no human being is sitting around waiting to finish, a batch job analyzing a large data set.
+
+3.3.2 Practice Quiz: Compute Engine
+-----
+Done - 2 questions
+
+
+3.4 Important VPC capabilities #imp
+------------------------------
+
+3.4.1 Video: Important VPC capabilities
+-----
+
+Routing Tables:
+	Much like physical networks, VPCs have routing tables. 
+	These routing tables are used to forward traffic:
+		from one instance to another instance within the same network
+		across sub-networks 
+		between GCP zones without requiring an external IP address
+	VPCs routing tables are built in, you don't have to provision or manage a router
+
+Firewall
+	Another thing you don't have to provision or manage for GCP
+	VPCs give you a global distributed firewall
+	You can control to restrict access to instances, both incoming and outgoing traffic
+	Convenient Way is to define firewall rules in metadata tags on Compute Engine instances
+		Example: you can tag all your web servers with say, "web," and write a firewall rule saying that traffic on ports 80 or 443 is allowed into all VMs with the "web" tag, no matter what their IP address happens to be
+
+VPC Peering:
+	VPCs belong to GCP projects but what if company has several GCP projects and the VPCs need to talk to each other? 
+	Establish a VPC peering between two VPCs so that they can exchange traffic
+
+	Shared VPC:
+		If you want to use the full power of IAM to control who and what in one project can interact with a VPC in another.
+	
+Anycast:
+	Collection of servers share the same IP address and send data from a source computer to the server that is topographically the closest
+	Multiple devices shares same IPv6 Address so that nearest server to the incoming request can respond to it.
+	
+Cloud Load Balancing:
+	Virtual machines can auto-scale to respond to changing load, but how do your customers get to your application when it might be provided by four VMs one moment and 40 VMs at another?
+	Cloud Load Balancing is a fully distributed, software-defined managed service for traffic
+	You don't have to worry about scaling or managing them because load balancers don't run in VMs
+	You can put Cloud Load Balancing in front of all your traffic - HTTP and HTTPS, other TCP and SSL traffic, and UDP traffic too
+	With Cloud Load Balancing, a single anycast IP front-ends all your back-end instances in regions around the world. It provides cross-region LBing, including automatic multi-region failover, which gently moves traffic in fractions if back-ends become unhealthy. 
+	Cloud Load Balancing reacts quickly to changes in users, traffic, back-end health, network conditions, and other related conditions
+
+Sudden increase in load:
+	What if you anticipate a huge spike in demand? Say, your online game is going to be a hit
+		Cross regional load balancing for a web application: use HTTPS LB
+		Check image: GCP-Training-3.4.1.jpg
+		SSL non HTTP traffic: use the global SSL proxy LB
+		TCP non SSL: use the global TCP proxy LB
+		UDP traffic: regional load balancer
+
+Internal Load Balancer:	
+	When we want to load balance traffic inside project
+	Ex: Between the presentation layer and the business logic layer of your application
+	It accepts traffic on a GCP internal IP address and load balances it across Compute Engine VMs
+	
+Google Public DNS:
+	DNS is what translates Internet host names to addresses
+	Google has a highly developed DNS infrastructure. It makes 8.8.8.8 available for free so that everybody can take advantage of it
+	
+Cloud DNS:
+	What about the Internet host names and addresses of applications you build in GCP? 
+	GCP offers Cloud DNS to help the world find them
+	It's a managed DNS service running on the same infrastructure as Google
+	Cloud DNS is also programmable. 
+	Low latency, high availability, and cost-effective way to make your applications and services available to users
+	You can publish and manage millions of DNS zones and records using the GCP console, CLI or API
+	
+	Edge Caches:
+		To accelerate content delivery in your application using Google Cloud CDN
+		Lower network latency, reduced load and save money too
+		Once you've set up HTTPS load balancing, enable Cloud CDN with a single checkbox
+
+Cloud Router:
+	Cloud Router lets your other networks and your Google VPC exchange route information over the VPN using the Border Gateway Protocol BGP
+	Many customers start with a VPN connection over the Internet using the IPSEC protocol.
+	Ex: If you add a new subnet to your Google VPC, your on-premises network will automatically get routes to it. 
+
+Direct Peering
+	Some customers don't want to use the Internet, either because of security concerns or because they need more reliable bandwidth. 
+	They can consider peering with Google using Direct Peering. 
+	Peering means putting a router in the same public data center as a Google POP and exchanging traffic
+	Google has more than 100 points of presence around the world
+	One downside of peering though is that it isn't covered by a Google SLA. Customers who want the highest uptimes for their interconnection with Google should use Dedicated Interconnect, in which customers get one or more direct private connections to Google. 
+	If these connections have topologies that meet Google's specifications, they can be covered by up to a 99.99 percent SLA. 
+	These connections can be backed up by a VPN for even greater reliability.
+
+3.5 Demonstration, lab activity, and quiz
+-----------------------------------------
+
+3.5.1 Video: Demonstration: Getting Started with Compute Engine
+-----
+
+3.5.2 Graded External Tool: Graded External ToolGetting Started with Compute Engine
+-----
+Create instances in zone1 and zone2
+Allow http traffic
+
+
+Connect between them
+ping from server1 to server2 is working
+output of the ping: complete hostname of my-vm-1 is my-vm-1.c.PROJECT_ID.internal, 
+GCP automatically supplies Domain Name Service (DNS) resolution for the internal IP addresses of VM instances.
+
+ssh my-vm-1
+sudo apt-get install nginx-light -y
+
+login to ssh via vm-2
+curl http://my-vm-1/
+
+
+
+
+
+3.5.3 Quiz: Google Compute Engine and Networking
+-----
+8 questions
+
+
+-----------------------
+4. Storage in the Cloud
+-----------------------
+
+Every application needs to store data. Different applications and workloads require different storage and database solutions. This module describes and differentiates among GCP's core storage options: Cloud Storage, Cloud SQL, Cloud Spanner, Cloud Datastore, and Google BigTable.
+
+* Objectives:
+	Purpose of and use cases for: Cloud Storage, Cloud SQL, Cloud Spanner, and Cloud BigTable
+	Choose between the various storage options on Google Cloud Platform
+	Build a BigQuery table using data from Cloud Storage
+	Use SQL queries to analyze data stored in BigQuery
+
+4.1 Module introduction
+-----------------------
+GCP offers solutions to structured, unstructured, transactional and relational data
+Core storage options: Cloud Storage, Cloud SQL, Cloud Spanner, Cloud Data Store and Google Big Table
+
+4.2 Cloud Storage
+-----------------
+
+4.2.1 Video: Cloud Storage
+-----
+Not same as file storage
+
+Object storage:
+	It's not the same as file storage, in which you manage your data as a hierarchy of folders
+	It's not the same as block storage, in which your operating system manages your data as chunks of disk
+	Instead, object storage means you save to your storage here, you keep this arbitrary bunch of bytes I give you and the storage lets you address it with a unique key
+	These unique keys are in the form of URLs which means object storage interacts nicely with Web technologies
+
+We don't need to provision capacity ahead of time
+Automatically high durability and high availability
+Similar to file system but not, each object in Cloud Storage has a URL
+
+Usage:
+	Serving website content
+	storing data for archival and disaster recovery
+	distributing large data objects to your end users via Direct Download
+
+You would not use Cloud Storage as the root file system of your Linux box. 
+Cloud Storage is comprised of buckets, not as root
+
+CS always encrypts(using HTTPS) your data on the server side before it is written to disk with no extra cost. 
+
+Once data is in Cloud Storage, we can move em to other GCP storage services
+CS files are organized into buckets(unique name) - specify a geographic location where the bucket and its contents are stored - choose a default storage class - Pick a location that minimizes latency for your users.
+
+Access:
+	IAM is sufficient for most purposes, ACL also available
+		ACLs: who has access to your buckets/objects AND what access they have
+		Container:
+			Scope: who can perform the specified actions
+				Example: a specific user or group of users 
+			Permission: what actions can be performed
+				Example; read or write
+	Roles are inherited from project to bucket to object
+
+Immutable:
+	By default, new always overrides old
+	The storage objects are immutable, we can't edit them but can create new versions
+	We can use versioning on buckets, It overrides or deletes all of the objects in the bucket. 
+	You can list the archived versions OR restore an object to an older state OR permanently delete a version as needed
+	To maintain junk - lifecycle management policies
+		Example: delete objects older than 365 days
+				 delete objects created before January 1, 2013 
+				 keep only the three most recent versions of each object in a bucket that has versioning enabled.
+
+4.2.2 Video: Cloud Storage interactions
+-----
+
+4 classes:			Multi-Regional			Regional		Nearline		Coldline
+for data access		most frequent		Frequent in region	<once/month		<once/year
+SLA					99.95%				99.90%				99.00%			99.00%
+Access APIs			-------------------------Consistent APIs------------------------
+Access Time			-----------------------Millisecond access-----------------------
+Price				---------------------Price per GB per month---------------------
+Use cases			Content Storage		In-region Analytics Longtail content Archiving		
+					Delivery			Transcoding			Backup			 DR
+
+R+M: High performance object storage, coastly
+N+C: backup and archival storage, cheaper
+
+Egress and data transfer charges apply separately
+
+N and C have additional retrieval fees
+Nearline: access fee per GB
+Coldline: higher access fee per GB
+
+Ways to bring data into Cloud Storage:
+	Online transfer:			gsutil or drag and drop
+	Storage Transfer Service:	Scheduled, Managed batch transfer, for TB/PB data
+	Transfer Appliance:		Rackable appliances to securely ship data, for TB/PB data
+
+Other multiple ways to transfer data
+	Import/Export tables on Big Query
+	from App Engine
+	Import/Export tables on Cloud SQL
+
+4.2.3 Practice Quiz: Cloud Storage
+-----
+Done - 3 questions
+
+
+4.3 Cloud BigTable
+------------------
+
+4.3.1 Video: Google Cloud BigTable
+-----
+Managed NoSQL Big data DB Service
+	NoSQL: Not same data stored
+Unlike Relational DB, which has same type of data across column
+BigTable: DBs in BigTable are sparsely(small) populated tables that can scale to billions of rows and thousands of columns allowing you to store Petabytes of data
+HBase compatibility
+
+Cloud BigTable:
+	ideal for storing large amount of data with low latency
+	Supports high throughput
+	support RW both
+
+Why Cloud BigTable:
+	Managed, scalable storage - this doesn't even require downtime
+	handles Admin tasks: upgrade,restart
+	Data Encrypted
+	Drives major applications of Google: Analytics and Gmail
+	
+BigTable Access Patterns:
+	Application API
+	Streaming
+	Batch Processing
+
+4.3.2 Practice Quiz: Cloud BigTable
+-----
+Done - 2 questions
+
+4.4 Cloud SQL and Cloud Spanner
+-------------------------------
+
+4.4.1 Video: Google Cloud SQL and Google Cloud Spanner
+-----
+Relational DB Services: They make our data consistent and correct
+DB Transaction: Either all or nothing
+Cloud SQL is managed by RDBMS
+Max Capacity: 10230 GB
+
+Advantages:
+	Cloud SQL offers MySQL and PostgreSQL DB as a service DAAS
+	Automatic Replication between zones
+	Managed backups
+	Vertical Scaling(more CPU, RAM): Read + Write
+	Horizontal Scaling(more resources): Read
+	Google Security
+	Accessible by other GCP services and other external services
+		Cloud SQL + GC App Engine
+		Cloud SQL + Compute Engines
+		Cloud SQL + External tools(Toad, workbench)
+
+but, Cloud SQL doesn’t offer horizontal scalability: use Cloud Spanner
+Solution: Cloud Spanner
+
+Cloud Spanner
+	When?
+		We have outgrown RDBMS
+		Starting new DBs with throughput high performance
+		Need transactional consistency
+		To Consolidate DB
+
+	Features
+		Horizontally scalable RDBMS
+		Transactional consistency at global scale 
+		Managed instances with high availability
+		Max Capacity: in Petabytes
+		Automated replication
+		Cloud Spanner uses ANSI SQL 2011 with extensions
+	
+Usecase: Financial Application and Inventory Applications
+
+4.4.2 Practice Quiz: Cloud SQL and Cloud Spanner
+-----
+Done - 3 questions
+
+4.5 Cloud Datastore
+-------------------
+
+4.5.1 Video: Google Cloud Datastore
+-----
+Horizontally scalable NoSQL DB
+Similar to Cloud BigTable but uUnlike Cloud BigTable, it also offers transactions that affect multiple database rows, and it lets you do SQL-like queries. 
+
+Usecase: 
+	To store structured data from App Engine apps. 
+	You can also build solutions that span App Engine and Compute Engine with Cloud Datastore as the integration point. 
+
+Sharding:
+	The word shard means a small part of a whole.
+	Type of database partitioning that separates very large databases the into smaller, faster, more easily managed parts called data shards. 
+
+Cloud Datastore: 
+	Automatically handles sharding and replication, providing you with a highly available and durable database that scales automatically to handle load. 
+	Unlike Cloud BigTable, it also offers transactions that affect multiple database rows, and it lets you do SQL-like queries. 
+	To get you started, Cloud Datastore has a free daily quota that provides storage, reads, writes, deletes and small operations at no charge.
+
+4.5.2 Practice Quiz: Cloud Datastore
+-----
+Done - 2 questions
+
+4.6 Video: Comparing Storage Options
+------------------------------------
+Check image: GCP-Training-4.5.1.jpg
+Check image: GCP-Training-4.5.2.jpg
+
+4.7 Demonstration, lab activity, and quiz
+-----------------------------------------
+
+4.7.1 Video: Demonstration: Getting Started with Cloud Storage and Cloud SQL
+-----
+Create instance(bloghost) - allow http - add startup script(to install web server) - Create
+create bucket - gsutil mb -l US gs://$DEVSHELL_PROJECT_ID
+Copy a file in this
+create SQL instance - configure it - create user account
+copy external ip of bucket and use it in SQL - Authorized network mention public ip
+
+Go to VM instance - ssh - edit php homepage - restart web server
+Check the external ip
+Now add image to the same portal, verify it via external IP
+
+4.7.2 Graded External Tool: Graded External ToolGetting Started with Cloud Storage and Cloud SQL
+-----
+Objectives
+	Create a Cloud Storage bucket and place an image into it.
+	Create a Cloud SQL instance and configure it.
+	Connect to the Cloud SQL instance from a web server.
+	Use the image in the Cloud Storage bucket on a web page.
+	
+	
+10.128.0.2
+35.192.116.84/32
+
+
+
+4.7.3 Quiz: Google Cloud Platform Storage Options
+-----
+8 questions
+
+
+--------------------------
+5. Containers in the Cloud
+--------------------------
+
+Containers are simple and interoperable, and they enable seamless, fine-grained scaling. Kubernetes is an orchestration layer for containers. Kubernetes Engine is Kubernetes as a service, a scalable managed offering that runs on Google’s infrastructure. You direct the creation of a cluster, and Kubernetes Engine schedules your containers into the cluster and manages them automatically, based on requirements you define. This module explains how Kubernetes Engine works and how it helps deploy applications in containers.
+
+* Objectives
+	Define the concept of a container and identify uses for containers
+	Identify the purpose of and use cases for Google Container Engine and Kubernetes
+	Build a Kubernetes cluster using Kubernetes Engine.
+	Deploy and manage Docker containers in Kubernetes Engine using the kubectl command.
+
+5.1 Containers, Kubernetes, and Kubernetes Engine
+-------------------------------------------------
+
+5.1.1 Video: Containers, Kubernetes, and Kubernetes Engine
+-----
+So far,
+IAAS: Servers. File Systems, Networking
+PAAS: Preset runtimes, managed services
+
+IAAS: own RAM, OS, HW, file systems, networking interfaces etc
+
+Containers: Independent scalability of workloads and abstraction layer of OS/HW
+
+Hypervisor:
+	To enable Virtualization
+	SW on top of HW
+	Creates virtualization layer
+	Acts as platform for VMs to be created on
+	Manages sharing of physical resources into virtual
+	
+Types:
+	Bare Model: Its has own OS, and can be installed on HW
+	Hosted: SW Application on top of host OS(Windows, Linux)
+	
+Uses use Docker for Kubernetes
+
+requirements.txt
+	Flask==0.12
+	uwsgi==2.0.15
+
+Example from Dockerfile:
+	FROM ubuntu:18.10											:	Ubuntu + Version
+	RUN apt-get update -y && \
+		apt-get install -y python3-pip python3-dev 				:	Installing python on Dev
+	COPY requirements.txt /app/requirements.txt					:	Requirements file from python
+	WORKDIR /app												:	
+	RUN pip2 install -r requirements.txt						:	Install dependencies
+	COPY . /app
+	ENDPOINT ["python2", "app.py"]								:	Produces an app
+
+We can build a docker container:
+	docker build -t py-server
+	docker run -d py-server
+This(deployment) is only 5% rest is: App configuration, service discovery, managing updates and monitoring
+
+Kubernetes:
+Opensource orchestrator, that abstracts container at higher level so that we can manage and scale application.
+Set of API to deploy containers on a set of nodes(cluster)
+
+Cluster == Master Node, Node, Node, Node
+
+In Google Cloud, nodes are virtual machines running in Compute Engine, how to make them communicate with one another
+
+Deploying container with a cluster:
+	Google Kubernetes Engine is hosted by Google
+	glcoud container clusters create k1: creating cluster
+	Instead of setting up kubernetes from the scratch, leverage Google Cloud Kubernetes Engine
+	
+Clusters:
+	Customizable
+	Different machine types supported
+	Numbers of nodes
+	network settings
+	
+To start cluster on GKE:
+	should have cluster:k1
+	just a command
+
+Check image: GCP-Training-5.1.1.jpg 
+
+Pod
+	Deploy containers on nodes using a wrapper around one or more containers called Pod
+	Pod is smallest unit in Kubernetes we create and deploy
+	Represents running process on a clusterL be it component of an application or an entire application
+	Mostly one container/pod, if we have multiple multiple containers with hard dependencies, we can bundle it into a single pod and share networking, storage
+	Provides unique Network IP options on how containers should run 
+	
+	To run container in Pod: kubectl --> starts deployment of container running in Pod.
+	Container: image of nginx server
+	To see running Pods: kubectl get pods
+	
+	Pods in a deployment are only accessible inside GKE Cluster
+	To make them publically available: add LB
+	kubectl expose deployments nginx --port=80 --type=LoadBalancer
+
+	Kubernetes creates services with Fixed IP of Pods, controller add public IP
+	in GKE LB works as Network Load Balancer
+	
+	To scale deployment: kubectl scale nginx --replicas=3
+	3 Pods are created
+
+	To autoscale
+	kubectl autoscale nginx --min=10 --max=15 ==cpu=80
+	Upon 80% CPU utilization
+	
+	Ideal Deployment Configuration:
+		apiVersion: v1
+		kind: Deployment
+		metadata:	
+			name: nginx												2
+			labels: 
+				app: nginx
+		spec:
+			replicas: 3												1
+			selector:												3 - how to group specific pod as replicas
+				matchLabels:
+					app: nginx
+			template:
+				metadata:
+					labels:
+						app: nginx									4 - So that they get selected
+				spec:
+					containers:
+					-	name: nginx
+						image: nginx:1.15.7
+						ports:
+							-	containerPort: 80
+	To deploy this: kubectl apply -f nginx-deployment.yml
+	
+	To get replicas to get the updated state:
+		kubectl get replicasets
+	
+	To get status: 
+		kubectl get pods
+		
+	To check everything running as usual:
+		kubectl describe deployments
+		kubectl get deployments
+	
+	To get external IP of service, hit endpoint:
+		kubectl get services
+	
+	curl externalIp
+	
+	When updating application:
+		to rollout all changes at once is risky
+		use: kubectl rollout
+			OR
+		below changes in configuration file
+		
+		rollingUpdate:
+			maxSurge: 1
+			maxUnavailable: 0
+		type:
+			RollingUpdate
+			
+	
+Containers need a lightweight container runtime, which does the plumbing jobs needed to allow that container to launch and run. The container runtime also determines the image format.
+
+5.1.2 Practice Quiz: Containers
+-----
+Done - 2 questions
+
+5.1.3 Practice Quiz: Kubernetes
+-----
+Done - 2 questions
+
+5.1.4 Practice Quiz: Kubernetes Engine
+-----
+Done - 2 questions
+
+5.2 Lab: Demonstration, activity, and quiz
+------------------------------------------
+
+5.2.1 Video: Demo and Lab Introduction
+-----
+Lab: Demonstration, activity, and quiz
+
+5.2.2 Video: Demo: Getting Started with Kubernetes Engine
+-----
+Module introduction; introduction to App Engine
+
+So far learnt:
+	how to build a run containerized applications
+	orchestrate 
+	scale them on a cluster
+	deploy using roll outs
+
+Untouched features:
+	configuring health checks
+	setting session affinity
+	managing different rollout strategies
+	deploying pods across regions for high availability. 
+
+App Engine Standard Environment
+
+Demo: 
+	Create Kubernetes Cluster
+	Deploy a LB
+	Scale server
+
+Confirm needed APIs are enabled - go to api and services - enable Kubernetes api and container api
+
+Start a cluster: Go to cloud shell -
+pratikaambani_gcp_user@cloudshell:~ (challenge-lab-gce-248419)$ export MY_ZONE=us-central1-f
+
+Launch Kubernetes cluster in that zone:  two nodes in cluster
+pratikaambani_gcp_user@cloudshell:~ (challenge-lab-gce-248419)$ gcloud container clusters create webfrontend --zone $MY_ZONE --num-nodes 2
+WARNING: In October 2019, node auto-upgrade will be enabled by default for newly created clustersand node pools. To disable it, use the `--no-enable-autoupgrade` flag.
+WARNING: Starting in 1.12, new clusters will have basic authentication disabled by default. Basicauthentication can be enabled (or disabled) manually using the `--[no-]enable-basic-auth` flag.
+WARNING: Starting in 1.12, new clusters will not have a client certificate issued. You can manually enable (or disable) the issuance of the client certificate using the `--[no-]issue-client-certificate` 
+flag.
+WARNING: Currently VPC-native is not the default mode during cluster creation. In the future, this will become the default mode and can be disabled using `--no-enable-ip-alias` flag. Use `--[no-]enable-i
+p-alias` flag to suppress this warning.
+WARNING: Starting in 1.12, default node pools in new clusters will have their legacy Compute Engine instance metadata endpoints disabled by default. To create a cluster with legacy instance metadata endp
+oints disabled in the default node pool, run `clusters create` with the flag `--metadata disable-legacy-endpoints=true`.
+WARNING: Your Pod address range (`--cluster-ipv4-cidr`) can accommodate at most 1008 node(s).
+This will enable the autorepair feature for nodes. Please see https://cloud.google.com/kubernetes-engine/docs/node-auto-repair for more information on node autorepairs.
+Creating cluster webfrontend in us-central1-f... Cluster is being health-checked (master is healt
+hy)...done.
+Created [https://container.googleapis.com/v1/projects/challenge-lab-gce-248419/zones/us-central1-f/clusters/webfrontend].
+To inspect the contents of your cluster, go to: https://console.cloud.google.com/kubernetes/workload_/gcloud/us-central1-f/webfrontend?project=challenge-lab-gce-248419
+kubeconfig entry generated for webfrontend.
+NAME         LOCATION       MASTER_VERSION  MASTER_IP      MACHINE_TYPE   NODE_VERSION  NUM_NODES  STATUS
+webfrontend  us-central1-f  1.13.7-gke.8    34.70.247.111  n1-standard-1  1.13.7-gke.8  2          RUNNING
+
+
+Cluster is ready, 
+Version of Kubernetes: kubectl version
+pratikaambani_gcp_user@cloudshell:~ (challenge-lab-gce-248419)$ kubectl version
+Client Version: version.Info{Major:"1", Minor:"13+", GitVersion:"v1.13.9-2+4a03651a7e7e04", GitCommit:"4a03651a7e7e04a0021b2ef087963dfb7bd0a17e", GitTreeState:"clean", BuildDate:"2019-08-16T18:57:20Z", GoVersion:"go1.11.5", Compiler:"gc", Platform:"linux/amd64"}
+Server Version: version.Info{Major:"1", Minor:"13+", GitVersion:"v1.13.7-gke.8", GitCommit:"7d3d6f113e933ed1b44b78dff4baf649258415e5", GitTreeState:"clean", BuildDate:"2019-06-19T16:37:16Z", GoVersion:"go1.11.5b4", Compiler:"gc", Platform:"linux/amd64"}
+
+
+Kubernetes cluster nodes are compute engine VMs: GCP Console - Conpute Engine - VM Instances - Nodes are available
+Same available in Kubernetes console: name, location, size
+
+Run a web server in cluster:	Cloud Shell - 
+kubectl run nginx --image=nginx:1.10.0
+pratikaambani_gcp_user@cloudshell:~ (challenge-lab-gce-248419)$ kubectl run nginx --image=nginx:1.10.0
+kubectl run --generator=deployment/apps.v1 is DEPRECATED and will be removed in a future version. Use kubectl run --generator=run-pod/v1 or kubectl create instead.
+deployment.apps/nginx created
+
+This deployment consists of single Pod
+Verify it running:
+pratikaambani_gcp_user@cloudshell:~ (challenge-lab-gce-248419)$ kubectl get pods
+NAME                     READY   STATUS    RESTARTS   AGE
+nginx-5d66c8bcb9-h5s2s   1/1     Running   0          44s
+
+Expose created deployment so that outside users can access it: kubectl expose deployment nginx --port 80 --type LoadBalancer
+pratikaambani_gcp_user@cloudshell:~ (challenge-lab-gce-248419)$ kubectl expose deployment nginx --port 80 --type LoadBalancer
+service/nginx exposed
+
+pratikaambani_gcp_user@cloudshell:~ (challenge-lab-gce-248419)$ kubectl get services
+NAME         TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+kubernetes   ClusterIP      10.15.240.1     <none>        443/TCP        7m42s
+nginx        LoadBalancer   10.15.246.144   <pending>     80:30632/TCP   29s
+
+Assigns external IP (takes time)
+
+Verify: kubectl get services
+pratikaambani_gcp_user@cloudshell:~ (challenge-lab-gce-248419)$ kubectl get services
+NAME         TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+kubernetes   ClusterIP      10.15.240.1     <none>        443/TCP        8m48s
+nginx        LoadBalancer   10.15.246.144   34.70.13.97   80:30632/TCP   95s
+Open external IP on browser
+
+
+Scale up deployment:	kubectl scale deployment nginx --replicas 3
+Verify: kubectl get pods
+pratikaambani_gcp_user@cloudshell:~ (challenge-lab-gce-248419)$ kubectl get pods
+NAME                     READY   STATUS              RESTARTS   AGE
+nginx-5d66c8bcb9-2p64x   0/1     ContainerCreating   0          7s
+nginx-5d66c8bcb9-h5s2s   1/1     Running             0          27m
+nginx-5d66c8bcb9-wms8d   1/1     Running             0          7s
+wait
+pratikaambani_gcp_user@cloudshell:~ (challenge-lab-gce-248419)$ kubectl get pods
+NAME                     READY   STATUS    RESTARTS   AGE
+nginx-5d66c8bcb9-2p64x   1/1     Running   0          46s
+nginx-5d66c8bcb9-h5s2s   1/1     Running   0          27m
+nginx-5d66c8bcb9-wms8d   1/1     Running   0          46s
+see running
+
+External IP should not change: kubectl get services
+It is same
+
+Refresh previous IP on browser, should work
+
+5.2.3 Graded External Tool: Graded External ToolQwiklabs – Getting Started with Kubernetes Engine
+-----
+Objectives
+	Provision a Kubernetes cluster using Kubernetes Engine.
+	Deploy and manage Docker containers using kubectl.
+
+
+enable APIs	
+export MY_ZONE=us-central1-a
+gcloud container clusters create webfrontend --zone $MY_ZONE --num-nodes 2
+kubectl version
+kubectl run nginx --image=nginx:1.10.0
+kubectl get pods
+kubectl expose deployment nginx --port 80 --type LoadBalancer
+kubectl get services
+kubectl scale deployment nginx --replicas 3
+kubectl get pods
+kubectl get services
+
+5.2.4 Quiz: Containers, Kubernetes, and Kubernetes Engine
+-----
+Done - 6 questions
+
+----------------------------
+6. Applications in the Cloud
+----------------------------
+
+App Engine is a Platform-as-a-Service ("PaaS") offering. The App Engine platform manages the hardware and networking infrastructure required to run your code. App Engine provides built-in services that many web applications need. This module describes how App Engine works.
+
+* Objectives
+	Explain the purpose of and use cases for Google App Engine and Google Cloud Datastore
+	Compare the App Engine Standard environment with the App Engine Flexible environment
+	Express the purpose of and use cases for Google Cloud Endpoints
+	Express the purpose of and use cases for Apigee Edge.
+	Preview an App Engine application using Cloud Shell.
+	Launch an App Engine application and then disable it.
+
+6.1 Module introduction; introduction to App Engine
+---------------------------------------------------
+
+6.1.1 Video: Module introduction; introduction to App Engine
+-----
+
+So far we have used Compute Engine and Kubernetes Engine where we choose infra on which Applications run
+
+What if we don't wanna focus on infra(but code)?
+	PaaS: Platform as a Service
+	App Engine manages hardware and networking for our codebase
+	Just share code with App Engine, rest of deployment, scalability and maintenance is managed by App Engine
+	Built-In Service:
+		NoSQL DBs
+		In-memory caching
+		LBing
+		Health Checks
+		Logging
+		Way to authenticate users
+	AutoScales based on traffic, pay for what you use
+	Suited for Mobile back ends and WebApps
+	Offers two environments:
+		Standard Environment
+		Flexible Environment
+
+6.1.2 Practice Quiz: App Engine
+-----
+Done - 2 questions
+
+6.2 App Engine Standard Environment
+-----------------------------------
+
+6.2.1 Video: Google App Engine Standard Environment
+-----
+	Simpler
+	Simpler deployment experience than flexible
+	Simpler Auto-scaling
+	Provides free daily quota
+	Usage based pricing
+	Low usage might incur no charge :P
+	
+	Google provides SDK for multiple languages so that we can test our application locally before uploading em on actual App Engine Service
+	Simpler commands for deployment
+
+	
+What does my code actually run on?
+	Runtime: 
+		Google calls it runtime
+		In multiple languages - Java, Python, Php, Go
+		Include library that supports App Engine APIs
+		If we want to run our code in another language, Flexible Environment should be used
+		Restricts code:
+			Runs only on Sandbox
+			Sandbox:
+				Software which is independent of HW
+				Because of this Applications scale and manage run in a finer manner
+				Constraints: 
+					App can't write to local file system, only DB
+					App requests that App receives have 60 seconds time out
+					During this we can't install any third party software
+				If not comfortable with this, use Flexible Environment
+
+App Engine Workflow for WebApp:
+	1. Develop and Test Application locally 
+	2. use SDK to deploy to App Engine 
+	3. App Engine Automatically scales App
+	4. App Engine can access variety of services using dedicated APIs: Memcache, Task Queues, Scheduled Tasks, Search, Logs
+
+6.3 App Engine Flexible Environment
+-----------------------------------
+
+6.3.1 Video: Google App Engine Flexible Environment
+-----
+When restrictions of Standard Environment don't work for us, but you wanna use other benefits of App Engine
+
+No Sandbox constraints, Flexible Environment lets us specify the CONTAINER(Unlike Sandbox of Standard Environment) where our Application runs in
+App will run inside Docker containers on Google Compute VMs
+Can Access App Engine resources
+We can choose which Geo Location we wanna run in
+
+App Engine Flexible Environment lets you ssh into the virtual machines in which your application runs
+
+Backward compatible updates to OSes are automatically applied
+
+Check image comparision: GCP-Training-6.3.1.jpg
+
+Towards Managed Infra													Towards Dynamic Infra
+<------------------------------------------------------------------------------------------->
+					Kubernetes Engine			App Engine Flexible		App Engine Standard
+Language Support	Any							Any						Java, Python, Go, PHP
+Service Model		Hybrid						PaaS					PaaS
+Primary usecase		Container based workloads	Web/Mobile Apps, CBW	Web and Mobile Apps
+
+6.3.2 Practice Quiz: App Engine Flexible and Standard Environments
+-----
+2 questions
+
+
+6.4 Cloud Endpoints and Apigee Edge
+-----------------------------------
+
+6.4.1 Video: Google Cloud Endpoints and Apigee Edge
+-----
+APIs hide details, enforce contracts
+
+GCP provides two API Management tools:
+	Cloud Endpoints:
+		Distributed API Management through API Console
+		Expose your API using Rest Interface
+		
+		It controls access and validates calls with JWTs and Google API Keys
+			Identifies WEb/Mobile users with Auth0 and Firebase Authentication
+		Generates client libraries
+		API Console as well
+		
+		Supported Platforms: Runtime Environment: App Engine Flexible ENvironment, Kubernetes Engine, Compute Engine
+		Clients: Android, JS, iOS
+	
+	Apigee Edge:
+		Platform for developing and managing APIs
+		Helps us secure and monetize APIs
+		
+		Focused on Business Problems: Rate limiting, quotas, analytics
+		Use of the backend services for Apigee Edge need not be in GCP, engineers often use it when they are "taking apart" a legacy application
+		
+		Instead of replacing a monolithic application in one risky move, they can instead use Apigee Edge to peel off its services one by one, standing up micro services to implement each in turn, until the legacy application can be finally retired.
+
+6.5 Demonstration, lab activity, and quiz
+-----------------------------------------
+
+6.5.1 Video: Demonstration: Getting Started with App Engine
+-----
+Create an app on local - deploy it in App Engine
+
+
+Steps:
+
+Create/Clone an App
+pratikaambani_gcp_user@cloudshell:~ (my-networking-playground-24807)$ git clone https://github.com/GoogleCloudPlatform/appengine-guestbook-python.git
+Cloning into 'appengine-guestbook-python'...
+remote: Enumerating objects: 493, done.
+remote: Total 493 (delta 0), reused 0 (delta 0), pack-reused 493
+Receiving objects: 100% (493/493), 437.58 KiB | 279.00 KiB/s, done.
+Resolving deltas: 100% (203/203), done.
+
+view deatils
+pratikaambani_gcp_user@cloudshell:~ (my-networking-playground-24807)$ cd appengine-guestbook-python/
+pratikaambani_gcp_user@cloudshell:~/appengine-guestbook-python (my-networking-playground-24807)$ cat app.yaml
+runtime: python27
+api_version: 1
+threadsafe: true
+
+# [START handlers]
+handlers:
+- url: /favicon\.ico
+  static_files: favicon.ico
+  upload: favicon\.ico
+
+- url: /bootstrap
+  static_dir: bootstrap
+
+- url: /.*
+  script: guestbook.app
+# [END handlers]
+
+# [START libraries]
+libraries:
+- name: webapp2
+  version: latest
+- name: jinja2
+  version: latest
+# [END libraries]
+
+
+Deploy it on local
+pratikaambani_gcp_user@cloudshell:~/appengine-guestbook-python (my-networking-playground-24807)$ dev_appserver.py ./app.yaml
+INFO     2019-09-17 00:22:38,779 devappserver2.py:224] Using Cloud Datastore Emulator.
+We are gradually rolling out the emulator as the default datastore implementation of dev_appserver.
+If broken, you can temporarily disable it by --support_datastore_emulator=False
+Read the documentation: https://cloud.google.com/appengine/docs/standard/python/tools/migrate-cloud-datastore-emulator
+Help us validate that the feature is ready by taking this survey: https://goo.gl/forms/UArIcs8K9CUSCm733
+Report issues at: https://issuetracker.google.com/issues/new?component=187272
+
+INFO     2019-09-17 00:22:38,802 devappserver2.py:278] Skipping SDK update check.
+INFO     2019-09-17 00:22:38,902 datastore_emulator.py:155] Starting Cloud Datastore emulator at: http://localhost:18819
+Cloud Shell - git clone https://github.com/GoogleCloudPlatform/appengine-guestbook-python.git - cd app
+WARNING  2019-09-17 00:22:39,047 simple_search_stub.py:1196] Could not read search indexes from /tmp/appengine.None.pratikaambani_gcp_user/search_indexes
+INFO     2019-09-17 00:22:42,243 datastore_emulator.py:161] Cloud Datastore emulator responded after 3.341220 seconds
+INFO     2019-09-17 00:22:42,247 api_server.py:275] Starting API server at: http://0.0.0.0:44689
+E0917 00:22:42.264744779     380 server_chttp2.cc:40]        {"created":"@1568679762.264702651","description":"Only 1 addresses added out of total 2 resolved","file":"src/core/ext/transport/chttp2/server/chttp2_server.cc","file_line":403,"referenced_errors":[{"created":"@1568679762.264695522","description":"Address family not supported by protocol","errno":97,"file":"src/core/lib/iomgr/socket_utils_common_posix.cc","file_line":382,"os_error":"Address family not supported by protocol","syscall":"socket","target_address":"[::1]:43827"}]}
+INFO     2019-09-17 00:22:42,265 api_server.py:265] Starting gRPC API server at: http://localhost:43827
+INFO     2019-09-17 00:22:42,286 dispatcher.py:256] Starting module "default" running at: http://0.0.0.0:8080
+INFO     2019-09-17 00:22:42,287 admin_server.py:150] Starting admin server at: http://0.0.0.0:8000
+INFO     2019-09-17 00:22:44,303 instance.py:294] Instance PID: 423
+INFO     2019-09-17 00:23:42,515 module.py:861] default: "GET /?authuser=1 HTTP/1.1" 200 2128
+INFO     2019-09-17 00:23:43,666 module.py:861] default: "GET /bootstrap/css/bootstrap-responsive.css HTTP/1.1" 200 22111
+INFO     2019-09-17 00:23:43,706 module.py:861] default: "GET /bootstrap/css/bootstrap.css HTTP/1.1" 200 127247
+INFO     2019-09-17 00:23:45,584 module.py:861] default: "GET /favicon.ico HTTP/1.1" 200 8348
+INFO     2019-09-17 00:23:57,144 module.py:861] default: "POST /sign?guestbook_name=default_guestbook HTTP/1.1" 302 -
+INFO     2019-09-17 00:23:57,953 module.py:861] default: "GET /?guestbook_name=default_guestbook HTTP/1.1" 200 2312
+INFO     2019-09-17 00:23:58,740 module.py:861] default: "GET /bootstrap/css/bootstrap.css HTTP/1.1" 304 -
+INFO     2019-09-17 00:23:58,743 module.py:861] default: "GET /bootstrap/css/bootstrap-responsive.css HTTP/1.1" 304 -
+^CINFO     2019-09-17 00:24:28,639 datastore_emulator.py:187] shutting down the emulator running at http://localhost:18819
+INFO     2019-09-17 00:24:30,125 shutdown.py:50] Shutting down.
+INFO     2019-09-17 00:24:30,126 stub_util.py:357] Applying all pending transactions and saving the datastore
+INFO     2019-09-17 00:24:30,126 stub_util.py:360] Saving search indexes
+
+Deploy it on App Engine
+pratikaambani_gcp_user@cloudshell:~/appengine-guestbook-python (my-networking-playground-24807)$ gcloud app deploy ./index.yaml ./app.yaml                                                                 
+Services to deploy:
+
+descriptor:      [/home/pratikaambani_gcp_user/appengine-guestbook-python/app.yaml]
+source:          [/home/pratikaambani_gcp_user/appengine-guestbook-python]
+target project:  [my-networking-playground-24807]
+target service:  [default]
+target version:  [20190917t055635]
+target url:      [https://my-networking-playground-24807.appspot.com]
+
+
+Configurations to update:
+
+descriptor:      [/home/pratikaambani_gcp_user/appengine-guestbook-python/index.yaml]
+type:            [datastore indexes]
+target project:  [my-networking-playground-24807]
+
+
+Do you want to continue (Y/n)?  yes
+
+Beginning deployment of service [default]...
+╔════════════════════════════════════════════════════════════╗
+╠═ Uploading 20 files to Google Cloud Storage               ═╣
+╚════════════════════════════════════════════════════════════╝
+File upload done.
+Updating service [default]...done.
+Setting traffic split for service [default]...done.
+Deployed service [default] to [https://my-networking-playground-24807.appspot.com]
+Updating config [index]...done.
+
+Indexes are being rebuilt. This may take a moment.
+
+You can stream logs from the command line by running:
+  $ gcloud app logs tail -s default
+
+To view your application in the web browser run:
+  $ gcloud app browse
+  
+Hurraaah!!
+
+6.5.2 Graded External Tool: Graded External ToolGetting Started with App Engine
+-----
+Objectives
+	Preview an App Engine application using Cloud Shell.
+	Launch an App Engine application.
+	Disable an App Engine application.
+
+login
+git clone https://github.com/GoogleCloudPlatform/appengine-guestbook-python
+cd appengine-guestbook-python
+ls -l
+
+cat app.yaml
+dev_appserver.py ./app.yaml
+check on 8080
+
+gcloud app deploy ./index.yaml ./app.yaml
+
+6.5.3 Quiz: Applications in the Cloud
+-----
+Done - 6 questions
+
+----------------------------------------------------
+7. Developing, Deploying and Monitoring in the Cloud
+----------------------------------------------------
+
+Popular tools for development, deployment, and monitoring just work in GCP. Customers also have options for tools in each of these three areas that are tightly integrated with GCP. This module covers those tools.
+
+* Objectives
+	Understand options for software developers to host their source code.
+	Understand the purpose of template-based creation and management of resources.
+	Understand the purpose of integrated monitoring, alerting, and debugging.
+	Build a Deployment Manager deployment.
+	Update a Deployment Manager deployment.
+	View the load on a VM instance using Stackdriver.
+
+7.1 Development in the Cloud
+----------------------------
+
+7.1.1 Video: Development in the cloud
+-----
+Cloud Source Repositories:
+	 Running your own git instance is great because you have total control
+	 Using a hosted Git provider is great because it's less work
+	 What if there were a third way? To keep code private to a GCP project and use IAM permissions to protect it, but not have to maintain the Git instance yourself
+	 
+	 CSRs
+		 We can have any number of private repositories
+		 Source Viewer
+	 
+Cloud Functions:
+	Responds to event without server or runtimes
+	Functions paid, not on which server it is running
+	
+	Why:
+		Many Apps are event driven
+		Ex: uploading images which includes processing: converting to std format, thumbnails, some fixed sizes
+	
+	Triggers:
+		Events and cloud storage
+		Cloud pubsub
+		HTTP Call
+
+	Written in JS, excute on managed Node.js environment on GCP
+
+7.1.2 Practice Quiz: Cloud Source Repositories
+-----
+Done - 1 question
+
+7.2 Deployment: Infrastructure as code
+--------------------------------------
+
+7.2.1 Video: Deployment: Infrastructure as code
+-----
+
+Code executes whenever an event triggers it, no matter whether it happens rarely or many times per second. 
+That means you don't have to provision compute resources to handle these operations.
+
+Imperative Approach: HOW you do something
+Setting up environment may require:
+	figure out the commands to change it from the old state to the new
+	setting up compute network 
+	setting up storage resources
+	keeping track of their configurations. 
+	same steps while changing environments
+	same steps while cloning environment
+
+Declarative Approach: Rather choose WHAT you do
+	It's more efficient to use a template
+	Choose Declarative, not Imperative
+	Deployment Manager lets us do that:
+		It's an Infrastructure Management Service that automates the creation and management of your Google Cloud Platform resources for you. 
+		To use it, you create a template file using either the YAML markup language or Python that describes what you want the components of your environment to look like. Then, you give the template to Deployment Manager, which figures out and does the actions needed to create the environment your template describes. 
+		If you need to change your environment, edit your template and then tell Deployment Manager to update the environment to match the change. 
+		Provides repeatable deployments
+		Create .yaml/python that describes what components of environment to be included and use Deployment Manager
+		We can also store and version control Deployment Manager templates in Cloud Source repositories.
+
+7.2.2 Practice Quiz: Cloud Functions
+-----
+Done - 1 question
+
+7.3 Monitoring: Proactive instrumentation
+-----------------------------------------
+
+7.3.1 Video: Monitoring: Proactive instrumentation
+-----
+Monitoring: Whether changes implemented are good or bad
+Insight of Application Health, performance, and availability
+
+Stackdriver: Monitoring, Logging, Debugging, Error Reporting, Tracing, Profiling
+
+Monitoring:
+	Checks endpoints of WebApps
+	Uptime and health checks
+	Dashboards and alerts
+	Access to monitoring tools
+	
+Logging:
+	Platform, System and Application logs
+	Log search, view, filter, and export
+	Log based matrics
+
+Tracing:
+	Latency reporting and sampling
+	Per-URL latency and statistics
+	Connect prod data to source code, easy to debug, works best when source code is available
+
+Error Reporting:
+	Error notifications
+	Error dashboard
+	
+Debugger:
+	Debug Applications
+	
+Profiling:
+	Continuous profiling of CPU and memory consumption
+
+7.4 Demonstration, lab activity, and quiz
+-----------------------------------------
+7.4.1 Video: Demonstration: Getting Started with Deployment Manager and Stackdriver
+-----
+Deployment Manager and Stackdriver
+Covered below, in 7.4.2
+
+7.4.2 Graded External Tool: Graded External ToolGetting Started with Deployment Manager and Stackdriver
+-----
+Objectives
+	Create a Deployment Manager deployment.
+	Update a Deployment Manager deployment.
+	View the load on a VM instance using Stackdriver.
+
+gcloud config set project $DEVSHELL_PROJECT_ID
+export MY_ZONE=us-central1-f
+gsutil cp gs://cloud-training/gcpfcoreinfra/mydeploy.yaml mydeploy.yaml
+sed -i -e 's/PROJECT_ID/'$DEVSHELL_PROJECT_ID/ mydeploy.yaml
+sed -i -e 's/ZONE/'$MY_ZONE/ mydeploy.yaml
+gcloud deployment-manager deployments create my-first-depl --config mydeploy.yaml
+
+
+Update deployment manager deployment
+nano mydeploy.yaml
+value: "apt-get update; apt-get install nginx-light -y"
+gcloud deployment-manager deployments update my-first-depl --config mydeploy.yaml
+
+7.4.3 Quiz: Developing, Deploying, and Monitoring in the Cloud
+-----
+Done - 5 questions
+
+---------------------------------------------
+8. Big Data and Machine Learning in the Cloud
+---------------------------------------------
+
+GCP's big-data and machine learning offerings are intended to help customers get the most out of data. These tools are intended to be simple and practical to embed in your applications. This module describes the available big-data and machine learning services and explains the usefulness of each.
+
+* Objectives
+	Understand the purpose of and use cases for the products in the Google Cloud big data platform..
+	Understand the purpose of and use cases for the products in the Google Cloud machine learning platform.
+	Load data into a BigQuery table from Cloud Storage.
+	Use SQL queries to analyze data in BigQuery.
+
+8.1 Module introduction
+-----------------------
+
+Video: Introduction to Big Data and Machine Learning
+---
+MotiveFastest and best use of data
+
+8.2 Google Cloud Big Data Platform
+----------------------------------
+
+8.2.1 Video: Google Cloud Big Data Platform
+-----
+Fully managed and scalable
+Pay for only resources you consume
+
+Platform is integrated with all GCP services to communicate among them
+
+Hadoop based on Map + Reduce
+
+
+Cloud Dataproc
+	fast easy managed way to run hadoop, spark, hive, pig on GCP
+	Request Hadoop cluster
+	builds within 90 sec
+	We can scale it up down while jobs are running
+	We can monitor cluster using Stackdriver
+	
+Why Cloud Dataproc:
+	We can easily migrate on-premices Hadoop jobs to the cloud
+	Saves Money: Running these jobs require large HW infrastructure but with Cloud Dataproc we pay only for resources used
+	
+	Once data is in cluster, we can use Spark and Spark SQL for data mining. And you can use MLib, which is Apache Spark's machine learning libraries to discover patterns through machine learning.
+
+8.2.2 Video: Cloud Dataflow
+-----
+Cloud Dataproc is great when you have a data set of known size or when you want to manage your cluster size yourself. 
+
+Cloud Dataflow:
+	What if your data shows up in real time or it's of unpredictable size or rate?
+	It's both a unified programming model and a managed service and it lets you develop and execute a big range of data processing patterns: extract, transform, and load batch computation and continuous computation. 
+	You use Dataflow to build data pipelines, the same pipelines work for both batch and streaming data. 
+	
+	There's no need to spin up a cluster or to size instances. Cloud Dataflow fully automates the management of whatever processing resources are required. Cloud Dataflow frees you from operational tasks like resource management and performance optimization. 
+	In this example, Dataflow pipeline reads data from a big query table, the Source, processes it in a variety of ways, the Transforms, and writes its output to a cloud storage, the Sink. 
+	
+	You can build really expressive pipelines. 
+	Each step in the pipeline is elastically scaled. 
+	There is no need to launch and manage a cluster. Instead, the service provides all resources on demand. It has automated and optimized worked partitioning built in, which can dynamically rebalance lagging work. That reduces the need to worry about hotkeys. That is, situations where disproportionately large chunks of your input get mapped to the same cluster. People use Dataflow in a variety of use cases. As we've discussed, it's a general purpose ETL tool and its use case as a data analysis engine comes in handy in things like fraud detection and financial services, IoT analytics and manufacturing, healthcare and logistics and click stream, point of sale and segmentation analysis in retail. And because those pipelines, we saw can orchestrate multiple services even external services. It can be used in real time applications such as personalizing gaming user experiences.
+
+8.2.3 Video: BigQuery
+-----
+
+What if, instead of a dynamic pipeline, your data needs to run more in the way of exploring a vast sea of data. 
+	You want to do ad-hoc SQL queries on a massive data set. That's what BigQuery is for. 
+	It's Google's fully-managed, petabyte-scale, low-cost analytics data warehouse. As there's no infrastructure to manage, you can focus on analyzing data to find meaningful insights, use familiar SQL
+	You can load it from cloud storage or cloud data store, or stream it into BigQuery at up to 100,000 rows per second. 
+	Once it's in there, you can run super-fast SQL queries against multiple terabytes of data in seconds only
+	In addition to SQL queries, you can easily read and write data in BigQuery via Cloud Dataflow, Hadoop, and Spark. 
+	Available 99.9 percent service level agreement.
+	
+	Google's infrastructure is global and so is BigQuery. 
+	BigQuery lets you specify the region where your data will be kept. 
+		Example: if you want to keep data in Europe, you don't have to go set up a cluster in Europe. Just specify the EU location where you create your data set. US and Asia locations are also available. 
+	Because BigQuery separates storage and computation, you pay for your data storage separately from queries. 
+	That means, you pay for queries only when they are actually running. 
+	You have full control over who has access to the data stored in BigQuery, including sharing data sets with people in different projects. 
+	People you share with pay for their own queries, not you. 
+	Long-term storage pricing is an automatic discount for data residing in BigQuery for extended periods of time. 
+	When the age of your data reaches 90 days in BigQuery, Google will automatically drop the price of storage.
+
+8.2.4 Video: Cloud Pub/Sub and Cloud Datalab
+-----
+	Whenever you're working with events in real time, it helps to have a messaging service.
+	It's meant to serve as a simple, reliable, scalable foundation for stream analytics. You can use it to let independent applications you build send and receive messages. That way they're decoupled, so they scale independently. 
+	Receiving messages doesn't have to be synchronous. That's what makes Pub/Sub great for decoupling systems. 
+	
+	It's designed to provide "at least once" delivery at low latency. When we say "at least once delivery," we mean that there is a small chance some messages might be delivered more than once. So, keep this in mind when you write your application.
+	Cloud Pub/Sub offers on-demand scalability to one million messages per second and beyond. 
+	Cloud Pub/Sub builds on the same technology Google uses internally. 
+	It's an important building block for applications where data arrives at high and unpredictable rates, like Internet of Things systems. 
+		If you're analyzing streaming data, Cloud Dataflow is a natural pairing with Pub/Sub. 
+	Pub/Sub also works well with applications built on GCP's Compute Platforms. 
+	Subscribers can get notified when new messages arrive for them or they can check for new messages at intervals. 
+
+Project Jupyter:
+	For data science, the lab notebook metaphor works really well, because it feels natural to intersperse data analysis with comments about their results. A popular environment for hosting those is Project Jupyter. 
+	It lets you create and maintain web-based notebooks containing Python code and you can run that code interactively and view the results. 
+	And Cloud Datalab takes the management work out of this natural technique. 
+	It runs in a Compute Engine virtual machine. 
+
+	To get started, you specify the virtual machine type you want and what GCP region it should run in. 
+	When it launches, it presents an interactive Python environment that's ready to use. And it orchestrates multiple GCP services automatically, so you can focus on exploring your data. 
+	You only pay for the resources you use. There is no additional charge for Datalab itself. 
+	It's integrated with BigQuery, Compute Engine, and Cloud Storage, so accessing your data doesn't run into authentication hassles. 
+	When you're up and running, you can visualize your data with Google Charts or map plot line and because there's a vibrant interactive Python community, you can learn from published notebooks. 
+	There are many existing packages for statistics, machine learning, and so on.
+
+8.3 Google Cloud Machine Learning Platform
+------------------------------------------
+
+8.3.1 Video: Google Cloud Machine Learning Platform
+-----
+ML APIs enable apps that see, hear, and understand
+Google: YouTube, Photos, Gmail App
+
+Cloud Machine Learning Platform provides modern machine learning services with pre-trained models and a platform to generate your own tailored models. 
+
+TensorFlow:
+	Open source software library that's exceptionally well suited for machine learning applications like neural networks. 
+	It was developed by Google Brain for Google's internal use and then open source so that the world could benefit. 
+	GCP is an ideal place for it because ML models need lots of on-demand compute resources and lots of training data. 
+	Tensor Processing Units:
+		TensorFlow can also take advantage of Tensor Processing Units, which are hardware devices designed to accelerate ML workloads with TensorFlow. 
+		GCP makes them available in the cloud with Compute Engine virtual machines. 
+		Each cloud TPU provides up to 180 teraflops of performance. 
+	
+	Suppose you want a more managed service. 
+		Google Cloud ML Engine lets you easily build ML models that work on any type of data of any size. 
+		It can take any TensorFlow model and perform large-scale training on a managed cluster. 
+	
+	Suppose you want to add various ML capabilities to your applications without having to worry about the details of how they are provided. 
+		Google Cloud also offers a range of ML APIs suited to specific purposes. 
+		People use the Cloud ML Platform for lots of applications. Generally, they fall into two categories, 
+		
+		Structured Data:
+			You can use ML for various kinds of classification and regression tasks
+			Ex:	Customer churn analysis, product diagnostics and forecasting. 
+				You can use ML to detect anomalies, as in fraud detection, sensor diagnostics or log metrics. 
+		Unstructured data:
+			You can use ML for image analytics 
+			Ex: Image Analytics
+				Video Analytics
+				Text Analytics
+				Identifying damaged shipment, identifying styles and flagging content. 
+				You can do text analytics too, like a call center, blog analysis, language identification, topic classification and sentiment analysis.
+			
+	In many of the most innovative applications for ML, several of these kinds of applications are combined.
+
+8.3.2 Video: Machine learning APIs
+-----
+
+Cloud Vision REST API:
+	Contents of image
+	Logo Detection
+	Label Detection
+	Extract Text
+	Analyze Sentiments
+	
+Cloud Natural Language API:
+	Returns text in realtime
+	Highly accurate, even in noisy environment
+	Access from any device
+	
+Cloud Translate API:
+	detect a language
+	support for dozens of APIs
+
+Cloud Video Intelligence API:
+	Annotate content
+	detect scene changes
+	flag inappropriate content
+	various video formats
+
+8.4 Demonstration, lab activity, and quiz
+-----------------------------------------
+
+8.4.1 Video: Demonstration: Getting Started with BigQuery
+-----
+
+GCP - Big Query - new dataset - logdata - us - save
+
+Loaded a log file and performed SQL Query inside logs
+
+8.4.2 Graded External Tool: Graded External ToolGetting Started with BigQuery
+-----
+Objectives
+	Load data from Cloud Storage into BigQuery.
+	Perform a query on the data in BigQuery.
+
+8.4.3 Quiz: Big Data and Machine Learning
+-----
+Done - 7 questions
+
+---------------------
+9. Summary and Review
+---------------------
+
+* Objectives
+	Compare GCP's compute services.
+	Compare GCP's storage services.
+	Compare Google VPC's networking capabilities.
+
+9.1 Course review
+-----------------
+
+9.1.1 Video: Review
+-----
+Check image: GCP-Training-9.1.1.jpg
+Check image: GCP-Training-9.1.2.jpg
+Check image: GCP-Training-9.1.3.jpg
+Check image: GCP-Training-9.1.4.jpg
+Check image: GCP-Training-9.1.5.jpg
+
+9.1.2 Quiz: Summary and Review
+-----
+Done - 10 questions

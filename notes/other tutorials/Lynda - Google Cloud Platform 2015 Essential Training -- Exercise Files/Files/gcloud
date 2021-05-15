@@ -1,0 +1,19 @@
+—Set up
+$ gcloud version
+$ gcloud components list
+$ gcloud auth login
+$ gcloud config set project mycoolproject-1021
+$ gcloud config set project <“your-project-id”>
+$ gcloud config unset project
+$ gcloud config list
+
+—GCE
+$ gcloud compute --project "mycoolproject-1021" instances create "instance-1" --zone "us-central1-f" --machine-type "n1-standard-1" --network "default" --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_only" "https://www.googleapis.com/auth/logging.write" --image "https://www.googleapis.com/compute/v1/projects/debian-cloud/global/images/backports-debian-7-wheezy-v20150710" --boot-disk-type "pd-standard" --boot-disk-device-name "instance-1"
+
+$ gcloud compute --project <“your-project-id”> instances create "instance-1" --zone "us-central1-f" --machine-type "n1-standard-1" --network "default" --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_only" "https://www.googleapis.com/auth/logging.write" --image "https://www.googleapis.com/compute/v1/projects/debian-cloud/global/images/backports-debian-7-wheezy-v20150710" --boot-disk-type "pd-standard" --boot-disk-device-name "instance-1"
+
+
+—GAE
+cd /Users/lynnlangit/Desktop/Exercise Files/GAE-python-HelloWorld/helloworld
+$ gcloud preview app run ./app.yaml
+$ gcloud preview app deploy ./app.yaml --set-default

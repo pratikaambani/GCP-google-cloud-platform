@@ -1,0 +1,98 @@
+X--X--X--X--X--X--X--X--X--X--X--X--X--X--X
+X--- Hands-on Lab : Cloud Architecture ---X
+X--X--X--X--X--X--X--X--X--X--X--X--X--X--X
+
+* 1 Week course: 5 October - 11 October
+* Course URL: https://google.qwiklabs.com/quests/24?mkt_tok=eyJpIjoiWkRBMU56YzRZemhrWkRjMiIsInQiOiJ2blhrTjZiT3VtTDVoVkRFRTBpdENydHF0ZVwvd0dlSlMyVU0zWTlYMVwvXC9yZXJNS3RjdUw3ZmxEb2NIa0tNR3NPNHFDbUhKMnJseld4RENsMHZmTWpQNUM1dE9DdWFhdTQxcFpQYklKMFUzalVjRWNXdVBpZnVhWkRyR2pkSjhOcSJ9
+* Previous: https://www.coursera.org/learn/gcp-infrastructure-containers-services
+* Next: https://go.cloudplatformonline.com/dcn/ITGD-f9pm9Mt0zL0cDq8GpYxtVI97o3TcSGhTrbPCiwBg5ZNY0kX0riqdhkoaPLEZ5i1yRayRq_PP6zT15Kk0CPsgUdBGGF7UWjsxULpTbU=/v1ib0hFw0okWGmyBJ03z000
+
+
+
+This fundamental-level quest is unique amongst the other Qwiklabs offerings. The labs have been curated to give IT professionals hands-on practice with topics and services that appear in the Google Cloud Certified Professional Cloud Architect Certification. From IAM, to networking, to Kubernetes engine deployment, this quest is composed of specific labs that will put your GCP knowledge to the test. Be aware that while practice with these labs will increase your skills and abilities, we recommend that you also review the exam guide and other available preparation resources.
+
+Prerequisites:
+This Quest expects familiarity with GCP Services, particularly those in computing and networking. It is recommended that the student have earned a Badge by completing the hands-on labs in the Baseline: Infrastructure and/or the GCP Essentials Quests before beginning. Additional lab experience with the Security and Identity Fundamentals and the Kubernetes In the Google Cloud Quests will be useful.
+
+
+
+Lab 1 : Orchestrating the Cloud with Kubernetes
+-----------------------------------------------
+Check folder: 1 Orchestrating the Cloud with Kubernetes
+
+In this lab you will learn how to: Provision a complete Kubernetes cluster using Google Container Engine; Deploy and manage Docker containers using kubectl; and Break an application into microservices using Kubernetes’ Deployments and Services.
+
+Overview:
+	1 hour 15 minutes
+	Provision a complete Kubernetes cluster using Kubernetes Engine.
+	Deploy and manage Docker containers using kubectl.
+	Break an application into microservices using Kubernetes' Deployments and Services.
+
+
+Lab 2 : Deployment Manager - Full Production
+--------------------------------------------
+Check folder: 2 Deployment Manager - Full Production
+
+In this lab you will launch a service using Deployment Manager, and monitor it using Stackdriver. You will set up basic black box monitoring with Stackdriver Dashboard and establish uptime check alert notification to trigger incident response.
+
+Overview:
+	1 hour 30 minutes
+	Install and configure an advanced deployment using Deployment Manager sample templates.
+	Enable Stackdriver monitoring.
+	Configure Stackdriver Uptime Checks and notifications.
+	Configure a Stackdriver dashboard with two charts, one showing CPU usage and the other ingress traffic.
+	Perform a load test and simulate a service outage.
+	
+	Launch a cloud service from a collection of templates.
+	Configure basic black box monitoring of an application.
+	Create an uptime check to recognize a loss of service.
+	Establish an alerting policy to trigger incident response procedures.
+	Create and configure a dashboard with dynamically updated charts.
+	Test the monitoring and alerting regimen by applying a load to the service.
+	Test the monitoring and alerting regimen by simulating a service outage.
+
+Lab 3 : Continuous Delivery with Jenkins in Kubernetes Engine
+-------------------------------------------------------------
+Check folder: 3 Continuous Delivery with Jenkins in Kubernetes Engine _ Qwiklabs.zip
+
+In this lab you will deploy and completely configure a continuous delivery pipeline using Jenkins running on Kubernetes Engine and go through the dev - deploy process.
+
+Lab 4 : Multiple VPC Networks
+-----------------------------
+Check folder: 4 Multiple VPC Networks
+
+In this lab, you create several VPC networks and VM instances and test connectivity across networks.
+
+Objectives
+	1 hour 10 minutes
+	Create custom mode VPC networks with firewall rules
+	Create VM instances using Compute Engine
+	Explore the connectivity for VM instances across VPC networks
+	Create a VM instance with multiple network interfaces
+
+
+Lab 5 : Site Reliability Troubleshooting with Stackdriver APM
+-------------------------------------------------------------
+Check folder: 5 Site Reliability Troubleshooting with Stackdriver APM
+
+The objective of this lab is to familiarize yourself with the specific capabilities of Stackdriver to monitor GKE cluster infrastructure, Istio, and applications deployed on this infrastructure.
+
+What you'll do
+	Create a GKE cluster
+	Deploy a microservices application to it
+	Define latency and error SLIs and SLOs for it
+	Configure Stackdriver to monitor your SLIs
+	Deploy a breaking change to the application and use Stackdriver to troubleshoot and resolve the issues that result
+	Validate that your resolution addresses the SLO violation
+
+What you'll learn
+	How to deploy a microservices application on an existing GKE cluster
+	How to select appropriate SLIs/SLOs for an application
+	How to implement SLIs using Stackdriver Monitoring features
+	How to use Stackdriver Trace, Profiler, and Debugger to identify software issues
+
+Prerequisites
+	Google Cloud Platform account and project with billing account
+	Basic knowledge of Kubernetes
+	Basic knowledge of Stackdriver Monitoring
+	Basic knowledge of troubleshooting process

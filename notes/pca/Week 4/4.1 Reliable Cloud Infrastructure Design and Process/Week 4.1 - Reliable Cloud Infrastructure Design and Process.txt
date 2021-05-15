@@ -1,0 +1,1465 @@
+X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X
+X--- Reliable Cloud Infrastructure: Design and Process --X
+X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X
+
+* 2 Week course: 8 October - 15 October
+* Previous: https://google.qwiklabs.com/quests/47
+* Course URL: https://www.coursera.org/learn/cloud-infrastructure-design-process
+* Next: https://www.coursera.org/learn/preparing-cloud-professional-cloud-architect-exam
+
+
+#######
+#Week1#
+#######
+
+--------------------------------------------
+| Module 1 : Welcome to Design and Process |
+--------------------------------------------
+
+1.1 Welcome to the course
+-------------------------
+
+1.1.1 Video: Welcome to the course
+1.1.2 Video: Course Overview
+-----
+GCP Design skills
+Process knowledge and skills
+GCP concepts and models
+Deployment manager as a cloud architect tool
+
+1.1.3 Video: Modules in this course
+1.1.4 Video: About your Lab Environment
+-----
+Four parts
+	lecture
+	application
+	related application problem
+	lab
+
+
+-----------------------------------
+| Module 2 : Defining the Service |
+-----------------------------------
+
+* Objectives
+	Design for high availability, scalability, and maintainability.
+	Create a YAML Deployment Manager template from scratch.
+	Configure the properties correctly using information gathered from GCP.
+	Prune properties to just those you need.
+	Identify and resolve YAML syntax issues in a template.
+
+2.1 Lectures
+------------
+
+2.1.1 Video: Defining the Service: Course Overview
+2.1.2 Video: Defining the Service: Module Overview
+-----
+State, Measurement, Requirements
+
+1. Rough idea --> Structured Design --> Measurable
+2, 3, 4. Three-tier architecture
+	Presentation Layer - Networking
+	Business-logic Layer - Compute
+	Data Layer - Storage
+5. Resiliency, scalability, disaster recovery
+6. Security
+	privacy
+	DOS
+7. Capacity planning and cost optimization
+8. Deployment, monitoring, alerting, incident response
+	Launching
+	Monitoring
+	Alerting
+	Responding
+	
+Design Process:
+	Begin simply
+	plan for failure
+	measure stuff
+
+2.1.3 Video: Defining the Service: State and Solution
+-----
+State :
+	Any action in the system that depends on the memory of a preceding action. 
+	Data that must be remembered is called state information. 
+	For example, compare two sets of directions. The first one says, walk south for one block and take the first right. The second one says, turn right one block after you've passed the market. Well the second instruction requires you to remember that you've passed the market, so it's stateful. Whereas the first one does not require you to remember anything, so it's stateless. 
+
+Whether a system is stateful or stateless has a lot of influence on design. 
+
+Dealing with state:
+	"Best state is no state"
+	Make system as much as stateless
+	easier to relocate tasks
+	more fault tolerant, less to recovery when something breaks
+	
+	Sources of state:
+		Objects in DB
+		Shared documents in memory
+		Key-Value pairs for user
+		
+	Critical state:
+		Assuming we need state, what is best way to implement it?
+
+2.1.4 Video: Defining the Service: Measurement
+-----
+
+Measurement is the key to creating a stable and manageable system. 
+
+If you design from the beginning, identifying indicators to be measured and objectives to compare them against, you'll have the information needed for the stabilization processes that surround the system. 
+
+Defining Service Level:
+	Helps us:
+		Qualify and quantify user experience
+		balance investment in reliability vs features
+		Set user expectations for availability and performance
+	
+	To define Service Level for workload:
+		SLI: 
+			Service Level Indicators
+			represents service availability and performance
+			Example:
+				Availability of webpage
+				How fast system responds when user clicks button
+
+		SLO: 
+			Service Level Objectives
+			How service should perform
+			At what point the users will decide that the service is working properly. 
+		
+		SLA: 
+			Service Level Agreements
+			restrictive version of SLO
+			Some services are so critical that a formal business agreement will exist between the provider and the users to guarantee a specific behavior and to compensate the users if the service fails to meet this expectation.
+
+Service levels define how a given service or product should behave. 
+There are a number of factors that go into service levels ranging from:
+	availability specifications such as 99.99 percent up time or
+	performance specification such as a minimum response time of one second. 
+Service levels helps set the user's expectation and help keep their expectations in line with the design of the service. 
+
+SLI:
+	SLIs should be directly observable and measurable by the users. 
+	SLIs should not be internal system metrics such as server, CPU utilization or the number of server failures. 
+	This is done for two reasons. 
+		One, the user can't directly measure those internal factors because they are on the outside of the system. 
+		Two, utilization isn't really an effective measure of the the usability of a system. 
+	Instead, utilization is a metric best used by auto-scalars to maintain a consistent user experience. 
+
+SLO:
+	Once we've identified what the users care about, we need to quantify those thresholds of pain. 
+	This is represented as the Service Level Objective or SLO. 
+	The SLO is a threshold value for an SLI, and the result should be set at the lowest or poorest level of service, where the users will still consider the service to be in good working order. 
+	the SLO represents the point at which the user would consider opening a support ticket because the service failed to meet his or her expectation. 
+	
+SLA:
+	Some services are so critical that the loss of the service could represent loss of money for the customer or even loss of life in extreme situations such as, autonomous cars or air traffic control. 
+	These contracts define an even more restrictive level of service that is lower or poorer than what is defined in the SLO. 
+	developers and operations team strive to maintain the SLO, which inherently meets the SLA figures.
+
+SLO vs SLA:
+	SLO is a soft target used by the owner of the service to set expectations. 
+	SLA is a business contract that grants a user compensation if the service falls below a certain threshold
+	SLO defines the user's pain tolerance to performance or availability issues, whereas an SLA is a legal contract. 
+	SLAs are known to the consumers of the service, but SLOs might not be
+
+Check Image: RCIDP-2.1.4.1.jpg
+
+SLI:
+	Service Level Indicators are quantitative measure of an attribute of the service. 
+	SLIs could represent things such as throughput, latency, availability, or even correctness. 
+	Be careful not to include internal system metrics such as CPU utilization or disk latency in your SLIs because the user cannot directly measure these values. 
+	
+	An SLI should:
+		represent user's experience - what they can see and feel
+		represent health of system
+	
+SLO:
+	Service Level Objectives are thresholds. 
+	They represent the point at which you must do something to improve the reliability or performance of the service
+	Example:
+		Change frequency of updates
+		Change your development process
+		Devote engineering efforts to reliability
+	
+	A goog SLO focuses on users' experience instead of internal system
+	
+	SLO represents users' "PAIN TOLERANCE" where PAIN is measurement of an SLI
+
+	Determining SLO:
+		SLOs aren't set at the maximum performance a service can achieve
+		business will determine an appropriate level of the performance or reliability that the provider can offer without making the service too available or too responsive. 
+		
+		Focus on the four golden monitoring signals when creating your SLOs: latency, traffic, errors, and resource saturation. 
+	
+	Useful concepts: real beats ideal
+	
+	When designing your SLOs, it's important to put reality above utopia. 
+	While we'd love to have a service that is up 100 percent of the time, that also means that the service can never be updated. 
+	Instead of assuming that every service will run perfectly, services are given error budgets for the SLOs that operates a bit like spending money. 
+	Each service starts with a set amount of errors that are considered normal and expected. Any errors in excess of this budget are considered outages. 
+	So, the goal is to perform all the system maintenance and updates within this budget. 
+	As the days go by each month, the error budget is replenished, giving the development and operations team the breathing room needed to implement changes and apply updates.
+
+	SLO should represent user experience, not service load
+	Example: if a service becomes unavailable at 03:00 AM, but no one notices, perhaps the SLO shouldn't be based on a 24-hour day. 
+	
+SLA:
+	Business contract between provider and consumer
+	There are some services that are so mission-critical, that the service provider must provide a written guarantee, that the service will perform above a certain specification
+	Breaking the SLA grants compensation from the provider to the users. 
+	Not all services have SLAs, but all services should have an SLO. 
+	It's also possible that providers might not publicly disclose their SLOs for fear that users might incorrectly associate the SLO with an SLA.
+	
+	SLA stipulates:
+		Penalty will apply to provider if committed availability broken
+		Customer will receive compensation from provider if SLA is broken
+
+User persona:
+	Abstract representation of how a certain set of users will use your service. 
+	For instance, the power user, the casual user, the road where you are in, the inpatient user. 
+	Can help you determine the SLIs and the SLOs for your service by understanding how each group will actually use your service
+
+2.1.5 Video: Defining the Service: Gathering Requirements
+-----
+Gathering requirements
+	Who's the main character? 
+	What do they do? 
+	What do they look like? 
+	Are they old? 
+	Do they have problems? 
+
+	Step 1 : qualitative requirements. 
+		Why:  Why is the system needed or desire? 
+		Who:  Who are the stakeholders?
+		What: What problem does it solve?
+		When: when do you need to buy? Do you need to buy this weekend? Is there any time value trade offs? 
+		
+		Do I really need to have another dashboard? Right?  Can I use anything else?  Is it really that accounting guy? Is he that special? Should I go ahead and create this dashboard for this? If so, who's going to develop it and what is in scope? Do I have team members? Are they going to continuously change the requirements on us? So what is feasible with the amount of time that I can spare these resources? What does the system need to do? Well, this is going to be a dashboard. Well, what are the priorities? Is it required versus a nice to have? It is a dashboard and the marketing people aren't going to be really using it? They have very important dashboards because they're driving revenue, right? See how quickly we can determine and potentially prioritize something else over that. Well I think that's our always our goal, right? And then when? Well, Perhaps, I have contractors, if I need to put them and pay them over the weekend, just so you can have it on the Monday. 
+	
+	Step 2 : Defining the quantitative requirements
+		time, data, and users. 
+		Time: 
+			Operational time constraints
+			Cost of downtime
+		Data:
+			Cost of data lost
+			Data volume
+			Throughput
+			Freshness
+			Groups of data
+		Users:
+			Number of users
+			Location of users
+	
+	Step 3 : Scaling requirements
+		What happens if we had an unexpected growth? what resource constraints are going to be important to pay attention to? Am I going to be worried about state? Am I going to worry about my data storage, my front end servers, my back end servers? In fact, we're going to deal with all of those. 
+		What about size requirements? Quick trivia question, who knows what this building is? how do we create dimensions around this size? I mean, in this case here, I've seen people overbuy product which may or may not have been necessary or depending on where they might grow, they may have started with something like MySQL. But guess what? MySQL doesn't scale. Its a vertical scaling one and they could have started and been better off with NoSQL, horizontal scaling. They could have given up some eventual consistency for relational. There are things when you got to think about that size, imagine how big it could get, and are you choosing the right solution in the beginning?
+
+2.2.1 Video: Introducing an example Photo Application service
+-----
+Thumbnail photo service, an example application, that will evolve and design throughout the class
+
+2.2 Application
+---------------
+
+Gather the requirements, so first of all, it's a brand new service. So, we don't really know how popular it will be. 
+Requirement:
+	Our users are going to be on the internet, they're going to use a web browser from their computer. Basically, they're going to upload images and it's going to generate thumbnails and I'll assume we don't have PCs fast enough, okay. Just work with me on this. 
+	The speed, we don't really care, as long as it's under a minute, this beats the estimated thumbnail creation time on a computer, so this is a little service we're going to offer. 
+	Resources, well, we don't know how big it is, we're just going to guess. 
+	Scale, we're just going to start out with something small. It's going, I think it's going to grow bigger, so we're going to try to put it into something that can grow, maybe a single virtual machine with a couple of course. We know we can go up to 64, which is quite a bit from our bench marking internally. 
+	size? Well, we're just going to service from one location, we're not really sure where the users are going to come from, so we'll just stick it in some central location in the US. 
+	Availability? Well, nobody knows about it, they don't rely on it. So, if it's up, it's up, if it's down, it's not. But, we'll put something around that. 
+
+Business-logic
+	we want to take a big image and convert it to a thumbnail. 
+	UI --> Ingest --> Image Storage --> Thumbnail conversion --> Thumbnail Storage --> Serving Thumbnail --> ack to UI
+	
+SLO:
+	Uptime: 23 hours/day
+	95.83% availability
+	SLI: service online/offline
+	
+Pre-production processes:
+	unit tests, integration tests with other applications, testing it on for the specific systems, stress testing
+	
+Production tests:
+	rolled out user testing
+	
+2.3 Welcome to Qwiklabs
+2.3.1 Graded External Tool: Graded External ToolQwiklabs – Access the Qwiklabs Environment
+-----------------------
+Qwiklabs login
+
+2.4 Lab
+-------
+
+2.4.1 Video: Lab Intro - Deployment Manager
+-----
+
+2.4.2 Graded External Tool: Graded External ToolQwiklabs – Deployment Manager Beginning Appserver
+-----
+Check Lab: 2.4.2 - Deployment Manager Beginning Appserver
+
+
+Overview
+	Create a Deployment Manager template in YAML format.
+	Learn to work with YAML.
+	Relate JSON to YAML, and correct syntax errors in YAML.
+	Create a prototype template from the documentation by converting the reference to YAML.
+	Prune the prototype template to common and required properties.
+	Use gcloud commands to interrogate the GCP environment to find the exact values and URIs required to configure the template.
+	Use Deployment Manager to create multiple environments for different organizations and purposes and then de-deploy them after they have served their purpose.
+
+Objectives
+	In this lab, you learn how to perform the following tasks:
+	Create a YAML Deployment Manager template from scratch.
+	Configure the properties correctly using information gathered from GCP.
+	Prune properties to just those you need.
+	Identify and resolve YAML syntax issues in a template.
+
+2.5 Quiz
+--------
+
+2.5.1 Quiz: Defining the Service Quiz
+-----
+Done - 5 questions
+
+------------------------------------------
+| Module 3 : Business-logic Layer Design |
+------------------------------------------
+
+* Objectives
+	Assess tradeoffs and make sound choices among Google Cloud Platform products..
+	Develop and deploy a service, including the application and not just the infrastructure.
+	Learn more advanced Deployment Manager template techniques.
+	Create a deployable package using pip.
+	Follow best practices for testing an application prior to deploying it and after it is deployed.
+
+3.1 Lectures
+------------
+
+3.1.1 Video: Business-logic Layer: Design Overview
+-----
+business logic
+	means processing
+	code that implements business rules that determines what happens to data
+	Example: Consider the transaction of buying an airline ticket. 
+		I could buy the ticket at the counter. 
+		I could buy the ticket through a travel agent. 
+		I could buy the ticket from a kiosk machine at the airport. 
+		I could buy the ticket online using a web browser, or I could buy the ticket using an app on my phone. 
+	All of these are different front ends or interfaces, but the transaction itself, of purchasing the ticket, remains the same no matter what interface is used
+	Definition: Part of program that encodes the real-world business rules that determine how data can be created, stored, changed
+	
+	Business logic operates on data. And that means executing code, processing. So for this reason, the business logic layer is also the part of the design process where you'll consider cloud processing options and determine what service the business logic code will use when it needs to run.
+
+3.1.2 Video: Business-logic Layer: Microservice Architecture
+-----
+Microservices architecture:
+	Method of developing software applications as a suite of independently deployable, small modular services and this makes it like tiny lego building blocks. 
+	Each service is going to run as a unique process and it communicates through a very well-defined lightweight mechanism. 
+	
+Benefits
+	Atomic, single-purpose code is very easy to develop and maintain
+	It also does one thing and it does it very well. So, troubleshooting is going to be very easy and it's very fast at what it does
+	It also supports AB testing. 
+	Independently developed services helps in fault isolation, debugging, a redundancy and resiliency because we can just make as many clones as we need to satisfy our requirements. 
+	
+Unit testing is going to be easier because they're individual but integration testing, how well do these services work together, can be a little bit difficult
+	
+Microservices are good when all modules are almost independent of one another but of no use when modules are tightly coupled
+ 	
+Cloud Functions
+	A lightweight computes solution that we offer as a managed service. 
+	It allows developers create the single-purpose standalone functions that respond to Cloud events. 
+	So, you don't have to manage the server, you don't have to manage the run-time environment. 
+	It does run JavaScript on node.js, so it does provide the ability to do front-end and back-end functions, which is great. Cloud Functions are fantastic for a microservice design. 
+	Again, you're solving the problem of having one specific service, whether it's a front-end or back-end service. 
+	It can make calls to other services when it's done to pass along the business logic. 
+
+Limitation:
+	Not a low latency service
+		Solution: Kubernetes or compute engine 
+
+example service using Cloud Functions:
+	Check Image: RCIDP-3.1.2.1.jpg
+
+Google App Engine:
+	This is where Google Cloud Platform started was on App Engine. 
+	Benefits:
+		full code isolation
+		many different languages
+		code is going to be executed through HTTP or RESTful API calls
+	
+	Limitations:
+		Shared services must be isolated in the application design
+		One master application running in production per project
+		Multiple applications will incur overhead
+		
+12-factor support:
+	methodology on how developers design modern based web applications
+
+	Version Control:
+		Cloud shell for building and deploying
+		GitHub support
+	Separate build and run stages
+		Build GAE app in Cloudshell, upload to GAE
+	Keep Dev, Staging, Prod as similar as possible
+		Deployment Manager Templates
+	Explicitly declare an isolate dependencies
+		custom images
+	Storing configuration in the environment. 
+		metadata server or GCS(Google Cloud Storage). 
+	What about maximizing robustness with fast startup and graceful shutdown
+		instance templates, Managed instance groups, auto-scaling 
+
+GAE
+	Code first
+	focus on programming, reduce IT work
+	minimize operation overhead
+	scale and reliability handled by platform
+	Containers can be run on GAE flex
+
+GKE
+	Platform independent
+	Separate app from OS
+	No OS dependencies
+	Already using Kubernetes and need to scale
+	Application can be containerized
+	
+GCE
+	Need processing efficiency
+	Migrating app from Data Center without rewriting it
+	Dependencies on OS
+	Required to use an existing VM image
+	Direct hardware access(GPUs, SSDs)
+	Driver-level access
+	Hardware performance is critical
+	
+Design first, dimensions later
+
+3.2 Application
+---------------
+
+3.2.1 Video: The photo service is slow
+-----
+What's Cause?
+What can be done?
+What lessons does this offers
+
+
+
+3.3 Challenge
+3.3.1 Video: Design challenge #1: Log aggregation
+3.3.2 Discussion Prompt: Design Challenge #1: Log aggregation
+-----
+Own solution
+
+
+3.4 Lab
+-------
+3.4.1 Video: Deployment Manager: Package and Deploy
+-----
+
+customize an instance using the deployment manager template
+install library packages and software required of an application
+package and install a Python application, the Echo application, that will be installed a boot time and will run when the instance starts up. 
+
+3.4.2 Graded External Tool: Graded External ToolQwiklabs – Deployment Manager Package and Deploy
+-----
+Check Lab: 3.4.2 - Deployment Manager Package and Deploy
+
+3.5 Quiz
+--------
+3.5.1 Quiz: Business-logic Layer Design Quiz
+-----
+Done - 6 questions
+
+
+--------------------------------
+| Module 4 : Data Layer Design |
+--------------------------------
+
+* Objectives
+	Integrate on-premises and cloud resources.
+
+4.1 Lectures
+------------
+
+4.1.1 Video: Data Layer Design: Overview
+-----
+
+The data layer covers the storage and retrieval of data, including the mechanisms of storage and retrieval, such as databases and file systems, and including the access methods that use the services, such as SQL and API's. 
+
+Not covered: 
+	transport of data into, around, and out of the system. 
+
+The networking transport of data is covered in the presentation layer module. 
+
+Data layer includes:
+	the data persistent mechanisms - such as the database services and storage services, 
+	and the data access layer - which encapsulates the persistent mechanisms and exposes the data.
+
+4.1.2 Video: Data Layer Design: Classifying and Characterizing Data
+-----
+
+What data transaction properties are required:
+
+ACID 
+	Atomicity
+	Consistency
+	Isolation
+	Durability
+
+BASE
+	Basically Available
+	Soft state
+	Eventual consistency
+
+Data Consistency requirements:
+	Read after write
+	Read after metadata update
+	Read after Delete
+	Bucket listing
+	Object listing
+	Granting access to resources
+	
+What are we trying to optimize
+	uptime
+	latency
+	scale
+	velocity
+	privacy
+
+4.1.3 Video: Data Layer Design: Data Ingest and Data Migration
+-----
+Data migration :
+	The idea that data already exists somewhere and that it will be transported into the cloud. 
+	Once the base of existing data has been migrated, updates and new data will be added to the cloud version and the original is no longer needed. 
+
+Data ingestion :
+	idea that data will continue to originate outside of the cloud and will be periodically loaded into the cloud
+
+GCS Tools for data migration:
+	console
+	gsutil
+		resumable upload and download
+		streaming transfer
+			chunked transfer encoding
+		Control data with Cloud IAM, Signed URLs, ACLs
+	JSON API
+		gzip
+			reduce network bandwidth at expense of CPU
+			transcoding of gzip compressed files
+		partial resource request/reply
+		
+Cloud storage transfer service(Megamaids):
+	It is a Commercial service
+	
+	Import online data to GCS:
+		Amazon S3
+		HTTP/HTTPS location
+		Transfer data between GCS buckets
+	
+	backup data to GCS:
+		move from multi-regional to nearline
+		
+	Synchronize:
+		one time, recurring, import at time of day
+		delete objects not in source
+		delete source objects after transfer
+		filter on filename, creation date
+	
+Google transfer appliance:
+	Rackable device upto 1PB ship to Google
+	use this if dataset meets following conditions:
+		takes more than 1 week to upload data
+		>60TB of data, irrespective of speed
+	Check Image: RCIDP-4.1.3.1.jpg
+
+Ingesting data into your service:
+	Check Image: RCIDP-4.1.3.2.jpg
+	
+4.1.4 Video: Data Layer Design: Identification of Storage Needs and Mapping to Storage Systems
+-----
+
+Storage options:
+	Check Image: RCIDP-4.1.4.1.jpg
+
+Choosing cloud storage:
+	Check Image: RCIDP-4.1.4.2.jpg
+
+BigQuery:
+	Check Image: RCIDP-4.1.4.3.jpg
+
+Cloud SQL:
+	Check Image: RCIDP-4.1.4.4.jpg
+
+Cloud Spanner:
+	Check Image: RCIDP-4.1.4.5.jpg
+
+https://quizlet.com/blog/quizlet-cloud-spanner
+
+https://www.gcppodcast.com/post/episode-62-cloud-spanner-with-deepti-srivastava/
+
+Cloud Datastore:
+	Check Image: RCIDP-4.1.4.6.jpg
+
+Storage and datastore portfolio
+	Check Image: RCIDP-4.1.4.7.jpg
+
+4.2 Application
+4.2.1 Video: Intermittent Outages
+---------------------------------
+
+
+4.3 Design Challenge
+--------------------
+
+4.3.1 Video: Design Challenge #2: Complication
+-----
+Done
+
+4.3.2 Discussion Prompt: Design Challenge #2: Complication
+-----
+Done
+
+4.4 Quiz
+4.4.1 Quiz: Data Layer Design Quiz
+-----
+Done - 2 questions
+
+----------------------------------------
+| Module 5 : Video: Presentation Layer |
+----------------------------------------
+
+* Objectives
+	Develop and deploy a service.
+	Configure a Deployment Manager template.
+	Create a deployable package using pip.
+	Follow best practices for testing an application manually prior to deploying it.
+	Investigate and gather information necessary to configure health checks.
+	Enable and verify that health check are functioning.
+
+5.1 Lectures
+------------
+5.1.1 Video: Presentation Layer: Design Overview
+-----
+presentation layer has to do with the flow of data through the system between the user, business logic, and the stored service, aka this is the network. 
+Agenda :
+	going to be the network edge configuration
+	network configuration for data transfer within the service
+	network integration with other environments
+
+5.1.2 Video: Presentation Layer: Network Configuration
+-----
+Intelligent Traffic Management in design is load balancing. 
+
+Network configuration for data transfer within the service:
+	focus on location, load balancing, and caching. 
+
+Location:
+	1Mn ns =  ms
+	no more than 6-7 round trips between europe and US possible
+
+Load Balancing:
+	Technology that allows us to control the network location of resources used by our service is Load balancing
+	
+	Can get traffic to application in closest region
+	Can scale services by distributing traffic over multiple servers and triggerring auto-scaling
+	Selecting LB Services:
+		Check Image: RCIDP-5.1.2.1.jpg
+	Choosing LB:
+		Check Image: RCIDP-5.1.2.2.jpg
+
+5.1.3 Video: Presentation Layer: Integration with other Environments
+-----
+
+Cloud external IP Address
+Cloud CDN
+	https://peering.google.com/#/
+	
+VPN Configuration
+	Reliability configuration
+	Aggregate capacity configuration
+
+VPN Performance
+
+5.2 Application
+---------------
+
+5.2.1 Video: Period Slowness in Application
+-----
+
+5.3 Challenge
+5.3.1 Video: Design Challenge #3: Growth
+5.3.2 Discussion Prompt: Design Challenge #3: Growth
+-----
+Done
+
+5.4 Quiz
+--------
+5.4.1 Quiz: Presentation Layer Design Quiz
+-----
+Done - 3 questions
+
+5.5 Lab
+-------
+
+5.5.1 Video: Lab Intro - Autoscaling
+-----
+
+5.5.2 Graded External Tool: Graded External ToolQwiklabs – Deployment Manager Adding Load Balancing
+-----
+Check Lab:  5.5.2 - Deployment Manager Adding Load Balancing
+
+
+
+#######
+#Week2#
+#######
+
+------------------------------------------------------------------------
+| Module 6 : Design for Resiliency, Scalability, and Disaster Recovery | 
+------------------------------------------------------------------------
+
+* Objectives
+	Implement technologies and processes that assure business continuity in the event of a disaster.
+
+6.1 Lectures
+------------
+
+6.1.1 Video: Design for Resiliency, Scalability, and Disaster Recovery Overview
+-----
+resiliency: 
+	The ability of a system to stay available and to bounce back from problems. 
+	quality of a design that accounts for and handles failure
+	resilient web application: continues to function despite expected or unexpected failures of components in the system
+	
+this module is designed for resiliency, scalability and disaster recovery. 
+
+design as though the world is crumbling around you
+
+6.1.2 Video: Design for Resiliency, Scalability, and Disaster Recovery: Failure Due to Loss
+-----
+
+challenge isn't to avoid it, but to accept it and deal with it
+
+Failure due to a loss:
+	Now a failure due to loss of resources required by the service, a single point of failure, and correlated failures
+	failure is not optional, it's mandatory
+	Hardware, software, people, communications, it's all going to fail. 
+	
+	Hardware: don'yt depend on it
+	Software: make it modularize, monitor, test, canary
+	People  : you're always going to have to review procedures and understand a proper escalation path
+	communication: Don't assume that somebody else has sent it out. You have to have a design process that communicates with your customers, other team members and important people who are going to be potentially affected or need to learn from this. 
+	
+Anticipate failure, design for failure, and fail gracefully.
+
+1. Single points of failure: 
+	hardware: It could be multiple machines failing at once because they're attached to the same power supply, power source. 
+	network paths: back hoe has dug up fiber cables
+	Data: replicate, copies, Replicate everything
+
+2. Design to avoid single points of failure:
+	A spare for the spare, so N+2. Because you want to plan to have one unit out for upgrades or it failing. And another one survives while it's failing. 
+	Make sure each unit can handle extra load
+	don't make any single unit too large #microservices
+	Don't concentrate responsibility onto a single process's server
+	Try to make interchangeable clones
+
+	Correlated failures:
+		when something fails and cause a huge chain of events, as you can see a number of different issues here
+		A group of related items that could fail at one time is called a failure domain
+	
+		Design to avoid correlated failures:
+			decouple servers, use microservices
+			Split responsibility into components and spread over multiple processes
+			Separate and isolate the risks
+			Design independent but collaborating services
+			
+6.1.3 Video: Design for Resiliency, Scalability, and Disaster Recovery: Failure Due to Overload
+-----
+
+When a resource crosses into a nonlinear behavior running out of memory, running out of disk which we call thrashing the disk. It can stop responding, there's no network available, there's no memory available, the CPU is too high. What will happen it creates this huge chain of effect and all the services that depend on it can fail
+
+When it comes to overload, prevention is really the best solution so design is critical. 
+
+Design to prevent cascading failures
+	achievable
+	monitor safety size
+	increase capacity for failover and not just operating capacity
+	
+fan-in overload failure
+	single server and backend is distributed via LB 
+	Reqest goes to any of multiple backend service, but what about response, it goes to just A SINGLE SERVER
+
+Queries of death overload failure
+	business logic error shows up as over consumption of resource and service overloads
+	Solution: monitor query performance
+
+Positive feedback cycle overload failure
+	you try to make the system more reliable by adding retries, and instead you create potential for an overload
+
+Detect overload:
+	early warning systems(canaries)
+	we launched and we test a single server before enabling autoscaling on an instance group. We want to test that server to see how well it's workload is and then what we might do is limit the size of the autoscaling group, because if you had a feedback loop and imagine you could quickly maximize the max setting on your cluster size.
+
+6.1.4 Video: Design for Resiliency, Scalability, and Disaster Recovery: Coping with Failure
+-----
+
+By making the processes and behaviors you want part of the normal routine operations, you avoid the surprise
+example: 
+	if you know that a zone outage is possible, consider establishing rotating outages as part of the routine operations. 
+	if you know that the users expect 99.95 percent availability, and your service is operating at 99.99 percent availability, consider using that 0.04 percent gap to exercise your resiliency and recovery designs. 
+	don't underestimate the importance of meetings. Circumstances are going to change, if you surround the technical processes with the right human processes, the team will catch the issues before they become emergencies. 
+	
+coping with failure:
+	failure is going to occur and the best way to deal with it is preparedness
+	To avoid any nasty surprises, it's also a really good idea to prepare for an emergency before it happens
+	Failure is likely to happen at some stage but if you prepare, you can really limit the impact.
+
+incorporate failure in SLOs
+
+Strategies for dealing with failure
+	redesign: remove faulty/risky component
+	prevention: take steps to ensure...
+	detection and mitigation: detect failure before it happens
+	Graceful degradation: 
+	repair: fix the issue
+	recover:
+
+6.1.5 Video: Design for Resiliency, Scalability, and Disaster Recovery: Business Continuity and Disaster Recovery
+-----
+Cloud DNS: 
+	first entry way to any application service on the web
+	has % uptime guarantee
+	
+Users care about data integrity
+
+reliable recovery with lazy detection
+	Check image: RCIDP-6.1.5.1.jpg
+
+Goal is not backup or archive, it is restore
+
+Tiered backup of resiliency:
+
+1st Tier:
+	Frequent backups
+	Quickly restored
+	Close to datastore
+	BKP kept for <10days
+
+2nd Tier:
+	backup twice a week
+	may take hours to restore
+	backup to random access distributed file
+	system local to the application
+	BKP kept for <35days
+	
+3rd Tier:
+	nearline storage
+	protect against site-level risks
+	balance risks against costs
+	BKP kept longer depending on policy
+	
++tiers:
+	Offline storage / archive
+	retained longer, policy
+
+Cloud store features for backup and DR
+	Lifecycle management
+		changing storage class of objects
+		deleting an object
+	Versioning
+		live vs archived N versions
+		whole objects, not incremental
+		works with lifecycle management
+	
+6.1.6 Video: Design for Resiliency, Scalability, and Disaster Recovery: Scalable and Resilient Design
+-----
+
+several steps you can take to make your design resilient
+
+
+Resilient design:
+	Use custom health checks
+		HTTP, HTTPS, TCP, SSL
+	
+	Instances
+		Automatically replace failed/unavailable instances
+		new instances should: understand role in system, configure itself automatically, discover dependencies, start handling requests as soon as they are up
+	
+	Storage
+		Cloud storage
+			replicable, durable, virtually infinite
+		Cloud SQL
+			replicable across multiple regions/zones
+	
+	Network
+		LBs
+			not hardware, set of rules
+		Location
+			hosting servers in multiple data centers(zones and regions)
+
+Desgin Pattern:
+	Check image: RCIDP-6.1.6.1.jpg
+
+Microservice design:
+	Check image: RCIDP-6.1.6.2.jpg
+
+12 factor system design:
+	Treat backend services as attached resources, we can do so with our networking load balancer. 
+	export our services via port binding: 
+		We can expose an API through our Cloud endpoints. 
+		We can expose it through services in Kubernetes. 
+		We can also expose this utilizing load balancers. 
+	execute the application as one or more stateless processes
+		This allows us to scale up via the process model
+			GCE Autoscaling: GAE, Cloud Functions
+		offloading the state
+			Cloud Datastore and Cloud SQL
+
+6.2 Application
+---------------
+
+6.2.1 Video: Out of Service!
+-----
+Always have a plan for dealing with major outage:
+	Appoint one person
+	Communicate
+	Clean up and loose ends left during incident response
+	Prepare a post-mortem report
+
+6.3 Design Challenge
+6.3.1 Video: Design Challenge #4: Redesign for Time
+6.3.2 Discussion Prompt: Design Challenge #4: Redesign for Time
+-----
+Use cloud pub/sub
+
+6.4 Quiz
+6.4.1 Quiz: Design for Resiliency, Scalability, and Disaster Recovery Quiz
+-----
+Done - 10 questions
+
+-----------------------------------------
+| Module 7 : Video: Design for Security |
+-----------------------------------------
+
+* Objectives
+	Implement policies that minimize security risks, such as auditing, separation of duties and least privilege.
+
+7.1 Lectures
+------------
+7.1.1 Video: Design for Security: Overview
+-----
+There are three kinds of security services built into the Google Cloud platform. 
+	The first kind are services that are transparent and automatic, such as encryption of data that occurs automatically when data's transported and when it's at rest. 
+	The second kind are services that have defaults but that offer methods for customizations, such as using your own encryption keys rather than those provided. 
+	Third kind are services that can be used as part of your security design, but only contribute to security if you choose to use them in your design. 
+
+7.1.2 Video: Design for Security: Cloud Security
+-----
+
+security effort are built into the infrastructure itself. You need to know about them so you don't accidentally spend effort duplicating them. 
+
+Security layers:
+	Check Image: RCIDP-7.1.2.1.jpg
+
+7.1.3 Video: Design for Security: Network Access Control and Firewalls
+-----
+The first level of security where your design can have a significant impact is on network level access control. 
+For example, if you remove the external IP from an instance in a bastion hosts design, you'll eliminate one target that could be attacked. 
+
+Locking down network access to only what's required is one way to reduce the potential attack surface. 
+
+Check image: RCIDP-7.1.3.1.jpg
+firewalls is really our first line of defense, trying to prevent any unauthorized access to ports, protocols, and communications that we do not want to allow. 
+And we now have configured our firewalls so we can block egress, ingress, as well as from the client to the individual network. 
+So we can actually isolate the virtual machines on both ingress and egress. 
+So this way, the servers can actually talk privately to the other virtual machines. 
+The clients will have ingress capability to talk to VMs if necessary, and then, of course, being able to get access to the network at all. 
+
+it's not just enforced on the host, where if you install IP tables. 
+
+When you set up a Google Cloud firewall, again, it's not an appliance, it's not a physical thing that can be hacked into, it's not going to have a single point of failure, etc. This is a distributed set of rules that as soon as you enter the Google network and we find out your destination IP is going to be your network, we apply all of these different firewall rules, whether they be both internal or external, to ensure security throughout the entire connection. 
+
+
+Designing VMs for secure access:
+	VMs with external IP Addresses
+		GCE firewalls
+		HTTPS and SSL
+		Port forwarding over SSH
+		SOCKS proxy over SSH
+	VMs with external IP Addresses
+		bastion hosts and SSH forwarding
+		IPSec VPN
+		NAT gateway for egress
+		Interactive serial console access
+
+API access control so using cloud endpoints:
+	Oftentimes, as a service, you just want to expose something to the web through a protected API endpoint. 
+	Well, now you can control who has access utilizing and validating every single call with a JSON Web Token and Google API keys. 
+	So you pass the keys, you want to rotate these keys quite often and ensure that tokens are provided by the user and/or remote applications. 
+	So this way, we can do dual authentication to identify users and/or actual other applications that may need to communicate with our web endpoint.
+
+7.1.4 Video: Design for Security: Protections Against Denial of Service
+-----
+Part of the protections against denial of service attacks are built into the cloud infrastructure. 
+The network, for example, uses software defined networking or SDN. Since there are no physical routers and no physical load balancers, there are no actual hardware interfaces that could be overloaded. 
+
+There are also services that adapt to demand in intelligent ways, and you can use these in your design to afford further protection against overload attacks. 
+
+types of denial-of-services attack:
+	bandwidth
+	connection
+	Application	
+
+Edge protection against DDoS:
+	Cloud CDN
+		content is served from edge
+		cache hit insulates the network and your application
+	Global LBing
+		detects and drops source port UDP
+		Solves NTP amplification
+		bandwidth protection and connection protection
+	TCP/SSL Proxy
+		Drops all UDP floods
+		solves SYN floods by terminating TCP connection
+	
+Network protection against DDoS:
+	Cloud Network firewall
+		Filter known bad traffic before it reaches your application
+	VM Traffic Throttling
+		Gbps/VM limit
+		network protects VMs against large scale sustained attack
+
+Infrastructure protection against DDoS:
+	Autoscaling
+		Absorb attacks of any size
+		traffic throttling protects VMs
+	Cross-region overflow
+		failover to absorb attack
+
+7.1.5 Video: Design for Security: Resource Sharing and Isolation
+-----
+The least secure design is where everything is in a single failure domain, and all the parts communicate and depend directly on one another. 
+There are many ways of separating those parts and providing more private, or tolerant communication channels between them, creating multiple failure domains and therefore better isolation. 
+
+Sharing enables collaboration between parts, where isolation prevents the compromise of one part from spreading to the other. 
+
+isolating through virtual private cloud:
+	If you have two different projects that need to talk to each other, in this case you can isolate the two networks from each other. 
+	So this way, they'll have their own private IP space, and private security mechanisms, and it's own identity access management. 
+	So any user here can't make actual changes to this network. Even though they're capable of communicating over the network, they may not have authentication capabilities to do so. 
+	
+IP address isolation using VPN tunneling:
+	an encrypted link between two multiple projects. 
+	This doesn't have to be in the cloud, this can also be an on premise. 
+	But here what if we want projects to talk to each other privately, they can use another private IP address subnet space to increase the privacy, and the encrypted communications between the two. 
+	But we also do encrypt our communications between all services actually but in this case here, you'll have more granular control over the encryption policy. 
+
+Cross-project Virtual Private Cloud network peering:
+	directly connect two projects together using a private IP address. 
+
+Shared private cloud: 
+	Check image: RCIDP-7.1.5.1.jpg
+	In this case here, you can have different Virtual Private Clouds with their own projects. And here they use that cross-project networking, which will allow them to communicate. 
+	So you actually create a separate project for this, and this project is responsible for allowing all of this inter-project communication to exist. 
+	So this is really handy. If you have single server providers that need to provide access to different projects, you want to isolate them, but you still want to allow them to communicate on a private subnet network, without having to go over the public internet. 
+	
+isolating through multiple network interfaces:
+	isolate based on the virtual NIC
+	So each of virtual machines can now handle up to eight private NICs. 
+	And so every time you have another NIC, you can actually have a private subnet that's connected to them. 
+	So some applications may retrieve data incoming on one subnet, but actually communicate with another. 
+	So almost kind of like a DMZ in this case. In which if you're going to get through, this is kind of the proxy if you want to be able to communicate with that other network. 
+	This is also good for software-defined security applications. So say you install something from our cloud launcher, and it's a security system which will examine and inspect all incoming traffic, and perhaps it will do some intrusion detection and then it will send it on to the network. So these oftentimes are applications that require multiple virtual NICs to represent their appliances that they have available in the real world. 
+	
+Access the GPC services over an internal IP:
+	Well, that's now available. Because this was some of the concerns, that somebody says, "Hey, I have a Compute Engine, but what I'd like to do is I want to access Google Cloud Storage." But it's going to be internal only, it should never be exposed and neither should this Compute Engine. 
+	So, why do I have to use a public IP? Well now, with private networking, actually when you set up your private networks, you can enable a private Google Cloud Access so this way you never have to expose your services to the public internet. 
+	example: If we go to the Google Cloud Console, then we'll scroll down to VPC networking, and then we're going to go ahead and let's do a VPC network. So you can only do this on VPC creation. So when you're creating a VPC network, this is going to be your own private subnet. 
+	
+7.1.6 Video: Design for Security: Data Encryption and Key Management
+-----
+Google automatically encrypts data in motion and data at rest
+
+you can use Google's built-in key management, or you can provide your own keys
+
+KMS:
+	The connection is already going to be connected over HTTPS. Now hopefully you have an HTTPS load balancer. We've got encryption that's communicating between any cloud services and any applications. All of that is done on the fly. 
+	In fact, we store keys in memory, so nothing is actually being stored on the applications that can be compromised. 
+	This is keeping in line with the 12 this in the environment, and also keys are automatically periodically rotated. 
+
+	
+Customer Managed Encryption Keys:
+	applies to both Google Compute Engine Virtual Machines which have persistent disk, as well as Google Cloud Storage
+	
+Customer Supplied Encryption Keys:
+	you can basically use your own 256 bit encryption AES
+	You want to keep keys on premise
+	Don't store them on the cloud
+	you hold the decryption keys. There's nothing Google can do to decrypt that data.
+
+	So that is provided as well on persistent disk, but again if you decide to go this route, if the key is lost, there's no way for us to decrypt the data, so this includes virtual machines.
+
+more control on encryption:
+	client side encryption
+		encrypt the data before you send it over to Google Cloud Storage, and then you could also encrypt the storage bucket
+	disk encryption:
+		file system encryption. 
+		TrueCrypt, for example, is a very popular one, it's an open source. 
+		So there are many different levels you can really get as granular as you need to when it comes to encryption.
+
+7.1.7 Video: Design for Security: Identity Access and Auditing
+-----
+Authorization:
+	controlled by Google's Identity and Access Management or IAM system. 
+	You're already using this service to control authorized access. By using the auditing tools available, you can also check for unwanted actions like attempts at unauthorized access. That can tell you where the attackers interest is focused. So you can add security measures in those areas. 
+	
+IAM policies:
+	policy inheritance
+		you can actually define security at the organizational level. 
+		You can organize those into folders which then roll down to projects to individual resources. 
+		you have a lot of granular control, you can say who? Does what? To what resource? That means they can control individual virtual machines, start and stop them, maybe they can only start them, they can't stop them, you can get very granular. 
+		if you can go ahead and create custom rules that are the least privileged only. 
+		hierarchy inheritance
+
+service accounts:
+	So when you're not working with humans, you need to be able to give that same level of authentication to applications. 
+	One for auditing reasons, but also this way if a user's account is compromised, they still need to have the private JSON key in order to access a particular service account
+
+GCP security auditing with Forseti:
+	open source tool
+
+Cloud audit logging: 
+	identify who did what, where, and when
+	the free version of our Cloud audit logging lasts for seven days, but you can get up to 30 days if you're paying for the premium
+	
+external audits and GCP standards and compliance
+
+7.2 Application
+7.2.1 Video: Photo service: Intentional Attack
+-----
+There's evidence that hackers are trying to compromise the private information of system users, and maybe try to bring down the service. 
+That brings up two important issues. 
+	how does the system keep users data private
+	how does the system protect against a denial-of-service attack
+
+7.3 Design Challenge
+--------------------
+
+7.3.1 Video: Design Challenge #5: Defense In Depth
+7.3.2 Discussion Prompt: Design Challenge #5: Defense In Depth
+-----
+Done
+
+7.4 Quiz
+7.4.1 Quiz: Design for Security Quiz
+-----
+Done - 6 questions
+
+
+------------------------------------------------------
+| Module 8 : Capacity Planning and Cost Optimization |
+------------------------------------------------------
+
+* Objectives
+	Identify ways to optimize resources and minimize cost.
+
+8.1 Lectures
+------------
+
+8.1.1 Video: Capacity Planning and Cost Optimization: Overview
+-----
+Both forecasting for future demand on a system, and planning the resources for a system, depend on non-abstract large-scale design sometimes called dimensioning
+
+When you optimize for one factor by changing a resource, there may be other consequences. For example, if you change the VM size to optimize CPU capacity, it's possible that network throughput memory and disk capacity could change as a consequence. 
+So, you really need to think through all the dimensions that are affected by your design and perform the calculations to ensure there's sufficient capacity for your purposes. 
+
+A common mistake is to optimize away resiliency. Remember that overcapacity is sometimes included by design to handle bursty periods, growth, or intentional attacks
+
+Failing to recognize the purpose of excess capacity, and then reducing it to save money, can create opportunities for cascade failures
+
+agenda for this module is we'll talk about capacity planning, pricing, then we're going to go back to our photo service and see if we can optimize for cost and capacity in there. Then finally, we'll add some additional dimensioning around our Google Cloud Logging, or our logging service
+
+8.1.2 Video: Capacity Planning and Cost Optimization: Capacity Planning
+-----
+common measures: VM instance capacity, disk performance, network throughput, and workload estimations. 
+
+you need to be able to answer the question, is there sufficient resource with reasonable certainty? 
+
+forecasting is going to be iterative
+
+don't mistake launch demand for something stable, or you might actually over-provision. 
+	A great example of this is when companies release a new game. All the news and the hype is out there, then they get a huge influx of new users. And they have to design a 10x But as the game starts to stabilize, and the popularity waxes and wanes, or if it's competing with another one, you'll start to see just kind of shaking out of all the steady users. And that's pretty much what you have to work with, so don't get all excited about that launch demand, wait for stabilization to occur
+Always remember to include the N + 2 servers, or else you're going to potentially risk an overload situation that we've covered earlier. 
+Always add head room to deal with non-linearity of demand. 
+	So this way, if you start to experience individual spikes, etc. 
+add overhead to instance estimates
+	if you always measured, say, 10,000 qps for performance, understand if that's going to change in the future. Perhaps the way the network is designed, the software, etc., you may not get that linear type of growth projection.
+
+
+instance overhead estimation:
+	of 100% capacity of a VM, some will be consumed by overhead
+	if you can't test, overhead is a cautious estimate
+	Load testing an better estimate the overhead
+	
+	OS Image: choice can make a difference
+		test several images
+	Hardware architecture can make difference for some workloads
+	OS firewalls turn off if GCP firewalls are sufficient
+	On windows, move Pagefile to local SSD if affordable
+	
+Persistent disk estimation:
+	Check Image: RCIDP-8.1.2.1.jpg
+	
+Network capacity estimation:
+	Consider potential IO bursts
+	network capacity scales with the number of cores
+	Interanal IPs and external IPs are different, they're not symmetrical
+	
+Workload estimation:
+	Throughput depends on,
+		type of requests or operations
+		requests that change state
+		request size
+		whether systm uses sharding, pipelining, batching
+		ex: perfkit benchmarker
+	
+	it's really a large cycle. 
+	First, you forecast, if you don't have any previous data, you honestly just pull something out of the air. 
+	Then you decide, what is it you're going to allocate, what resources are going to be necessary, and then try to go and get approval for that. 
+	testing simply beats tradition, so don't mistake launch demand for something stable, or you might actually over-provision. 
+	always remember to include the N + 2 servers, or else you're going to potentially risk an overload situation that we've covered earlier
+
+1. if you're moving from an on-premise VM with, say, eight cores, that actually represents 16 virtual cores inside of the Google cloud platform. because every vCPU is a hyper thread, so that one there can easily be identified. 
+2. what about the operating system image? Just the fact that you're running an OS takes up capacity, and so test different types of images. In fact, our performance team has identified that Ubuntu performs the best in pretty much all platform benchmarks when it comes to Google cloud platform.
+3. Understanding hardware architecture, remember, different zones have different hardware components. In fact, now, when it comes to a compute engine, you can actually go in here when you're creating a compute instance. 
+4. look out the difference zones and instances to try to get a guesstimate of what you might get. But notice here, when you create an instance, let's go ahead and re-authenticate here.
+
+when we create virtual machines, we also tell you, it's not 4 gigs of memory, it's 3.75 or some decrement
+
+PerkKit Benchmarker:
+	open source project on GitHub that Google has created
+	includes 28 open performance benchmarking tools
+	
+
+allocate:
+	Forecasting is going to tell us basically how much capacity, how much we're going to potentially allocate
+	So allocation is going to tell us how much resource is going to be necessary to provide that capacity. 
+n kind of get an idea here, bouncing back and forth. Trying to find that kind of happy medium when it comes to your launch process.
+
+8.1.3 Video: Capacity Planning and Cost Optimization: Pricing
+-----
+
+8.2 Application
+---------------
+
+8.2.1 Video: Photo Service: Cost and Capacity
+-----
+
+Pricing:
+	Pricing is commonly used in cost optimization, reducing cost, and also for budgeting. 
+	you may have distributed an element of your solution over multiple regions to improve reliability. However, that distribution design might result in additional network charges for egress traffic. 
+	pick from standard templates and then optimize for high memory, or just simply more CPUs and memory, add GPUs, or just customize your exact workload. 
+	We already include the machine type discount, and we have inferred type discounts, so, we have sustained-use discounts, we have inferred instance discounts. So, if your popcorn VMs, we can calculate how often, how many hours you've used a particular type, then we try to pair it up with one of our lower costs configurations and give you a discount at the end of the year. 
+	
+	pre-pay : fixed discount for anywhere from one year to three years depending on how much you'll commit to. this doesn't apply to our managed services. You'll notice all of these are listed here, app engine, app engine Flex, Dataproc, so on and so forth. 
+	
+	pre-emptible VMs: 
+		If we're going to be creating a highly available environment, you might as well use something that gives you an 80 percent discount. 
+		you can be disrupted with 30 second notification, you're guaranteed to be turned off within 24 hours if you're not preempted, but you've already built in the ability for fault-tolerance and failover. 
+		
+		optimizing disk costs:
+			determine how much space you need
+			determine what performance characteristics app requires:
+				IO pattern: small reads and writes or large reads and writes
+				configure instances to optimize storage  performance
+				
+			Well, in this case you're either deciding to purchase storage for performance or for capacity. 
+			So, when it comes to SSD, it certainly costs more per gig, but it's a much lower price for I up. So, you have to try to find that balance on which one is going to fit your budget. 
+			
+	network optimizing:
+		If you are going to be going multi zone, which is best practices, there actually is a fee to do egress between this multiple zones within the same region. 
+		It's about one penny per gig. There isn't infrastructure that is required to support that. So, it's very minimal cost as opposed to egressing, which comes in at a full $0.08 per gig. 
+		you can save money on that with CDNs using our CDN, or our content providers, or even dedicated network connectivity to Google, either through a partner interconnect or private interconnect, which will save you also 50 percent on your cost. 			Now if you're egressing between regions, that's going to be standard egress as well as going to intercontinental. intercontinental can sometimes be a little bit more expensive
+		
+	VM to VM in same zone:
+		Egress throughput cap:
+			each core is subject to 2 Gbits/second capacity
+			each additional core increases the capacity by 2 Gbits/second
+			Maximum is 16 Gbits/second
+			instances of 0.5 vCPU or less get 1 Gbits/second capacity
+
+8.3 Design Challenge
+--------------------
+
+8.3.1 Video: Design Challenge #6: Dimensioning
+8.3.2 Discussion Prompt: Design Challenge #6: Dimensioning
+-----
+SSD is time saviour in terms of query execution
+
+
+8.4 Quiz
+--------
+8.4.1 Quiz: Capacity Planning and Cost Optimization Quiz
+-----
+Done - 2 questions
+
+-------------------------------------------------------------------------
+| Module 9 : Deployment, Monitoring and Alerting, and Incident Response |
+-------------------------------------------------------------------------
+
+* Objectives
+	Implement processes that minimize downtime, such as monitoring and alarming, unit and integration testing, production resilience testing, and incident post-mortem analysis.
+	Launch a cloud service from a collection of templates.
+	Configure basic black box monitoring of an application.
+	Create an uptime check to recognize a loss of service.
+	Establish an alerting policy to trigger incident response procedures.
+	Create and configure a dashboard with dynamically update charts.
+	Test the monitoring and alerting regimen by applying a load to the service.
+	Test the monitoring and alerting regimen by simulating a service outage.
+
+9.1 Lectures
+------------
+9.1.1 Video: Deployment, Monitoring and Alerting, and Incident Response: Overview
+-----
+Don't just design your service, design its operation
+
+9.1.2 Video: Deployment, Monitoring and Alerting, and Incident Response: Deployment
+-----
+Make a checklist, automate processes, use an infrastructure orchestration framework
+
+Dependencies:
+	shared infrastructure
+	external and 3rd party
+	
+Plan for capacity
+	Verify overload handling procedures
+	
+SPOF?
+
+Security and access control
+	Verify attack shields
+
+Rollout plan
+	Gradual
+	Staged/Phrased
+	%age of users
+	
+Deployment Manager
+	Configuration
+		describes all resources written in YAML
+	Resources
+		list of resources to create
+	Templates
+		buiding blocks of configuration written in python or Jinja2 and referenced in YAML file
+
+9.1.3 Video: Deployment, Monitoring and Alerting, and Incident Response: Monitoring and Alerting
+-----
+
+Check Image: RCIDP-9.1.3.1.jpg
+
+two types of metrics:
+	Check Image: RCIDP-9.1.3.2.jpg
+	push-based metrics:
+		simply send out alerts
+		for example, a disk is full or you have a new item that's been uploaded to a bucket. 
+		That way, you're going to send out a webhook notification, or you can pull from the outside. 
+		So, you're periodically doing a push-pull trying to check at certain intervals to make sure everything is functioning. 
+	pull-based metrics:
+		If you don't have the ability to tell yourself that something is down, you can also verify if the service is down by periodically monitoring to see if the service responds. 
+	
+Alerts
+Tickets
+Logging
+
+12-factor administration and operations design in GCP:
+	treat logs and events as streams:
+		Now, you've kind of created your own in your own log measurement, but you could most likely replace all of this with Stackdriver Logging. Because Stackdriver Logging can ingest this in real time, it makes it queryable. It can also export in real time to BigQuery and/or Google Cloud Storage for long-term archive. So, there's a lot of flexibility there and maybe this is how you want to do post-processing.
+		
+	run administration and management tasks as a one-off process:
+		This way, you don't give the humans full root access, perhaps you have them authenticate and utilize service accounts to do major functions. 
+		These can be auditable and you can easily revoke access. 
+		Stackdriver can handle everything end to end from the monitoring, error reporting, Cloud tracing, and debugging. 
+		But, these last three features are exclusive to Google App Engine and are only possible if you're using that service.
+
+Stackdriver:
+	Check Image: RCIDP-9.1.3.3.jpg
+	Check Image: RCIDP-9.1.3.4.jpg
+	collection of tools that are unified together
+	Google uses Fluentd to capture logs, which can actually be captured from any location in the world even if it's not a Google service
+
+	features:
+		uptime health check:
+			You want to make sure that you're monitoring your uptime. 
+			This is how you check for your error allocation for the month, and trigger any alerts if anything goes down. 
+			you can make very nice graphical visualizations which consist of and can actually show you your service level indicators for the month and any outages can be tracked. 
+			So, it's very easy to start to report on uptime and also create simulated walk throughs. 
+			In this case you're just going to simply hit the homepage and identify if it's up or down and then count it as a timeout if it times out at 10 seconds. 
+		Creating an alert:
+			So, at some point, you will have a failure that has occurred. 
+			Condition
+				Basically, you're alerting policy will define what the health condition is. You can have multiple conditions and different kinds of notifications. 
+				Do you want to send out an email alert or a Slack channel alert? 
+			Notification
+				Do you want to do a webhook notification? 
+				Perhaps you know that there's a memory allocation issue and the processes is just to reboot the server. 
+				So, you don't need a human for that at all. 
+				You can send out a webhook notification to an application that's listening for that webhook, and then it can run as a service account to restart the VM, or something simple like that. 
+			Documentation:
+				Those involved 	need to have a clear understanding of what the problem is, as well as what needs to be done to fix it. Think of those on call who might not have the required levels of experience or expertise to solve the problem. This information can be extremely helpful to them. It's also an opportunity to document best practices. 
+				
+		Dashboards and Graphs:
+			great visualizations, gives you historical information, and helps you find correlations. 
+			You can scroll through and create groups of services or scroll through a specific time and identify events such as a spike and CPU, which is associated with memory allocation, and so on. 
+			visualizations can help you compare and test with early warning results and production results, so you can see what's going on inside of production.
+
+9.1.4 Video: Deployment, Monitoring and Alerting, and Incident Response: Incident Response
+-----
+
+Site Reliability Engineering:
+	Check Image: RCIDP-9.1.4.1.jpg
+	Check Image: RCIDP-9.1.4.2.jpg
+
+9.2 Application
+---------------
+
+9.2.1 Video: Stabilization and operation
+-----
+
+9.3 Design Challenge
+--------------------
+9.3.1 Video: Design Challenge #7: Monitoring and Alerting
+9.3.2 Discussion Prompt: Design Challenge #7: Monitoring and Alerting
+-----
+Check lab: Deployment Manager_ Full Production + (Stackdriver)
+
+Overview
+	Install an advanced deployment using Deployment Manager sample templates.
+	Enable Stackdriver monitoring.
+	Configure Stackdriver Uptime Checks and Notifications.
+	Configure a Stackdriver Dashboard with two charts, showing CPU and Received packets.
+	Perform a load test and simulate a service outage.
+
+Objectives
+	Launch a cloud service from a collection of templates.
+	Configure basic black box monitoring of an application.
+	Create an uptime check to recognize a loss of service.
+	Establish an alerting policy to trigger incident response procedures.
+	Create and configure a dashboard with dynamically update charts.
+	Test the monitoring and alerting regimen by applying a load to the service.
+	Test the monitoring and alerting regimen by simulating a service outage.
+
+9.4 Lab
+9.4.1 Video: Deployment Manager - Full Production
+9.4.2 Graded External Tool: Graded External ToolQwiklabs – Deployment Manager Full Production
+
+9.5 Quiz
+9.5.1 Quiz: Deployment, Monitoring and Alerting, and Incident Response Quiz
+-----
+Done - 3 questions

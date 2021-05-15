@@ -1,0 +1,18 @@
+Latency – The time taken for a packet to be transferred across a network. You can measure this as one-way to its destination or as a round trip
+Throughput – The quantity of data being sent and received within a unit of time
+
+
+CPU: Central Processing Unit
+	for Arithmetic calculation
+	low throughput for bunch of Arithmetic operations
+	2 * 3 * 6
+
+GPU:
+	Has higher latency
+	High throughput
+	Can perform [1, 2, 3] * [4, 5, 6] simultaneously
+	parallel processing
+
+TPU:
+	Google came up with this for tensorflow operations
+	Highest throughput

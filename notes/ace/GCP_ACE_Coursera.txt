@@ -1,0 +1,363 @@
+---
+GCP
+---
+
+https://www.coursera.org/learn/preparing-cloud-associate-cloud-engineer-exam/home/welcome
+Course: Associate Cloud Engineer
+Ability to download resources
+
+Time: ~7 weeks, 450 minues, 7.5 Hours
+
+Personal Target
+Target: 15 Days
+50 minutes/day
+
+-------
+Welcome
+-------
+
+- Google Cloud Platform: Deploy applications, monitor operations, and manage enterprise solutions
+- Six learning modules
+	Understanding Associate Cloud Engineer Certification
+	Setting up a cloud solution environment
+	Planning and configuring a cloud solution
+	Deploying and implementing a cloud solution
+	Ensuring successful operation of a cloud solution
+	Configuring access and security
+	
+	
+	
+
+-------------------------------------------------------
+1. Understanding Associate Cloud Engineer Certification
+-------------------------------------------------------
+
+ACE: Associate Cloud Engineer
+
+About GCP certification
+Devising a study strategy
+Ready?
+Appear for exam
+
+About GCP certification
+--
+ACE Certification:
+Job and Task based certification
+Knowledge + Skill
+Core Technology
+
+Devising a study strategy
+--
+ACE: Montior, and Manage cloud solutions
+ACE = Professional - Business Requirements
+
+Exam Guide
+Online Practise Exam
+
+cloud.google.com/docs
+It has sectional documentation
+
+Target: <45 minutes with 80% marks
+
+
+
+
+
+
+1. Setting up a cloud solution environment
+
+1.1 Setting up cloud projects and accounts:
+    * Creating projects.
+    --
+    Hierarchy:
+    Organization > Folder > Project > Resource
+    Project does not have to reside under a folder in order to have a parent. In this instance, Project 5 inherits directly from the org node, example.com.
+    
+    * Assigning users to pre-defined IAM roles within a project.
+    --
+    Roles: Collection of permissions
+    Types: Primitive, Predefined, Custom
+    
+    Primitive: 
+    Owner - Everything
+    Editor - Deploy Application, Configure services, modify code
+    Viewer - Read Only
+    Billing Administrator - Manage billing, add/remove administrator
+
+    Permissions: WHO | can do what | on which resource
+
+    Roles at: Project Level, Folder Level, Organization Level
+
+    Linking users to G Suite identities.
+    --
+	To collaborate with team-mates
+	Example: Lets say We've added Pratik into organization, Pratik leaves Org but no centralized entity to remove pratik's access.
+	Solution: G Suite, Google Admin can immediately disable
+	GCP customers who are not G Suite customers can get these same capabilities through Cloud Identity
+	Cloud Identity: Lets us manage and groups using the Google Admin Console, but you do not pay a received G Suite collaboration products.
+    
+    Enabling APIs within projects.
+	--
+	4 ways to interact with GCP
+	REST APIs
+	Your code can use Google services in much the same way that web browsers talk to web servers.
+	
+	We don't need to start from Zero, Google provides some libraries that we can leverage
+	Two type of libraries:
+	1. Cloud client libraries: Latest and recommended, They adopted native styles and idioms of each language
+	2. Google API client library: when Cloud Client Library doesn't support new services and features. Designed for generality and completeness
+	
+	API Console: To try Google APIs using browser
+	i.e.: Browser APIs and Versions, Seem methods available for each API
+	execute requests and observe response
+	easily make authenticated and authorized API calls
+	
+    Provisioning one or more Stackdriver accounts.
+	--
+	Multi cloud monitoring and management service
+	Integrated logging and diagnostics
+	Manages resources across platform: GCP, AWS, On-premises
+	Provides observable signals on resource performance
+	
+	
+* Provisioning one or more Stackdriver accounts.
+	--
+	Multi cloud monitoring and management service
+	Integrated logging and diagnostics
+	Manages resources across platform: GCP, AWS, On-premises
+	Provides observable signals on resource performance
+	rich set of observable signals that speed root cause analysis, and reduce mean time to resolution
+	Already integrated into many GCP services and products: Compute Engine, App Engine, Google Kubernetes Engine, Cloud SQL, Cloud Datastore, BigQuery, Networking, and Cloud Pub/sub
+	Admin logs for 400 days
+	Data Access audit logs for 30 days
+	Ability to export logs
+	
+1.2 Managing billing configuration.
+	* Creating one or more billing accounts.	
+	* Linking projects to a billing account.
+	* Establishing billing budgets and alerts.
+	* Setting up billing exports to estimate daily/monthly charges.
+To manage: you must be billing administrator, 
+To change billing ac: must be owner of project, AND billing administrator
+All created projects are linked to billing accounts
+
+To set budget alert: must be billing administrator
+Alert on: billing account or project
+setting budget does not cap api usage
+
+
+1.3 Installing and configuring the command line interface (CLI), specifically the Cloud SDK (e.g., setting the default project).
+
+accessible from browser called Cloud Shell
+gsutil: for GC storage
+bq: big query
+we can use Google cloud SDK tools without installing em
+
+To open: click Could Shell button in TCP console
+SDK also available as docker image
+
+
+Tour to QuickLabs and GCP
+What you will learn
+In this lab, you will do the following:
+
+Learn about the Qwiklabs platform and identify key features of a lab environment.
+Learn about (and possibly purchase) Qwiklabs credits and launch an instance of a lab.
+Learn how to access the GCP console with specific credentials.
+Learn about GCP projects and identify common misconceptions that surround them.
+Learn how to use the GCP navigation menu to identify types of GCP services.
+Learn about primitive roles and use the Cloud IAM service to inspect actions available to specific users.
+Learn about Cloud Shell and run commands that use the gcloud toolkit.
+Learn about the API library and examine its chief features.
+Use tools that are pre-installed in Cloud Shell and run commands like touch, nano, and cat to create, edit, and output the content of files.
+
+
+
+
+	
+* Ways to interact with the services:
+1 Google Cloud Platform Console
+2 Command-line interface
+3 Client libraries
+
+GCP offers a wide variety of services and APIs that can be integrated with any cloud-computing application or project—be it personal or enterprise-grade
+
+
+Udemy:
+Google Cloud Platform Associate Cloud Engineer Bootcamp
+https://freecoursesite.com/google-certified-associate-cloud-engineer-certification
+
+
+
+
+
+
+Exam Guide:
+Don’t appear for this exam unless you have some level of comfort using gcloud commands.
+take your time to read the question properly
+Coursera, Cloud Academy, and Udemy courses to learn more about GCP
+After ACE, go for Architech
+2 hours test, try to complete in 1.5 hours
+no break in test
+IAM, GCS, and Stackdriver are universal — every exam had these sections prominently. 
+The practice test on the google certification site is the closest to the real one.
+	
+	
+
+1.2 Managing billing configuration.
+Creating one or more billing accounts.
+Linking projects to a billing account.
+Establishing billing budgets and alerts.
+Setting up billing exports to estimate daily/monthly charges.
+
+1.3 Installing and configuring the command line interface (CLI), specifically the Cloud SDK (e.g., setting the default project).
+
+
+2. Planning and configuring a cloud solution
+
+2.1 Planning and estimating GCP product use using the Pricing Calculator.
+
+2.2 Planning and configuring compute resources. Considerations include:
+Selecting appropriate compute choices for a given workload (e.g., Compute Engine, Kubernetes Engine, App Engine).
+Using preemptible VMs and custom machine types as appropriate.
+
+2.3 Planning and configuring data storage options. Considerations include:
+Product choice (e.g., Cloud SQL, BigQuery, Cloud Spanner, Cloud Bigtable)
+Choosing storage options (e.g., Regional, Multi-regional, Nearline, Coldline)
+
+2.4 Planning and configuring network resources. Tasks include:
+Differentiating load balancing options.
+Identifying resource locations in a network for availability.
+Configuring Cloud DNS.
+
+
+3. Deploying and implementing a cloud solution
+
+3.1 Deploying and implementing Compute Engine resources. Tasks include:
+Launching a compute instance using Cloud Console and Cloud SDK (gcloud) (e.g., assign disks, availability policy, SSH keys).
+Creating an autoscaled managed instance group using an instance template.
+Generating/uploading a custom SSH key for instances.
+Configuring a VM for Stackdriver monitoring and logging.
+Assessing compute quotas and requesting increases.
+Installing the Stackdriver Agent for monitoring and logging.
+
+3.2 Deploying and implementing Kubernetes Engine resources. Tasks include:
+Deploying a Kubernetes Engine cluster.
+Deploying a container application to Kubernetes Engine using pods.
+Configuring Kubernetes Engine application monitoring and logging.
+
+3.3 Deploying and implementing App Engine and Cloud Functions resources. Tasks include:
+Deploying an application to App Engine (e.g., scaling configuration, versions, and traffic splitting).
+Deploying a Cloud Function that receives Google Cloud events (e.g., Cloud Pub/Sub events, Cloud Storage object change notification events).
+
+3.4 Deploying and implementing data solutions. Tasks include:
+Initializing data systems with products (e.g., Cloud SQL, Cloud Datastore, BigQuery, Cloud Spanner, Cloud Pub/Sub, Cloud Bigtable, Cloud Dataproc, Cloud Storage).
+Loading data (e.g., Command line upload, API transfer, Import / export, load data from Cloud Storage, streaming data to Cloud Pub/Sub).
+
+3.5 Deploying and implementing networking resources. Tasks include:
+Creating a VPC with subnets. (e.g., Custom-mode VPC, Shared VPC).
+Launching a Compute Engine instance with custom network configuration (e.g., Internal-only IP address, Google private access, Static external and private IP address, network tags).
+Creating ingress and egress firewall rules for a VPC (e.g., IP subnets, Tags, Service accounts).
+Creating a VPN between a Google VPC and an external network using Cloud VPN.
+Creating a load balancer to distribute application network traffic to an application (e.g., Global HTTP(S) load balancer, Global SSL Proxy load balancer, Global TCP Proxy load balancer, Regional Network load balancer, Regional Internal load balancer).
+
+3.6 Deploying a Solution using Cloud Launcher. Tasks include:
+Browsing Cloud Launcher catalog and viewing solution details.
+Deploying a Cloud Launcher marketplace solution.
+
+3.7 Deploying an Application using Deployment Manager. Tasks include:
+Developing Deployment Manager templates to automate deployment of an application.
+Launching a Deployment Manager template to provision GCP resources and configure an application automatically.
+
+
+4. Ensuring successful operation of a cloud solution
+
+4.1 Managing Compute Engine resources. Tasks include:
+Managing a single VM instance (e.g., start, stop, edit configuration, or delete an instance).
+SSH/RDP to the instance.
+Attaching a GPU to a new instance and installing CUDA libraries.
+Viewing current running VM Inventory (instance IDs, details).
+Working with snapshots (e.g., create a snapshot from a VM, view snapshots, delete a snapshot).
+Working with Images (e.g., create an image from a VM or a snapshot, view images, delete an image).
+Working with Instance Groups (e.g., set auto scaling parameters, assign instance template, create an instance template, remove instance group).
+Working with management interfaces (e.g., Cloud Console, Cloud Shell, GCloud SDK).
+
+4.2 Managing Kubernetes Engine resources. Tasks include:
+Viewing current running cluster inventory (nodes, pods, services).
+Browsing the container image repository and viewing container image details.
+Working with nodes (e.g., add, edit, or remove a node).
+Working with pods (e.g., add, edit, or remove pods).
+Working with services (e.g., add, edit, or remove a service).
+Working with management interfaces (e.g., Cloud Console, Cloud Shell, Cloud SDK).
+
+4.3 Managing App Engine resources. Tasks include:
+Adjusting application traffic splitting parameters.
+Setting scaling parameters for autoscaling instances.
+Working with management interfaces (e.g., Cloud Console, Cloud Shell, Cloud SDK).
+
+4.4 Managing data solutions. Tasks include:
+Executing queries to retrieve data from data instances (e.g., Cloud SQL, BigQuery, Cloud Spanner, Cloud Datastore, Cloud Bigtable, Cloud Dataproc).
+Estimating costs of a BigQuery query.
+Backing up and restoring data instances (e.g., Cloud SQL, Cloud Datastore, Cloud Dataproc).
+Reviewing job status in Cloud Dataproc or BigQuery
+Moving objects between Cloud Storage buckets.
+Converting Cloud Storage buckets between storage classes.
+Setting object lifecycle management policies for Cloud Storage buckets.
+Working with management interfaces (e.g., Cloud Console, Cloud Shell, Cloud SDK).
+
+4.5 Managing networking resources. Tasks include:
+Adding a subnet to an existing VPC.
+Expanding a CIDR block subnet to have more IP addresses.
+Reserving static external or internal IP addresses.
+Working with management interfaces (e.g., Cloud Console, Cloud Shell, Cloud SDK).
+
+4.6 Monitoring and logging. Tasks include:
+Creating Stackdriver alerts based on resource metrics.
+Creating Stackdriver custom metrics.
+Configuring log sinks to export logs to external systems (e.g., on premises or BigQuery).
+Viewing and filtering logs in Stackdriver.
+Viewing specific log message details in Stackdriver.
+Using cloud diagnostics to research an application issue (e.g., viewing Cloud Trace data, using Cloud Debug to view an application point-in-time).
+Viewing Google Cloud Platform status.
+Working with management interfaces (e.g., Cloud Console, Cloud Shell, Cloud SDK).
+
+
+5. Configuring access and security
+
+5.1 Managing Identity and Access Management (IAM). Tasks include:
+Viewing account IAM assignments.
+Assigning IAM roles to accounts or Google Groups.
+Defining custom IAM roles.
+
+5.2 Managing service accounts. Tasks include:
+Managing service accounts with limited scopes.
+Assigning a service account to VM instances.
+Granting access to a service account in another project.
+
+5.3 Viewing audit logs for project and managed services.
+
+
+------------------------------------------
+2. Setting up a cloud solution environment
+------------------------------------------
+
+
+--------------------------------------------
+3. Planning and configuring a cloud solution
+--------------------------------------------
+
+
+----------------------------------------------
+4. Deploying and implementing a cloud solution
+----------------------------------------------
+
+
+----------------------------------------------------
+5. Ensuring successful operation of a cloud solution
+----------------------------------------------------
+
+
+----------------------------------
+6. Configuring access and security
+----------------------------------
+

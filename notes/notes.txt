@@ -1,0 +1,20 @@
+GCP Topics
+	Below topic you must have to understand thoroughly.
+	Four type of Compute engine
+	GKE Vs App Engine Vs MIG Compute Engine
+	Various Storage Option.
+	Local SSD Vs Persistence SSD Vs RAM Disk Vs Book Disk
+	Understanding of Reginal Resource Vs Global Resource
+	Load Balancers
+	External vs Internal
+	Dataproc Vs Dataflow
+	Bigtable vs BigQuery
+	Time series example
+	IAM Polices at orginazation level vs Folder level Vs Resource level
+	StackDriver Log/StackDriver Moniters
+	DataLab  and Data Studio
+
+
+also, read Official Google Cloud Certified Professional Cloud Architect Study Guide by Dan Sullivan
+
+Coursera **Preparing for the Google Cloud Professional Cloud Architect Exam **and Reliable Cloud Infrastructure Design and ProcessDrivezy no

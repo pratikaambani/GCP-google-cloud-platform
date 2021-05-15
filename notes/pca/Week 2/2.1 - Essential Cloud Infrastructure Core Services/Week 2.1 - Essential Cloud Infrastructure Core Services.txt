@@ -1,0 +1,1783 @@
+X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X
+X--- Essential Cloud Infrastructure: Core Services ---X
+X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X
+
+* 2 Week course: 23 September - 26 September - 29 September
+* Course URL: https://www.coursera.org/learn/gcp-infrastructure-core-services/home/welcome
+* Previous: https://www.coursera.org/learn/gcp-fundamentals-aws
+* Next: https://www.coursera.org/learn/gcp-infrastructure-scaling-automation
+
+
+#######
+#Week1#
+#######
+--------------------------
+| Module 0: Introduction |
+--------------------------
+In this module we introduce the Architecting with Google Compute Engine specialization. This specialization is defined for cloud solution architects, DevOps engineers, and anyone who's interested in using GCP, to create new solutions or to integrate existing systems, application environments, and infrastructure with a focus on Compute Engine.
+
+0.1 Welcome to Essential Cloud Infrastructure: Core Services
+------------------------------------------------------------
+
+0.1.1 Video: Course Introduction
+0.1.2 Reading: Welcome to Essential Cloud Infrastructure: Core Services
+0.1.3 Reading: How to download course resources
+-----
+GCP Compute Services:
+	GCE: IaaS, VMs on demand
+	GKE: Containerization
+	GAE: PaaS, run code in cloud without worrying about Infrastructure
+	Cloud Functions: FaaS, Serverless
+
+3 Course series Sequence:
+	Essential Cloud Infrastructure: Foundation
+	Essential Cloud Infrastructure: Core Services (this course)
+	Elastic Cloud Infrastructure: Scaling and Automation
+
+Main focus on Compute Engine in this course
+
+
+-----------------------
+| Module 1: Cloud IAM |
+-----------------------
+
+* Objectives
+	Describe the Cloud IAM resource hierarchy
+	Explain the different types of IAM roles
+	Recall the different types of IAM members
+	Implement access control for resources using Cloud IAM
+
+1.1 Overview
+------------
+
+1.1.1 Video: Module Overview
+-----
+In this module, we cover Cloud Identity and Access Management (or Cloud IAM). Cloud IAM is a sophisticated system built on top of email-like address names, job-type roles, and granular permissions. If you're familiar with IAM from other implementations, look for the differences that Google has implemented to make IAM easier to administer and more secure.
+
+Components to be covered:
+	IAM
+	Organization
+	Roles
+	Members
+	Service Accounts
+	Cloud IAM Best Practices
+	Lab
+	Quiz
+
+1.2 Cloud IAM
+-------------
+
+1.2.1 Video: Cloud IAM
+-----
+WHO can do WHAT on WHICH resources
+
+WHO: Person, Group, or Application
+WHAT: Privileges, Actions
+WHICH: Any GCP Service
+
+Organization >> Folders >> Projects >> Resources 
+Roles and Members
+
+Resource Hierarchy: Check Image: ECCS-1.2.1.1.jpg
+
+Child policies cannot restrict access granted at the parent level. 
+Example: if I grant you editor role for department X, and I grant you the viewer role at the Bookshelf project level, you still have the editor role for that project.
+
+follow the principle of least privilege
+
+1.2.2 Video: Organization
+-----
+Root node in hierarchy
+
+Has many roles:
+	Organization Admin: 
+		for auditing
+		control over all cloud resources
+	Project Creator:
+		Controls project creation
+		control over who can create projects
+
+The two roles are generally assigned to different users or groups, although this depends on the organization's structure and needs. 
+
+Super Admin responsibilities:
+	assign the organization admin role to some users
+	be a point of contact in case of recovery issues
+	control the lifecycle of the G Suite or Cloud Identity account and organization resource. 
+	
+Organization Admin role responsibilities:
+	define IAM policies
+	determined the structure of the resource hierarchy
+	delegate responsibility over critical components such as networking, billing, and resource hierarchy through IAM roles. 
+	
+Folders:
+As sub organizations within the organization. 
+Provide an additional grouping mechanism and isolation boundary between projects. Folders can be used to model different legal entities, departments, and teams within a company. 
+Folders allow delegation of administration rights. 
+Example: each head of a department can be granted full ownership of all GCP resources that belong to their department. 
+
+Other Resource Manage roles:
+
+Organization:
+	Admin:		Full control over all resources
+	Viewer: 	View access to all resources
+	
+Folder:
+	Admin:		Full control over all folders
+	Creator: 	Browse hierarchy and create folders
+	Viewer: 	View projects and folders below a resource
+	
+Project:
+	Creator:	Create new projects(automatic owner) and migrate new projects into organization
+	Deleter: 	Delete projects
+
+1.2.3 Video: Roles
+-----
+WHO | WHAT | WHICH
+
+Three types:
+	Primitive: applies to all resources
+		Owner: Invite members, remove members, delete projects + below two
+		Editor: Deploy, Modify, Configure + below 
+		Viewer: Read-only
+		Billing Administrator: Add/remove admins. Manage billing
+	
+	Predefined: applies to particular service in a project
+		Predefined IAM Roles in Compute Engine:
+			Compute Admin: Full control of all Compute Engine resources
+			Network Admin: CRUD networking resources, except firewall rules and ssl certificates
+			Storage Admin: CRUD Disks, images, and snapshots
+	
+	Custom: define precise set of permissions
+
+Roles for service accounts can also be assigned to groups or users. 
+
+1.2.4 Video: Demo: Custom roles
+-----
+Goal: Create an instance operator role that - 
+	allows some users to start and stop Compute Engine virtual machines 
+	but not reconfigure them. 
+
+Console - IAM - Roles - Create role(custom) - Name:instance operator - id:customRole - launch: Alpha - Add permissions - filter: compute.instances. - select get, list, reset, resume, start, stop, suspend - create
+
+1.2.5 Video: Members
+-----
+
+Five types:
+	Google Account: Developer, Admin or any other person
+	Service Account: belongs to application instead of individual enduser, in code
+	Google Group: named collection of GA+SA
+	Cloud Identity/G Suite Domain: Organization's internet domain name alias@example.com, free+premium
+
+1.2.6 Video: Service Accounts
+-----
+Provide identity for server-to-server interactions
+Belongs to an application instead of an end user, in code
+
+identified by an email address: project-number@cloudservices.gserviceaccount.com	
+
+Three types:
+	user-created/custom
+	built-in
+		compute engine and app engine default service accounts
+	Google APIs service account
+		runs internal Google processes on your behalf
+
+
+Default Compute Engine Service Account:
+	Apart from the default service account, all projects come with the Google Cloud Platform APIs service account
+	identifiable by the email: project-number-compute@developer.gserviceaccount.com
+	Automatically granted the editor role on your project
+	
+Scopes:
+	deals with Authorization	
+	Scopes can be customized when you create an instance using the default service account. 
+	These scopes can be changed after an instance is created by stopping in. 
+	Access scopes are actually the legacy method of specifying permissions for your VM. 
+	Default service account support both primitive and predefined roles. But user-created service accounts only use predefined IAM roles
+
+Authentication:
+	Unlike username and passwords, SA have keys
+	GCP managed keys: not downloadable, automatically rotated
+	User managed keys: Create, manage, and rotate yourself
+
+1.2.7 Video: Cloud IAM best practices
+-----
+Leverage and understand resource hierarchy
+Check the policy granted on each resource and make sure you understand inheritance
+user principles of "Least privileges"
+Audit policies in Cloud audit logs setiampolicy
+Audit membership of groups used in policies
+
+Grant roles to groups instead of individuals
+	update group membership instead of change Cloud IAM Policies
+	Audit membership of groups used in policies
+	Control the ownership of the Google Group used in Cloud IAM Policies
+	
+Service Account practices:
+	careful while granting serviceAccoutnUser role
+	When you create service account, name it by the purpose
+	establish naming conventions
+	Establish key rotation policies and methods
+	Audit with serviceAccount.keys.list() method
+	
+Cloud IAP
+	Identity Aware Proxy
+	Central authorization layer with https
+	apply network level firewalls
+	
+1.2.8 Video: Lab Intro: Cloud IAM
+-----
+To grant and revoke roles to change access
+Cloud IAM to,
+	implement acces control
+	restrict access to specific features and resources
+	use service account under the use role
+
+1.2.9 Video: Getting Started with Google Cloud Platform and Qwiklabs
+-----
+Done
+
+1.2.10 Graded External Tool: Graded External ToolLab: Cloud IAM
+-----
+Objectives
+	Use Cloud IAM to implement access control
+	Restrict access to specific features or resources
+	Use the Service Account User role
+
+
+1.2.11 Video: Lab Review: Cloud IAM
+-----
+Two GCP users: Owner and viewer
+
+Checked stuff added by Owner is visible to Viewer account
+Via IAM owner can modify access to viewer account
+
+Created service account - granted IAM roles - asked to access buckets - unable to do so
+
+Granted permissions and asked to access buckets via SSH
+
+granting and revoking Cloud IAM roles, first to a user and then to a Service Account User. 
+
+
+1.3 Review
+----------
+
+1.3.1 Quiz: Module Quiz
+-----
+Done - 3 questions
+
+
+-------------------------------------------
+| Module 2: Storage and Database Services |
+-------------------------------------------
+In this module, we cover storage and database services in GCP. Every application needs to store data, whether it's business data, media to be streamed, or sensor data from devices.
+
+* Objectives
+	Differentiate between Cloud Storage, Cloud SQL, Cloud Spanner, Cloud Firestore and Cloud Bigtable
+	Choose a data storage service based on your requirements
+	Implement data storage services
+
+2.1 Overview
+------------
+
+2.1.1 Video: Module Overview
+-----
+Google offers several data storage services to choose from. 
+In this module, we will cover Cloud Storage, Cloud SQL, Cloud Spanner, Cloud Firestore, and Cloud Bigtable.
+Check Image: ECCS-2.1.1.1.jpg
+
+Storage and database services: 
+						Storage Service Type, 
+	Object				Cloud Storage
+	Relational			Cloud SQL, Cloud Spanner
+	Non-relational		Cloud Firestore, Cloud Bigtable
+	Data warehouse		BigQuery
+
+Check Image: ECCS-2.1.1.2.jpg
+S AL RH #beforeExam
+
+BigQuery:
+	It sits on the edge between data storage and data processing. 
+	You can store data in BigQuery, but the intended use for BigQuery is big data analysis and interactive querying. 
+	
+Scope of this module:
+	To explain which services are available and when to consider using them from an infrastructure perspective. 
+	Set up and connect to a service without detailed knowledge of how to use a database system. 
+	Overview of Cloud Memorystore, GCP's fully managed Redis service.
+
+2.2 Cloud Storage
+-----------------
+
+2.2.1 Video: Cloud Storage
+-----
+Not files in file system, instead it is collection of buckets where we place objects
+We can create directories(for saying) but they are just another object that points to another object in the bucket
+URL to access objects
+
+4 storage classes:
+	Regional
+	Multi Regional
+	Nearline
+	Coldline
+Check Image: ECCS-2.2.1.1.jpg
+	
+Usecases:
+	website content
+	Storing data for archiving disaster recovery
+	Distributing large Data Objects via direct download
+
+Features:
+	Scalable to exabytes of data
+	first byte in miliseconds
+	High availability
+	
+Broken in different items: bucket, objects, access
+	Bucket:
+		globally unique name
+		cannot be nested
+	Objects:
+		Can be text, doc, video, etc
+		inherits storage class of the created bucket
+		no minimum size, scale as much as you want
+	Access:
+		using gsutil
+		using REST JSON/XML APIs
+
+Changing default storage classes
+	When you upload an object, you can specify a storage class for it. If not specified, object is assigned the storage class of bucket
+	
+	Regional bucket can never be a multi-regional and vice versa
+	Regional and multi-regional buckets can be changed to Coldline or Nearline.
+	Object can be moved from bucket to bucket
+	
+	You can also change the storage class of an object that already exists in your bucket without moving the object to a different bucket or changing the URL to the object. 
+	Example: If you have objects in your bucket that you want to keep, but that you don't expect to access frequently. In this case, you can minimize costs by changing the storage class of those specified objects to nearline storage or coldline storage. 
+	
+Object life cycle management:
+	To help manage the classes of objects in your bucket
+
+Access Control:
+	Rolls are inherited from project to bucket to object. 
+	Below all can be used together
+
+	Cloud IAM - for access control
+	Access control list or ACLs - finer control. 
+	Signed URLs - provide a cryptographic key that gives time-limited access to a bucket or object
+	Signed policy document - What kind of file can be uploaded by someone with assigned URL
+	
+ACL:
+	Who has access AND What level of access
+	Max 100 ACL entries per object or bucket
+	
+	Each ACL consists of two pieces of information. 
+		Scope which defines who can perform the specified actions
+			for example, a specific user or group of users
+		Permission, which defines what actions can be performed
+			for example, read or write. 
+		
+	Example:
+		collaborator@gmail.com
+		allUsers: anyone who was on the Internet, with or without a Google account
+		allAuthenticatedUsers: anyone who is authenticated with a Google account
+
+Signed URLs:
+	Allowed operations in ticket: GET, PUT, DELETE (not POST)
+
+	For some applications, it is easier and more efficient to grant limited time access tokens that can be used by any user instead of using account-based authentication for controlling resource access
+	for example, when you don't want to require users to have Google accounts. 
+	
+	You create a URL, that grants reader right access to a specific Cloud storage resource, and specifies when the access expires. 
+	That URL is signed using a private key associated with the service account. 
+	When the request is received, Cloud Storage can verify that the access granting URL was issued on behalf of a trusted security principle. 
+	In this case, the service account and delegates it's trust of that account to the holder of the URL. 
+	After you give out the signed URL, it is out of your control	
+	
+	Example:  expires after 10 months
+	gsutil signurl -d 10m path/to/privatekey.p12
+	gs://bucket/object
+
+2.2.2 Video: Cloud Storage Features
+-----
+When you want to use your own keys instead of Google managed keys: CSEK (Customer Supplied Encryption Keys)
+Object Versioning: multiple versions of objects
+Object lifecycle management: Automatic delete or archive objects
+Object change notification
+Data import services
+Strong consistency
+Directory synchronization: sync VM with bucket
+
+Object Versioning:
+	Objects are immutable: can't change, solution is versioning
+	retrieval of objects that are deleted or overwritten
+	maintains history of modifications of objects
+	Allows: list archived versions of object, restore an object to older state, delete a version
+
+Object lifecycle management:
+	To support common use cases like setting a time to live for objects, archiving older versions of objects, or downgrading storage classes of objects to help manage costs, Cloud Storage offers Object Lifecycle Management. 
+	You can assign a lifecycle management configuration to a bucket. 
+	The configuration is a set of rules that apply to all of the objects in the bucket. 
+	So when an object meets the criteria of one of the rules, Cloud Storage automatically performs a specified action on the object. 
+	
+	example: 
+		Downgrade the storage class of objects older than a year to coldline storage. 
+		Delete objects created before a specific date. For example, January 1st, 2017
+		Keep only the three most recent versions of each object in a bucket with versioning enabled. 
+
+		Object inspection occurs in asynchronous batches. So rules may not be applied immediately. Also updates to your lifecycle configuration may take up to 24 hours to go into effect. 
+		This means that when you change your lifecycle configuration, object lifecycle management may still perform actions based on the old configuration for up to 24 hours. 
+
+Object change notification:
+	Only type of notification channels is a WebHook
+	To notify an application when an object is updated or added to a bucket through a watch request.
+	Completing a watch request creates a new notification channel: by which a notification message is sent (anytime an object is added, updated, or removed from the bucket) to an application watching a bucket. 
+	Example: When add new picture to a bucket, application can be notified to create a thumbnail. 
+	However, Cloud Pub/Sub notifications are the recommended way to track changes to objects in your Cloud Storage buckets because they're faster, more flexible, easier to set up, and more cost-effective. Cloud Pub/Sub is Google's distributed real-time messaging service
+	
+Data import services:
+	What if you have to upload terabytes or even petabytes of data? 
+	Three services:
+		Transfer Appliance
+			Hardware appliance you can use to securely migrate large volumes of data from hundreds of terabytes up to one petabyte to GCP without disrupting business operations.
+			Rack, capture and then ship your data to GCP
+		Storage Transfer Service
+			Enables high-performance imports of online data. 
+			That data source can be another Cloud Storage bucket in Amazon S3 bucket or an HTTP, HTTPS location. 
+		Offline Media Import
+			Third-party service where physical media such as storage arrays, hard-disk drives, tapes, and USB flash drives is sent to a provider who uploads the data
+
+Strong global consistency:
+	Actively strong on these operations
+	Read-after-write
+	Read-after-metadata-update
+	Read-after-delete
+	Bucket listing
+	Object listing
+	Granting access to resources
+	
+Choosing a storage class:
+Check Image: ECCS-2.2.2.1.jpg
+
+2.2.3 Video: Lab Intro: Cloud Storage
+-----
+Create bucket 
+Advance options:
+	set ACL - WHO + WHAT
+	Supply and manage encryption keys for additional security
+	object versioning
+	Directory synchronization
+
+2.2.4 Graded External Tool: Graded External ToolLab: Cloud Storage
+-----
+Objectives
+In this lab, you learn how to perform the following tasks:
+
+Create and use buckets
+Set access control lists to restrict access
+Use your own encryption keys
+Implement version controls
+Use directory synchronization
+Share a bucket across projects using IAM
+
+2.2.5 Video: Lab Review: Cloud Storage
+-----
+Cloud Storage
+1 hour 15 minutes
+Free
+Rate Lab
+Overview
+Cloud Storage is a fundamental resource in GCP, with many advanced features. In this lab, you exercise many Cloud Storage features that could be useful in your designs. You explore Cloud Storage using both the console and the gsutil tool.
+
+Objectives
+In this lab, you learn how to perform the following tasks:
+
+Create and use buckets
+Set access control lists to restrict access
+Use your own encryption keys
+Implement version controls
+Use directory synchronization
+Share a bucket across projects using IAM
+Before you click the Start Lab button
+Read these instructions. Labs are timed and you cannot pause them. The timer, which starts when you click Start Lab, shows how long Cloud resources will be made available to you.
+
+This Qwiklabs hands-on lab lets you do the lab activities yourself in a real cloud environment, not in a simulation or demo environment. It does so by giving you new, temporary credentials that you use to sign in and access the Google Cloud Platform for the duration of the lab.
+
+What you need
+To complete this lab, you need:
+
+Access to a standard internet browser (Chrome browser recommended).
+Time to complete the lab.
+Note: If you already have your own personal GCP account or project, do not use it for this lab.
+
+Task 1: Preparation
+Create a Cloud Storage bucket
+On the Navigation menu ( 7a91d354499ac9f1.png), click Storage > Browser.
+A bucket must have a globally unique name. You could use part of your PROJECT_ID_1 in the name to help make it unique. For example, if the PROJECT_ID_1 is "myproj-154920," your bucket name might be "storecore154920."
+
+Click Create bucket.
+Specify the following, and leave the remaining settings as their defaults:
+Property	Value (type value or select option as specified)
+Name	Enter a globally unique name
+Location type	Multi-region
+Access control model	Set object-level and bucket-level permissions
+Make a note of the bucket name. It will be used later in this lab and referred to as [BUCKET_NAME_1].
+Click Create.
+Click Check my progress to verify the objective.
+Create a Cloud Storage bucket
+
+Download a sample file using CURL and make two copies
+In the GCP Console, click Activate Cloud Shell (Cloud Shell).
+
+If prompted, click Start Cloud Shell.
+
+Store [BUCKET_NAME_1] in an environment variable:
+
+export BUCKET_NAME_1=<enter bucket name 1 here>
+
+Verify it with echo:
+
+echo $BUCKET_NAME_1
+
+Run the following command to download a sample file (this sample file is a publicly available Hadoop documentation HTML file):
+
+curl \
+http://hadoop.apache.org/docs/current/\
+hadoop-project-dist/hadoop-common/\
+ClusterSetup.html > setup.html
+
+To make copies of the file, run the following commands:
+
+cp setup.html setup2.html
+cp setup.html setup3.html
+
+Task 2: Access control lists (ACLs)
+Copy the file to the bucket and configure the access control list
+Run the following command to copy the first file to the bucket:
+
+gsutil cp setup.html gs://$BUCKET_NAME_1/
+
+To get the default access list that's been assigned to setup.html, run the following command:
+
+gsutil acl get gs://$BUCKET_NAME_1/setup.html  > acl.txt
+cat acl.txt
+
+To set the access list to private and verify the results, run the following commands:
+
+gsutil acl set private gs://$BUCKET_NAME_1/setup.html
+gsutil acl get gs://$BUCKET_NAME_1/setup.html  > acl2.txt
+cat acl2.txt
+
+To update the access list to make the file publicly readable, run the following commands:
+
+gsutil acl ch -u AllUsers:R gs://$BUCKET_NAME_1/setup.html
+gsutil acl get gs://$BUCKET_NAME_1/setup.html  > acl3.txt
+cat acl3.txt
+
+Click Check my progress to verify the objective.
+Make file publicly readable
+
+Examine the file in the GCP Console
+In the GCP Console, on the Navigation menu ( 7a91d354499ac9f1.png), click Storage > Browser.
+
+Click [BUCKET_NAME_1].
+
+Verify that for file setup.html, Public access has a Public link available.
+
+Delete the local file and copy back from Cloud Storage
+Return to Cloud Shell. If necessary, click Activate Cloud Shell (Cloud Shell).
+
+Run the following command to delete the setup file:
+
+rm setup.html
+
+To verify that the file has been deleted, run the following command:
+
+ls
+
+To copy the file from the bucket again, run the following command:
+
+gsutil cp gs://$BUCKET_NAME_1/setup.html setup.html
+
+Task 3: Customer-supplied encryption keys (CSEK)
+Generate a CSEK key
+For the next step, you need an AES-256 base-64 key.
+
+Run the following command to create a key:
+
+python -c 'import base64; import os; print(base64.encodestring(os.urandom(32)))'
+
+Result (do not copy; this is example output):
+
+python -c 'import base64; import os; print(base64.encodestring(os.urandom(32)))'
+tmxElCaabWvJqR7uXEWQF39DhWTcDvChzuCmpHe6sb0=
+
+Copy the value of the key.
+
+Modify the boto file
+The encryption controls are contained in a gsutil configuration file named .boto.
+
+To view and open the boto file, run the following commands:
+
+ls -al
+
+nano .boto
+
+If the .boto file is empty, close the nano editor with Ctrl+X and generate a new .boto file using the gsutil config -n command. Then, try opening the file again with the above commands.
+
+If the .boto file is still empty, you might have to locate it using the gsutil version -l command.
+
+Locate the line with "#encryption_key="
+Uncomment the line by removing the # character, and paste the key you generated earlier at the end.
+Example (do not copy; this is an example):
+
+Before:
+# encryption_key=
+
+After:
+encryption_key=tmxElCaabWvJqR7uXEWQF39DhWTcDvChzuCmpHe6sb0=
+
+Press Ctrl+O, ENTER to save the boto file, and then press Ctrl+X to exit nano.
+
+Upload the remaining setup files (encrypted) and verify in the GCP Console
+To upload the remaining setup.html files, run the following commands:
+
+gsutil cp setup2.html gs://$BUCKET_NAME_1/
+gsutil cp setup3.html gs://$BUCKET_NAME_1/
+
+Return to the GCP Console.
+Click [BUCKET_NAME_1]. Both setup2.html and setup3.html files show that they are customer-encrypted.
+Click Check my progress to verify the objective.
+Customer-supplied encryption keys (CSEK)
+
+Delete local files, copy new files, and verify encryption
+To delete your local files, run the following command in Cloud Shell:
+
+rm setup*
+
+To copy the files from the bucket again, run the following command:
+
+gsutil cp gs://$BUCKET_NAME_1/setup* ./
+
+To cat the encrypted files to see whether they made it back, run the following commands:
+
+cat setup.html
+cat setup2.html
+cat setup3.html
+
+Task 4: Rotate CSEK keys
+Move the current CSEK encrypt key to decrypt key
+Run the following command to open the .boto file:
+
+nano .boto
+
+Comment out the current encryption_key line by adding the # character to the beginning of the line.
+Uncomment decryption_key1 by removing the # character, and copy the current key from the encryption_key line to the decryption_key1 line.
+Result (do not copy; this is example output):
+
+Before:
+encryption_key=2dFWQGnKhjOcz4h0CudPdVHLG2g+OoxP8FQOIKKTzsg=
+
+# decryption_key1=
+
+After:
+# encryption_key=2dFWQGnKhjOcz4h0CudPdVHLG2g+OoxP8FQOIKKTzsg=
+
+decryption_key1=2dFWQGnKhjOcz4h0CudPdVHLG2g+OoxP8FQOIKKTzsg=
+
+Press Ctrl+O, ENTER to save the boto file, and then press Ctrl+X to exit nano.
+Note: In practice, you would delete the old CSEK key from the encryption_key line.
+
+Generate another CSEK key and add to the boto file
+Run the following command to generate a new key:
+
+python -c 'import base64; import os; print(base64.encodestring(os.urandom(32)))'
+
+Copy the value of the generated key.
+
+To open the boto file, run the following command:
+
+nano .boto
+
+Add a new line with encryption_key= and paste the new key value.
+Result (do not copy; this is example output):
+
+Before:
+# encryption_key=2dFWQGnKhjOcz4h0CudPdVHLG2g+OoxP8FQOIKKTzsg=
+
+After:
+encryption_key=HbFK4I8CaStcvKKIx6aNpdTse0kTsfZNUjFpM+YUEjY=
+
+Press Ctrl+O, ENTER to save the boto file, and then press Ctrl+X to exit nano.
+
+Rewrite the key for file 1 and comment out the old decrypt key
+When a file is encrypted, rewriting the file decrypts it using the decryption_key1 that you previously set, and encrypts the file with the new encryption_key.
+
+You are rewriting the key for setup2.html, but not for setup3.html, so that you can see what happens if you don't rotate the keys properly.
+
+Run the following command:
+
+gsutil rewrite -k gs://$BUCKET_NAME_1/setup2.html
+
+To open the boto file, run the following command:
+
+nano .boto
+
+Comment out the current decryption_key1 line by adding the # character back in.
+Result (do not copy; this is example output):
+
+Before:
+decryption_key1=2dFWQGnKhjOcz4h0CudPdVHLG2g+OoxP8FQOIKKTzsg=
+
+After:
+# decryption_key1=2dFWQGnKhjOcz4h0CudPdVHLG2g+OoxP8FQOIKKTzsg=
+
+Press Ctrl+O, ENTER to save the boto file, and then press Ctrl+X to exit nano.
+Note: In practice, you would delete the old CSEK key from the decryption_key1 line.
+
+Download setup 2 and setup3
+To download setup2.html, run the following command:
+
+gsutil cp  gs://$BUCKET_NAME_1/setup2.html recover2.html
+
+To download setup3.html, run the following command:
+
+gsutil cp  gs://$BUCKET_NAME_1/setup3.html recover3.html
+
+What happened? setup3.html was not rewritten with the new key, so it can no longer be decrypted, and the copy will fail.
+
+You have successfully rotated the CSEK keys.
+
+Task 5: Enable lifecycle management
+View the current lifecycle policy for the bucket
+Run the following command to view the current lifecycle policy:
+
+gsutil lifecycle get gs://$BUCKET_NAME_1
+
+There is no lifecycle configuration. You create one in the next steps.
+
+Create a JSON lifecycle policy file
+To create a file named life.json, run the following command:
+
+nano life.json
+
+Paste the following value into the life.json file:
+
+{
+  "rule":
+  [
+    {
+      "action": {"type": "Delete"},
+      "condition": {"age": 31}
+    }
+  ]
+}
+
+These instructions tell Cloud Storage to delete the object after 31 days.
+
+Press Ctrl+O, ENTER to save the file, and then press Ctrl+X to exit nano.
+
+Set the policy and verify
+To set the policy, run the following command:
+
+gsutil lifecycle set life.json gs://$BUCKET_NAME_1
+
+To verify the policy, run the following command:
+
+gsutil lifecycle get gs://$BUCKET_NAME_1
+
+Click Check my progress to verify the objective.
+Enable lifecycle management
+
+Task 6: Enable versioning
+View the versioning status for the bucket and enable versioning
+Run the following command to view the current versioning status for the bucket:
+
+gsutil versioning get gs://$BUCKET_NAME_1
+
+The Suspended policy means that it is not enabled.
+
+To enable versioning, run the following command:
+
+gsutil versioning set on gs://$BUCKET_NAME_1
+
+To verify that versioning was enabled, run the following command:
+
+gsutil versioning get gs://$BUCKET_NAME_1
+
+Click Check my progress to verify the objective.
+Enable versioning
+
+Create several versions of the sample file in the bucket
+Check the size of the sample file:
+
+ls -al setup.html
+
+Open the setup.html file:
+
+nano setup.html
+
+Delete any 5 lines from setup.html to change the size of the file.
+
+Press Ctrl+O, ENTER to save the file, and then press Ctrl+X to exit nano.
+
+Copy the file to the bucket with the -v versioning option:
+
+gsutil cp -v setup.html gs://$BUCKET_NAME_1
+
+Open the setup.html file:
+
+nano setup.html
+
+Delete another 5 lines from setup.html to change the size of the file.
+
+Press Ctrl+O, ENTER to save the file, and then press Ctrl+X to exit nano.
+
+Copy the file to the bucket with the -v versioning option:
+
+gsutil cp -v setup.html gs://$BUCKET_NAME_1
+
+List all versions of the file
+To list all versions of the file, run the following command:
+
+gsutil ls -a gs://$BUCKET_NAME_1/setup.html
+
+Highlight and copy the name of the oldest version of the file (the first listed), referred to as [VERSION_NAME] in the next step.
+
+Store the version value in the environment variable [VERSION_NAME].
+
+export VERSION_NAME=<Enter VERSION name here>
+
+Verify it with echo:
+
+echo $VERSION_NAME
+
+Download the oldest, original version of the file and verify recovery
+Download the original version of the file:
+
+gsutil cp $VERSION_NAME recovered.txt
+
+To verify recovery, run the following commands:
+
+ls -al setup.html
+
+ls -al recovered.txt
+
+You have recovered the original file from the backup version. Notice that the original is bigger than the current version because you deleted lines.
+
+Task 7: Synchronize a directory to a bucket
+Make a nested directory and sync with a bucket
+Make a nested directory structure so that you can examine what happens when it is recursively copied to a bucket.
+
+Run the following commands:
+
+mkdir firstlevel
+mkdir ./firstlevel/secondlevel
+cp setup.html firstlevel
+cp setup.html firstlevel/secondlevel
+
+To sync the firstlevel directory on the VM with your bucket, run the following command:
+
+gsutil rsync -r ./firstlevel gs://$BUCKET_NAME_1/firstlevel
+
+To verify that versioning was enabled, run the following command in Cloud Shell:
+
+gsutil versioning get gs://$BUCKET_NAME_1
+
+Examine the results
+In the GCP Console, on the Navigation menu ( 7a91d354499ac9f1.png), click Storage > Browser.
+
+Click [BUCKET_NAME_1]. Notice the subfolders in the bucket.
+
+Click on /firstlevel and then on /secondlevel.
+
+Compare what you see in the GCP Console with the results of the following command:
+
+gsutil ls -r gs://$BUCKET_NAME_1/firstlevel
+
+Exit Cloud Shell:
+
+exit
+
+Task 8: Cross-project sharing
+Switch to the second project
+Open a new incognito tab.
+
+Navigate to console.cloud.google.com.
+
+Click the project selector dropdown in the title bar.
+
+Click All, and then click the second project provided for you in the Qwiklabs Connection Details dialog. Remember that the Project ID is a unique name across all Google Cloud projects. The second project ID will be referred to as [PROJECT_ID_2].
+
+Prepare the bucket
+In the GCP Console, on the Navigation menu ( 7a91d354499ac9f1.png), click Storage > Browser.
+Click Create bucket.
+Specify the following, and leave the remaining settings as their defaults:
+Property	Value (type value or select option as specified)
+Name	Enter a globally unique name
+Location type	Multi-region
+Access control model	Set object-level and bucket-level permissions
+Note the bucket name. It will be referred to as [BUCKET_NAME_2] in the following steps.
+
+Click Create.
+
+Upload a text file to the bucket
+Upload a file to [BUCKET_NAME_2]. Any small example file or text file will do.
+
+Note the file name (referred to as [FILE_NAME]); you will use it later.
+
+Create an IAM Service Account
+In the GCP Console, on the Navigation menu ( 7a91d354499ac9f1.png), click IAM & admin > Service accounts.
+Click Create service account.
+On Service account details page, specify the Service account name as cross-project-storage.
+Click Create.
+On the Service account permissions page, specify the role as Storage > Storage Object Viewer.
+Click Continue.
+Click Create Key.
+Select JSON as the key type.
+Click Create. A JSON key file will be downloaded. You will need to find this key file and upload it in into the VM in a later step.
+Click Close.
+Click Done.
+On your hard drive, rename the JSON key file to credentials.json.
+In the upper pane, switch back to [PROJECT_ID_1].
+Click Check my progress to verify the objective.
+Create the resources in the second project
+
+Create a VM
+On the Navigation menu ( 7a91d354499ac9f1.png), click Compute Engine > VM instances.
+Click Create.
+Specify the following, and leave the remaining settings as their defaults:
+Property	Value (type value or select option as specified)
+Name	crossproject
+Region	europe-west1
+Zone	europe-west1-d
+Machine type	f1-micro
+Click Create.
+
+SSH to the VM
+For crossproject, click SSH to launch a terminal and connect.
+
+Store [BUCKET_NAME_2] in an environment variable:
+
+export BUCKET_NAME_2=<enter bucket name 2 here>
+
+Verify it with echo:
+
+echo $BUCKET_NAME_2
+
+Store [FILE_NAME] in an environment variable:
+
+export FILE_NAME=<enter FILE_NAME here>
+
+Verify it with echo:
+
+echo $FILE_NAME
+
+List the files in [PROJECT_ID_2]:
+
+gsutil ls gs://$BUCKET_NAME_2/
+
+Result (do not copy; this is example output):
+
+AccessDeniedException: 403 Caller does not have storage.objects.list access to bucket [BUCKET_NAME_2].
+
+Authorize the VM
+To upload credentials.json through the SSH VM terminal, click on the gear icon ( d88f3e00dc8118df.png) in the upper-right corner, and then click Upload file.
+
+Select credentials.json and upload it.
+
+Click Close in the File Transfer window.
+
+Verify that the JSON file has been uploaded to the VM:
+
+ls
+
+Result (do not copy; this is example output):
+
+credentials.json
+
+Enter the following command in the terminal to authorize the VM to use the Google Cloud API:
+
+gcloud auth activate-service-account --key-file credentials.json
+
+The image you are using has the Google Cloud SDK pre-installed; therefore, you don't need to initialize the Google Cloud SDK. If you are attempting this lab in a different environment, make sure you have followed these procedures regarding installing the Google Cloud SDK:
+
+https://cloud.google.com/sdk/downloads
+
+Verify access
+Retry this command:
+
+gsutil ls gs://$BUCKET_NAME_2/
+
+Retry this command:
+
+gsutil cat gs://$BUCKET_NAME_2/$FILE_NAME
+
+Try to copy the credentials file to the bucket:
+
+gsutil cp credentials.json gs://$BUCKET_NAME_2/
+
+Result (do not copy; this is example output):
+
+Copying file://credentials.json [Content-Type=application/json]...
+AccessDeniedException: 403 Caller does not have storage.objects.create access to bucket [BUCKET_NAME_2].
+
+Modify role
+In the upper pane, switch back to [PROJECT_ID_2].
+In the GCP Console, on the Navigation menu ( 7a91d354499ac9f1.png), click IAM & admin > IAM.
+Click the pencil icon for the cross-project-storage service account (You might have to scroll to the right to see this icon).
+Click on the Storage Object Viewer role, and then click Storage > Storage Object Admin.
+Click Save. If you don't click Save, the change will not be made.
+Click Check my progress to verify the objective.
+Create and verify the resources in the first project
+
+Verify changed access
+Return to the SSH terminal for crossproject.
+
+Copy the credentials file to the bucket:
+
+gsutil cp credentials.json gs://$BUCKET_NAME_2/
+
+Result (do not copy; this is example output):
+
+Copying file://credentials.json [Content-Type=application/json]...
+- [1 files][  2.3 KiB/  2.3 KiB]
+Operation completed over 1 objects/2.3 KiB.
+
+In this example the VM in PROJECT_ID_1 can now upload files to Cloud Storage in a bucket that was created in another project.
+
+Note that the project where the bucket was created is the billing project for this activity. That means if the VM uploads a ton of files, it will not be billed to PROJECT_ID_1, but instead to PROJECT_ID_2.
+
+Task 9: Review
+In this lab you learned to create and work with buckets and objects, and you learned about the following features for Cloud Storage:
+
+CSEK: Customer-supplied encryption key
+Use your own encryption keys
+Rotate keys
+ACL: Access control list
+Set an ACL for private, and modify to public
+Lifecycle management
+Set policy to delete objects after 31 days
+Versioning
+Create a version and restore a previous version
+Directory synchronization
+Recursively synchronize a VM directory with a bucket
+Cross-project resource sharing using IAM
+Use IAM to enable access to resources across projects
+
+2.3 Cloud SQL
+-------------
+
+2.3.1 Video: Cloud SQL
+-----
+
+for Structured or relational DB
+Questions: install own SQL instance or use a managed service
+
+Benefits of managed service:
+	MySQL and PostgreSQL
+	patches and updates are automatically applied
+	You admin MySQL users
+	supports many clients: 
+		Cloud Shell: gcloud sql
+		App Engine, and G-Suite scripts. 
+		Apps and tools:
+			SQL Workbench
+			Toad
+			external applications using mysql drivers
+
+Cloud SQL instance:
+	Performance:
+	high performance and scalability with up to:
+	30 terabytes of storage capacity
+	40,000 IOPS
+	416 gigabytes of RAM per instance
+	You can easily scale up to 64 processor cores, and scale out with read replicas. 
+	
+	Choice:
+		MySQL 5.6 or 5.7
+		PostgreSQL 6.9 or 11.1 
+
+Cloud SQL Services:
+	Replica service: Replicate data between multiple zones - for automatic fail-over if an outage occurs. 
+	Automated and on-demand backups with point-in-time recovery. 
+	Import/Export databases using MySQL dump, or import and export CSV files. 
+	Scaling:
+		Up/horizontal: Machine capacity
+		Out/vertical: replicas
+
+Choosing a connection type to your Cloud SQL instance
+	Check Image: ECCS-2.3.1.1.jpg
+	If application hosted within the same GCP project as your Cloud SQL instance, and it is co-located in the same region, choosing the private IP connection will provide you with the most performance and secure connection using private connectivity. In other words, traffic is never exposed to the public Internet. 
+	If the application is hosted in another region or project, or if you are trying to connect to your Cloud SQL instance from outside of GCP, you have three options. 
+		Cloud Proxy: which handles authentication, encryption, and key rotation for you. 
+		Manual SSL Connection: If you need manual control over the SSL connection, you can generate and periodically rotate the certificates yourself
+		unencrypted connection: by authorizing a specific IP address, to connect to your SQL server, over its external IP address
+
+Choosing Cloud SQL:	
+	Check Image: ECCS-2.3.1.2.jpg
+
+2.3.3 Graded External Tool: Graded External ToolLab: Cloud SQL
+-----
+Implementing Cloud SQL
+
+In this lab, you configure a Cloud SQL server and learn how to connect an application to it via a proxy over an external connection. You also configure a connection over a Private IP link that offers performance and security benefits. The app we chose to demonstrate in this lab is Wordpress, but the information and best practices are applicable to any application that needs SQL Server.
+
+By the end of this lab, you will have 2 working instances of the Wordpress frontend connected over 2 different connection types to their SQL instance backend, as shown in this diagram:
+
+Objectives
+	Create a Cloud SQL database
+	Configure a virtual machine to run a proxy
+	Create a connection between an application and Cloud SQL
+	Connect an application to Cloud SQL using Private IP address
+
+
+Task 1: Create a Cloud SQL database
+In this task, you configure a SQL server according to GCP best practices and create a Private IP connection.
+
+On the Navigation menu (Navigation menu), click SQL.
+Click Create instance.
+Click Choose MySQL.
+Specify the following, and leave the remaining settings as their defaults:
+Property	Value
+Instance ID	wordpress-db
+Root password	type a password
+Region	us-central1
+Zone	Any
+Database Version	MySQL 5.7
+Note the root password; it will be used in a later step and referred to as [ROOT_PASSWORD].
+Expand Show configuration options.
+
+Expand the Set connectivity section.
+
+Select Private IP.
+
+In the dialog box, click Enable API, click Allocate and connect, and then click Close. This enables Private Services Access and attaches a Private IP address to your Cloud SQL server.
+Private IP is an internal connection, unlike external IP, which egresses to the internet.
+
+Expand the Configure machine type and storage section.
+
+Provision the right amount of vCPU and memory. To choose a Machine Type, click Change, and then explore your options.
+
+A few points to consider:
+
+Shared-core machines are good for prototyping, and are not covered by Cloud SLA.
+Each vCPU is subject to a 250 MB/s network throughput cap for peak performance. Each additional core increases the network cap, up to a theoretical maximum of 2000 MB/s.
+For performance-sensitive workloads such as online transaction processing (OLTP), a general guideline is to ensure that your instance has enough memory to contain the entire working set and accommodate the number of active connections.
+For this lab, select db-n1-standard-1, and then click Select.
+
+Next, choose Storage type and Storage capacity.
+
+A few points to consider:
+
+SSD (solid-state drive) is the best choice for most use cases. HDD (hard-disk drive) offers lower performance, but storage costs are significantly reduced, so HDD may be preferable for storing data that is infrequently accessed and does not require very low latency.
+There is a direct relationship between the storage capacity and its throughput.
+Add a few zeros to the storage capacity to see how it affects the throughput. Reset the slider to 10GB.
+Setting your storage capacity too low without enabling an automatic storage increase can cause your instance to lose its SLA.
+Click Close.
+Click Create at the bottom of the page to create the database instance.
+You might have to wait for the Private IP changes to propagate before the Create button becomes clickable.
+Click Check my progress to verify the objective.
+Create a Cloud SQL instance
+
+Task 2: Configure a proxy on a virtual machine
+When your application does not reside in the same VPC connected network and region as your Cloud SQL instance, use a proxy to secure its external connection.
+
+In order to configure the proxy, you need the Cloud SQL instance connection name.
+
+The lab comes with 2 virtual machines preconfigured with Wordpress and its dependencies. You can view the startup script and service account access by clicking on a virtual machine name. Notice that we used the principle of least privilege and only allow SQL access for that VM. There's also a network tag and a firewall preconfigured to allow port 80 from any host.
+On the Navigation menu (Navigation menu) click Compute Engine.
+
+Click SSH next to wordpress-europe-proxy.
+
+Download the Cloud SQL Proxy and make it executable:
+
+wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy && chmod +x cloud_sql_proxy
+In order to start the proxy, you need the connection name of the Cloud SQL instance. Keep your SSH window open and return to the GCP console.
+
+On the Navigation menu (Navigation menu), click SQL.
+
+Click on the wordpress-db instance and wait for a green checkmark next to its name, which indicates that it is operational (this could take a couple of minutes).
+
+Note the Instance connection name; it will be used later and referred to as [SQL_CONNECTION_NAME].
+
+In addition, for the application to work, you need to create a table. Click Databases.
+
+Click Create database, type wordpress, which is the name the application expects, and then click Create.
+
+Return to the SSH window and save the connection name in an environment variable, replacing [SQL_CONNECTION_NAME] with the unique name you copied in a previous step.
+
+export SQL_CONNECTION=[SQL_CONNECTION_NAME]
+To verify that the environment variable is set, run:
+echo $SQL_CONNECTION
+The connection name should be printed out.
+
+To activate the proxy connection to your Cloud SQL database and send the process to the background, run the following command:
+
+./cloud_sql_proxy -instances=$SQL_CONNECTION=tcp:3306 &
+The expected output is
+
+Listening on 127.0.0.1:3306 for [SQL_CONNECTION_NAME]
+Ready for new connections
+Press ENTER.
+The proxy will listen on 127.0.0.1:3306 (localhost) and proxy that connects securely to your Cloud SQL over a secure tunnel using the machine's external IP address.
+Click Check my progress to verify the objective.
+Create a database and configure a proxy on a Virtual Machine
+
+Task 3: Connect an application to the Cloud SQL instance
+In this task, you will connect a sample application to the Cloud SQL instance.
+
+Configure the Wordpress application. To find the external IP address of your virtual machine, query its metadata:
+
+curl -H "Metadata-Flavor: Google" http://169.254.169.254/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip && echo
+Go to the wordpress-europe-proxy external IP address in your browser and configure the Wordpress application.
+
+Click Let's Go.
+
+Specify the following, replacing [ROOT_PASSWORD] with the password you configured upon machine creation, and leave the remaining settings as their defaults:
+
+Property	Value
+Username	root
+Password	[ROOT_PASSWORD]
+Database Host	127.0.0.1
+You are using 127.0.0.1, localhost as the Database IP because the proxy you initiated listens on this address and redirects that traffic to your SQL server securely.
+SQL Proxy
+
+Click Submit.
+
+When a connection has been made, click Run the installation to instantiate Wordpress and its database in your Cloud SQL. This might take a few moments to complete.
+
+Populate your demo site's information with random information and click Install Wordpress. You won't have to remember or use these details.
+
+Installing Wordpress might take up to 3 minutes, because it propagates all its data to your SQL Server.
+When a 'Success!' window appears, remove the text after the IP address in your web browser's address bar and press ENTER. You'll be presented with a working Wordpress Blog!
+Wordpress Site
+
+Task 4: Connect to Cloud SQL via internal IP
+If you can host your application in the same region and VPC connected network as your Cloud SQL, you can leverage a more secure and performant configuration using Private IP.
+
+By using Private IP, you will increase performance by reducing latency and minimize the attack surface of your Cloud SQL instance because you can communicate with it exclusively over internal IPs.
+
+In the GCP Console, on the Navigation menu (Navigation menu), click SQL.
+Click wordpress-db.
+Note the Private IP address of the Cloud SQL server; it will be referred to as [SQL_PRIVATE_IP].
+On the Navigation menu, click Compute Engine.
+Notice that wordpress-us-private-ip is located at us-central1, where your Cloud SQL is located, which enables you to leverage a more secure connection.
+Copy the external IP address of wordpress-us-private-ip, paste it in a browser window, and press ENTER.
+
+Click Let's Go.
+
+Specify the following, and leave the remaining settings as their defaults:
+
+Property	Value
+Username	root
+Password	type the [ROOT_PASSWORD] configured when the Cloud SQL instance was created
+Database Host	[SQL_PRIVATE_IP]
+Click Submit.
+Notice that this time you are creating a direct connection to a Private IP, instead of configuring a proxy. That connection is private, which means that it doesn't egress to the internet and therefore benefits from better performance and security.
+Click Run the installation. An 'Already Installed!' window is displayed, which means that your application is connected to the Cloud SQL server over private IP.
+
+In your web browser's address bar, remove the text after the IP address and press ENTER. You'll be presented with a working Wordpress Blog!
+
+SQL Proxy
+
+Task 5: Review
+In this lab, you created a Cloud SQL database and configured it to use both an external connection over a secure proxy and a Private IP address, which is more secure and performant. Remember that you can only connect via Private IP if the application and the Cloud SQL server are collocated in the same region and are part of the same VPC network. If your application is hosted in another region, VPC, or even project, use a proxy to secure its connection over the external connection. SQL Lab Diagram
+
+2.4 Other database services
+---------------------------
+
+2.4.1 Video: Cloud Spanner
+-----
+When you need horizontal scalability, use cloud spanner
+Scale to Petabytes
+Strong transactional consistency at global scale
+High availability
+Example: financial applications, inventory applications
+Monthly uptime:
+	Multi regional: 99.999%
+	Regional: 99.99%
+
+Offers best of relational and non-relational dbs
+
+Characteristics:
+	Check Image: ECCS-2.4.1.1.jpg
+
+Decision Tree:
+	Check Image: ECCS-2.4.1.2.jpg
+
+2.4.2 Video: Cloud Firestore
+-----
+Cloud Firestore:
+	NoSQL DB
+	Highly scalable
+	Fast,	Fully managed, 
+	Serverless, Fully Native
+
+Simplifies storing, synchronizing and querying data for Mobile, Web, IoT Apps at global scale
+Its client libraries provide live synchronization and offline support
+Strong Security
+Supports ACID transactions
+Multi-region replication
+Run powerful queries smoothly without any degradation
+
+Next generation of cloud datastore
+--
+	Datastore Mode:
+		backword compatibility
+		Transactions are no longer limited to 25 groups, unlimited
+		Strong consistency
+		
+	Native Mode(New mobile and web featues):
+		Strongly consistent storage layer
+		Mobile and web libraries
+		Realtime updates
+		Compatible with all client store APIs and libraries
+
+Decision Tree:	
+	Check Image: ECCS-2.4.2.1.jpg
+
+2.4.3 Video: Cloud Bigtable
+-----
+Cloud BigTable:
+If transactional consistency is not required
+
+fully managed, NoSQL DB
+
+Petabytes scale
+Low latency - 10ms
+Seamless scalability for throughput: 
+Learns and adjusts specific access patterns	
+Powers Google core services: Search, Analytics, Maps, Gmail
+Great choice for operational and analytical applications: IoT, User Analytics, Fin Data Analytics
+Storage engine for ML
+Integrates easily with Cloud BigData tools: hadoop, cloud dataflow, cloud dataproc
+Supports: hbase API
+
+Simplified version of Cloud Bigtables overall architecture
+	Check Image: ECCS-2.4.3.1.jpg
+
+Processing is separate from storage
+Tablets: 
+	To help balance the workload of queries, A Cloud Bigtable table is sharded into blocks of contiguous rows called tablets 
+	Tablets are similar to HBase regions
+	Tablets are stored on Colossus which is Google's file system in SSTable format. 
+		An SSTable provides a persistent, ordered, immutable map from keys to values where both keys and values are arbitrary byte strings. 
+	
+Rebalancing without moving data:
+Learns to adjust to specific access patterns. If a certain Bigtable node is frequently accessing a certain subset of data, Cloud Bigtable will update the indexes so that other nodes can distribute that workload evenly . 
+
+Decision Tree:
+	Check Image: ECCS-2.4.3.2.jpg
+If you need to store more than one terabyte of structured data, have very high volumes of writes. Need read write latency of less than 10 milliseconds along with strong consistency or need a storage service that is compatible with the HBase API. Consider using Cloud Bigtable. 
+If you don't need any of these and are looking for a storage service that scales down well, consider using Cloud Firestore. 
+Speaking of Scaling, the smallest Cloud Bigtable cluster you can create has three nodes and can handle 30,000 operations per second. 
+Remember that you pay for those nodes while they are operational, whether your application is using them or not.
+
+2.4.4 Video: Cloud Memorystore
+-----
+Fully managed in-memory datastore
+built on Scalable, Secure, Highly available Infra
+Extreme performance
+focused on building great apps, without burden of complex redis deployment
+Automates complex tasks: High availability(replicated across 2 zones and provides 99.9% availability SLA), failover, patching, and monitoring
+Sub-milisecond latency
+Instances upto 300GB
+Network throughput of 12Gbps
+Fully compatible with Redis protocol: Easy lift and shift
+
+2.5 Review
+----------
+
+2.5.1 Quiz: Module Quiz
+-----
+Done - 3 questions
+
+2.5.2 Video: Module Review
+-----
+Cloud Storage: 		Immutable binary objects
+Cloud SQL: 			Fully managed mysql and postgre sql db service
+Cloud Spanner: 		A relational database with SQL queries and horizontal scalability, transactional consistency, global scale, high availability
+Cloud BigTable: 	Fully managed NoSQL wide column DB, Structured objects, with lookups based on a single key
+Cloud Datastore: 	Fully managed, in-memory DB service for Redis, Structured objects, with transactions and SQL-like queries
+Cloud Firestore: 	Fully managed NoSQL DB
+
+#######
+#Week2#
+#######
+---------------------------------
+| Module 3: Resource Management |
+---------------------------------
+In this module, we will cover Resource Management. Resources in GCP are billable, so managing them means controlling cost. There are several methods in place for controlling access to the resources, and there are quotas that limit consumption.
+
+* Objectives
+	Describe the cloud resource manager hierarchy
+	Recognize how quotas protect GCP customers
+	Use labels to organize resources
+	Explain the behavior of budget alerts in GCP
+	Examine billing data with BigQuery
+
+3.1 Overview
+------------
+
+3.1.1 Video: Module Overview
+-----
+Resource Management:
+
+"Resources" are billable
+"Management" is controlling costs
+
+Several methods in place for controlling access to the resources and there are quotas that limit consumption
+
+This module:
+	Resource Manager
+	Quotas
+	Labels and Names
+	Billing: for alerts and budgets
+	Lab
+
+3.2 Resource Management
+-----------------------
+
+3.2.1 Video: Cloud Resource Manager
+-----
+Lets us hierarchically manage resources by project, folder, and organization. 
+
+IAM policies are inherited top to bottom
+Policies contain a set of roles and members
+Policies are set on resources
+
+These resources inherit policies from their parent. Therefore, resource policies are a union of parent and resource. 
+Child policies can not restrict the access granted at parent level
+If a parent policy is less restrictive, it overrides the more restrictive resource policy. 
+
+IAM policies are inherited top to bottom, billing is accumulated from the bottom up. 
+Resource consumption is measured in quantities like rate of use or time, number of items, or feature use. 
+
+Organization contains: all billing accounts
+Project: associated with one billing account
+
+Project Name: Human readable way to identify projects
+Project Number: Automatically generated by the server and assigned to your project, Google APIs use this
+Project ID: another unique identifier
+
+Resource Hierarchy:
+	Resources are categorized as global, regional, or zonal. 
+	Global Resources: Images, snapshots, and networks
+	Regional Resources: External IP addresses
+	Zonal: instances and disks. 
+
+Resource belongs to only one project
+Each resource is organized into a project. This enables each project to have its own billing and reporting.
+Billing and reporting is per project
+
+3.2.2 Video: Quotas
+-----
+All resources are subject to project quotas or limits. 
+
+Three categories:
+How many resources you can create per project? 
+	For example, you can only have five VPC networks for project. 
+How quickly you can make API requests in a project or rate limits. 
+	For example, five administrative actions per second per project (Cloud Spanner API). 
+How many resources you can create per region
+	For example: 24 CPUs/region
+
+We can increase quota if required. If you expect a notable upcoming increasing usage, you can pro actively request quota adjustments from the quotas page in the GCP Console. 
+
+If quotas can be changed, why do they exist? 
+	Prevent runaway consumption in case of an error or malicious attack. 
+		For example, imagine you accidentally create a 100 instances instead of 10 Compute Engine instances using the gcloud command-line. 
+	Prevent billing spikes or surprises: quotas are related to billing
+	Forces consideration and periodic review. 
+		For example, do you really need a 96 Core instance? Or can you go with a smaller and cheaper alternative?
+
+3.2.3 Video: Labels and names
+-----
+Labels:
+	key-value paired
+	Attached to resources: VMs, Disks, Snapshots, Images
+	Create/Manage via: Console, gcloud, API
+	Maximum 64labels/resource, and max 63 characters per key/value
+	Keys must start with a lowercase letter or international character.
+
+Examples:
+	Inventory: label resources with Environment and segregate them. i.e. Dev, Prod, SIT
+	In scripts: analyse costs, bulk operations
+
+Common Use cases:
+Team or Cost Center - team: dev, team: test
+Components - component: java, component: angular
+Environment/Stage - environment: PROD, environment: SIT
+Owner or Contact - owner: pratik, contact: opm
+State - state: inuse, state: readyfordeletion
+
+Labels are not tags
+		Labels												Tags
+Way to organize resources across GCP			Tags are applied to instances only
+ie disks, snapshots, images
+User defined - key:value						User defined
+Propagated through billing						Primarily used for networking(to apply firewall rules)
+
+3.2.4 Video: Billing
+-----
+We can set budget to track how project is going
+
+After setting up budgets, we can set budget alerts
+Ex: send email after 50% usage of budget amount
+
+Cloud pub/sub notifications to programmetically receive spend updates about this budget.
+
+We can also create cloud function that will listen to Cloud Pub/Sub
+using Pub/Sub Topic and Budget ID
+
+Label all your resources and export Billing data to BigQuery to analyse your spends
+
+Data Studio:
+	Visualized your daily/monthly/yearly spends
+	Turns data into informative dashboard
+
+3.2.5 Video: Demo: Billing Administration
+-----
+Export billing data
+More sophisticated processing or filtering of data occurs after the building is exported, as you will explore in the next lab.
+
+Not possible via Quicklabs so demoing
+
+Console - billing - (Check) overview - 
+	Budgets and alerts - Create budget - My Budget alert - select project - type:last month's spend - target:500$ - enable include credits in cost - define thresholds - 50, 90, 100, 25 - Finish
+	(Check Page) 
+	Transactions - (Check) 
+	Billing export - BigQuery export - edit settings 
+	Payment method (check)
+
+
+3.2.6 Video: Lab Intro: Examining Billing Data with BigQuery
+-----
+Billing data with bigquery
+	sign into BigQuery 
+	create a dataset 
+	Create a table by importing billing data that is stored in a Cloud Storage bucket 
+	run simple queries on the imported data 
+	run more complex queries on a larger dataset
+
+
+3.2.7 Graded External Tool: Graded External ToolLab: Examining Billing Data with BigQuery
+-----
+Objectives
+	Sign in to BigQuery from the GCP Console
+	Create a dataset
+	Create a table
+	Import data from a billing CSV file stored in a bucket
+	Run complex queries on a larger dataset
+
+3.2.8 Video: Lab Review: Examining Billing Data with BigQuery
+-----
+Done
+
+3.3 Review
+----------
+3.3.1 Quiz: Module Quiz
+-----
+Done - 3 questions
+
+3.3.2 Video: Module Review
+-----
+
+
+---------------------------------
+| Module 4: Resource Monitoring |
+---------------------------------
+In this module, we’ll give you an overview of the resource monitoring options in GCP. The features covered in this module rely on Stackdriver, a service that provides monitoring, logging, and diagnostics for your applications.
+
+* Objectives
+	Describe the Stackdriver services for monitoring, logging, error reporting, tracing, and debugging
+	Create charts, alerts, and uptime checks for resources with Stackdriver Monitoring
+	Use Stackdriver Debugger to identify and fix errors
+
+4.1 Overview
+------------
+
+4.1.1 Video: Module Overview
+-----
+Transparency is key principle in GCP, access and process consumption data
+
+Stackdriver overview
+Monitoring
+Lab
+Logging 
+Error reporting
+tracing
+debugging
+Lab
+
+4.1.2 Video: Stackdriver Overview
+-----
+Dynamically discovers cloud resources and app services based on Deep integration with GCP and AWS
+Has access to powerful data and analytics tools
+Collaboration with many different third-party software providers.
+
+Integration with multiple products: monitoring, logging, error reporting, fault tracing, and debugging. 
+You only pay for what you use 
+
+Free Stackdriver products
+	Stackdriver Debugger
+	Stackdriver Profiler
+
+Chargeable Stackdriver products
+	Stackdriver Logging
+	Stackdriver Error Reporting: you might incur minor costs if your errors are ingested by Logging.
+	Stackdriver Monitoring
+	Stackdriver Trace
+
+4.2 Monitoring
+--------------
+
+4.2.1 Video: Monitoring
+-----
+Base of site reliability engineering(SRE)
+
+Dynamically configured and intelligent defaults
+Monitors platform, system, and application metrics
+	through ingest data: metrics, events, metadata
+	then generates insights through dashboards, charts, alerts
+Uptime and health checks configurable
+Dashboards
+setting alerts
+
+Workspace:
+	Root entity that holds monitoring and configuration information
+	Project capacity: 1 < Project > 100 per workspace
+	Contains: Custom dashboards, alerting policies, uptime checks, notification channels, and group definitions that we can use to monitor projects
+	>1 workspaces possible
+	Single pane of glass
+	Alerting policies can notify you of certain conditions
+	
+Uptime checks:
+	HTTP, HTTPS, TCP options available
+	
+Monitoring agent:
+	Stackdriver monitoring can access some metrics without monitoring agent: CPU Utilization, Disk traffic matrics, network traffic matrics, uptime info
+	To access additional system resources and application services, install agent
+	Supported for Compute Engine and EC2 instances
+
+4.2.2 Video: Lab Intro: Resource Monitoring
+-----
+monitoring
+dashboards
+alert
+resource groups
+uptime checks
+
+4.2.3 Graded External Tool: Graded External ToolLab: Resource Monitoring
+-----
+Objectives
+	Enable Stackdriver Monitoring
+	Add charts to dashboards
+	Create alerts with multiple conditions
+	Create resource groups
+	Create uptime checks
+
+4.3 Logging, Error Reporting, Tracing and Debugging
+---------------------------------------------------
+
+4.3.1 Video: Logging
+-----
+Basis of Stackdriver
+Also provides logging, error reporting, tracing, and debugging
+
+Allows you to store, search, analyze, monitor, and alert on logged data and events from GCP and AWS. 
+
+Can ingest application and system log data from thousands of VMs. 
+	API to write logs
+	30 days retrntion
+	
+Log search, view, and filter 
+create log-based metrics
+
+
+Store on Big Query instead of Storage bucket:
+	Retention is 30 days only but you can export your logs to Cloud Storage buckets, BigQuery datasets, and Cloud Pub/Sub topics.
+	But why would you export to BigQuery or Cloud Pub/Sub? 
+	Exploiting logs to BigQuery allows you to analyze logs and even visualize them in Data Studio. 
+	BigQuery runs extremely fast SQL queries on gigabytes to petabytes of data. 
+	This allows you to analyze logs such as your network traffic so that you can better understand traffic growth to forecast capacity, network usage to optimize network traffic expenses, or network forensics to analyze incidence
+	For example: 
+		I queried my logs to identify the top IP addresses that have exchange traffic with my web server. Depending on where these IP addresses are and who they belong to, I could relocate part of my infrastructure to save on networking costs, or deny some of these IP addresses if I don't want them to access my web server. 
+	If you want to visualize your logs, connect your BigQuery tables to Data Studio. Data Studio transforms your raw data into the metrics and dimensions that you can use to create easy to understand reports and dashboards. 
+
+Store on Cloud Pub/Sub:
+	This enables you to stream logs to applications or endpoints. 
+	Similar to Stackdriver monitoring agent, it's a best practice to install the logging agent on all of your VM instances. 
+	The logging agent can be installed with these two simple commands, which you could include in your startup script. 
+	This agent is supported for Compute Engine and EC2 instances.
+
+4.3.2 Video: Error Reporting
+-----
+Counts, analyses and aggregates the errors in your running Cloud services. 
+Error Dashboards: A centralized Error Management interface displays the results with sorting and filtering capabilities 
+Error Notifications: real-time notifications when new errors are detected
+
+GA for the App Engine standard environment and
+Beta for App Engine flexible environment, Compute Engine and AWS EC2
+
+Programming languages:
+	Exception stack trace parser is able to process Go, Java,.NET, Node.js, PHP, Python and Ruby. 
+
+4.3.3 Video: Tracing
+-----
+
+Tracing System:
+	latency reporting
+	displays data in real-time
+	per-URL latency sampling
+
+Collects latency data:
+	App Engine
+	Google HTTP/HTTPS LBs
+	applications instrumented with the Stackdriver Trace API
+	
+4.3.4 Video: Debugging
+-----
+
+Inspect the state of a running application in real time, without stopping or slowing it. 
+debug snapshots:
+	Capture call stack and local variables of a running application
+Debug logpoints:
+	Inject logging into a service without stopping it
+	
+Request latency: <10 seconds
+Languages: Java, Python, Go, Node.js and Ruby.
+
+4.3.5 Video: Lab Intro: Error Reporting and Debugging
+-----
+Stackdriver Logging, Error reporting, Tracing, and Debugging 
+in a lab. In this lab, you will deploy a small Hello World application to App Engine and instrument it with Stackdriver. Then you'll plant a bug in the application which will expose you to Stackdriver's Error Reporting and Debugging features
+
+4.3.6 Graded External Tool: Graded External ToolLab: Error Reporting and Debugging
+-----
+Objectives
+
+	Launch a simple Google App Engine application
+	Introduce an error into the application
+	Explore Stackdriver Error Reporting
+	Use Stackdriver Debugger to identify the error in the code
+	Fix the bug and monitor in Stackdriver
+	
+
+
+
+4.3.7 Video: Lab Review: Error Reporting and Debugging
+-----
+
+4.4 Review
+----------
+
+4.4.1 Quiz: Module Quiz
+-----
+Done - 3 questions
+
+4.4.2 Video: Module Review
+-----
+Interconnecting Networks
+Load Balancing and Autoscaling
+Infrastructure Automation
+Managed Services

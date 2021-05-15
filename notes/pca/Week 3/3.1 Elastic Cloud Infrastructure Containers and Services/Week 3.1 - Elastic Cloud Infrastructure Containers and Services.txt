@@ -1,0 +1,483 @@
+X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X
+X-- Elastic Cloud Infrastructure: Containers and Services --X
+X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X
+
+* 1 Week course: 5 October - 11 October
+* Course URL: https://www.coursera.org/learn/gcp-infrastructure-containers-services
+* Previous: https://www.coursera.org/learn/gcp-infrastructure-scaling-automation/home
+* Next: https://go.cloudplatformonline.com/dcn/DkLCXkyLVQBx2APDZHCLNmqtGl4bJTZY6he1z2Btigb_PsUH_dlyOxGuLGs3vFZc/hkmdriJ00G000zo6h130Wwb
+
+#######
+#Week1#
+#######
+
+--------------------------
+| Module 0: Introduction |
+--------------------------
+
+0.1 Welcome to Elastic Cloud Infrastructure: Scaling and Automation
+-------------------------------------------------------------------
+Video: Elastic Cloud Infrastructure: Containers and Services Course Intro
+Reading: ReadingHow to download course resources
+
+-------------------------------------------------
+| Module 1: Application Infrastructure Services |
+-------------------------------------------------
+In this module, you will learn about Cloud Pub/Sub, API Management, Cloud Functions, Cloud Source Repositories, and Specialty APIs.
+
+* Objectives
+	Differentiate between the GCP options and tools available for development and collaboration.
+	Recall what a Cloud Source Repository is.
+
+1.1 Overview: Video: Module Overview (Intro)
+---------------------------------------------------
+
+
+1.2 Application Infrastructure Services Concepts
+------------------------------------------------
+
+1.2.1 Video: Cloud Pub/Sub
+-----
+
+Fully managed realtime messaging service that allows us to send and receive messages between independent applications
+
+Decouples senders and receivers, asynchronous communications
+Guaranteed delivery
+Stores data for 7 days
+data not in order
+
+
+Benefits:
+	Scales globally
+	low latency
+		dynamic rate limiting
+	Availability
+		Durability: replicated storage of messages
+		Reliability
+		End-to-end reliability via application ACKs
+	Security
+		Encryption in motion and at rest
+	Maintenance free
+
+Single publisher - single subscriber
+Check Image: ECICS-01.jpg
+
+Multiple publishers - Multiple subscribers
+Check Image: ECICS-02.jpg
+
+Integrations:
+Check Image: ECICS-03.jpg
+
+Use cases:
+	balancing workloads in network clusters
+	implementing async workflows
+	distributing event notifications
+	refreshing distributed caches
+	Logging into multiple systems
+	data streaming from various processes or devices
+	reliability improvements
+	
+1.2.2 Video: API Management
+-----
+Google Cloud Endpoints helps you create, deploy, protect, monitor, analyze and serve your APIs using the same infrastructure Google uses for its own APIs. 
+
+Use any language and framework to write an API, add an open API specification or gRPC API configuration, and Cloud Endpoints will monitor and protect your API. 
+
+
+Example:
+	Check Image: ECICS-04.jpg
+	example for a mobile backend. Let's say you have users that need to do very small synchronous interactions with your application. Basically, they can publish or communicate with that Cloud Endpoint, which can then be processed say, by App Engine and a number of other different data sources to get back to that individual customer. Cloud Endpoints can be the forefront of where your communications will start, and then of course, it can publish to other backend application servers. The nice thing here is you've got that mobile backend API, so you don't need to set up an entire environment just to handle all of the incoming connections from your different locations. It is a managed service. It automatically scales up and down for you and this way, you have a backend service constantly running with your Cloud Endpoints only available whenever users are trying to interact with it. You don't want to have to depend on creating autoscaling engines just because a couple of hundred phones came online, an airplane landed and then everybody's checking your application as soon as they get on. Cloud Endpoints can be a nice suitable environment for setting that up. 
+	
+Apigee is an API interface that wraps your APIs, and provides analytics and data transformation and validation. The use of Apigee is outside of the scope of this course, but more information can be found in both the online documentation, as well as in the courses in our application development track.
+
+1.2.3 Video: Cloud Functions
+-----
+
+Single Purposed + Short Lived + Self contained
+
+Serverless 
+Check Image: ECICS-05.jpg
+microservices architecture. 
+You can think of it as a way to do lightweight event actions using JavaScript. 
+So instead of setting up an environment, imagine if you could just publish JavaScript to do something based on a trigger.
+
+Official Definition:
+	Google Cloud Functions is a lightweight compute solution for developers to create single-purpose stand-alone functions that respond to Cloud events without the need to manage a server or runtime environment
+	
+Cloud Functions is a lightweight event-based asynchronous compute solution that allows you to create small single-purpose functions that respond to Cloud events without the need to manage a server or a runtime environment. 
+Triggers can be configured using Cloud Pub/Sub, HTTP, and Cloud Storage. 
+You deploy functions from a Cloud Storage bucket, GitHub or Bitbucket repo.
+Cloud Functions also benefit from Stackdriver integration. 
+
+Cloud Endpoints vs Cloud Functions:
+Cloud Endpoints exposes an array of endpoints or API functions, whereas Cloud Functions exposes a single endpoint. 
+The Cloud Endpoints backend is an App Engine backend, so you have a long running programming environment with full access to complex data, and storage services. In Cloud Functions, you have one single piece of code that accepts a limited input, executes rapidly, produces some output, and then exits.
+
+1.2.4 Video: Demo: Cloud Functions
+-----
+
+Dependencies
+npm install --save @google-cloud/storage
+
+mkdir ~/gcf_hello_world
+cd gcf_hello_world
+nano index.js
+
+exports.helloGET = (req, res) => {
+	res.send('Hello World!');
+}
+
+gcloud beta functions deploy helloGET --trigger-http --runtime nodejs8
+
+deployed, copy URL and open it
+
+1.2.5 Video: Cloud Source Repositories
+-----
+
+Google Cloud Source Repositories provides Git version control to support collaborative development of any application or service, including those that run on App Engine and Compute Engine. 
+
+If you are using Stackdriver debugger, you can use Cloud Source Repositories and related tools to view debugging information alongside your code during application run-time. 
+
+Google Cloud Source Repositories also provides a source browser that you can use to view your repository files from within the GCP console. 
+You can easily create a repository using the listed gcloud commands. 
+Repositories can be a mirror of a hosted GitHub or Bitbucket repository. 
+
+Here's additional information about Cloud Source Repositories. In the previous slide, we mentioned that repositories can be a mirror of GitHub or Bitbucket repositories. "When you push a change to the connected repository, it automatically syncs to the Cloud Platform repository."
+
+1.2.6 Video: Specialty APIs
+-----
+You can easily get amazing functionality into your applications by leveraging the services and APIs already supported in the larger Google Cloud, beyond the Google Cloud Platform APIs. 
+
+Check Image: ECICS-06.jpg
+
+As you can see in this slide, the list is extensive. Using very little coding, you can add cool features to your application by leveraging the machine learning API and specialty APIs. Some demonstrations consist of as few as six lines of code. Specifically, the Cloud Speech API provides speech to text functionality, in over 80 languages and variants in real-time streaming or batch modes.
+
+1.3 Review
+----------
+
+1.3.1 Quiz: Module 1 Quiz
+-----
+Done - 3 questions
+
+1.3.2 Video: Module 1 Review (Outro)
+-----
+The application infrastructure services we've covered can help you grow your application in directions you might not have considered. For example, if you have a successful application, wrapping the API with security, monitoring, and documentation can enable third-party development on top of your solution turning it from an isolated application into an extensible platform and enabling business partnerships
+
+----------------------------------------------
+| Module 2: Application Development Services |
+----------------------------------------------
+In this module, you will learn about Google App Engine and how you can leverage it so that you don't have to worry about scaling, and can focus on the application code.
+
+* Objectives
+	Understand App Engine capabilities as an alternative to containers.
+	Recall which environments allow you to run Docker containers in GCP.
+	Differentiate between the App Engine Flexible and Standard Environments.
+
+2.1 Overview: Video: Module Overview (Intro)
+---------------------------------------------------
+Google App Engine
+
+App Engine handles all the front end and back end scaling transparently. 
+So all you need to do is focus on the application code
+
+2.2 App Engine Concepts : Video: App Engine
+--------------------------------------------------
+Check Image: ECICS-07.jpg
+PaaS
+	Infinite Autoscaling
+
+Standard Environment
+	Fully managed
+	Scale to zero
+	specific versions of supported languages
+	
+Flexible Environment
+	Docker container support
+	VMs exposed
+	Any language in your container
+
+Flexible vs Standard: 
+	Check Image: ECICS-09.jpg
+	
+	
+App engine gives you the ability to deploy your own code, but take advantage of the built-in feature set of autoscaling you're manage servers. 
+
+Overview of Appengine:
+	Check Image: ECICS-08.jpg
+	allows you to scale down from nothing to thousands of different modules and instances running at the same time. 
+	Here's an overview of app engine. We have a built-in load balancer, that's already front ending your applications. Any type of load balancing configurations you have set with Google app engine are already built in. You don't necessarily have access to local storage, and so pretty much everything is done through APIs for external access. You could be making calls to other services such as Cloud Datastore for your back-end infrastructure, and perhaps cloud SQL for relational database task. You can take advantage of a number of built-in functions such as task queues, which you can use for launching other external tasks, whether they be in real-time or in batch. You could also utilize external cloud storage as well as cloud Memcache. There's actually a number of other additional APIs you can take advantage of, but these are some of the common architectures that take advantage of the external services available to your front-end application on app engine. 
+
+Microservices on Appengine:
+		Services are a modular abstraction in app engine, a way to break up the application into separate parts. 
+		Instead of architecting your entire application inside a single app engine service as shown on the previous slide, you could implement your application in multiple services. 
+		You can have more than one service in a project. 
+		You can also use multiple projects to further isolate services. 
+		Splitting traffic to different versions enables incremental roll outs and AB testing. 
+		Each service can have multiple versions deployed simultaneously. 
+		Code is completely separate inversions, services, and projects. 
+		Services in a single project share some resources for example, Datastore, Memcache, and Task Queues. 
+		Services in separate projects are completely isolated. On the IAM level, you can assign different roles at the project, but not at the service level. 
+		When services are in the same project, they are isolated in some ways, and then share certain resources. 
+		Coded one service can't directly call code in another service. Code is deployed independently. 
+		Each service can be written in a different language. Then with autoscaling, and load balancing, and machine instance type that you saw on the previous slide, they're all independent per service. 
+	
+2.3 Review
+----------
+
+2.3.1 Quiz: Module 2 Quiz
+-----
+Done - 2 questions
+
+2.3.2 Video: Module 2 Review (Outro)
+-----
+The Google App Engine Flexible Environment, supports Docker containers. 
+In the next module, we're going to look at GKE, which is a container first system. 
+App Engine makes it easier and faster to get an application up and running, since it handles the infrastructure, and lets you worry about your application instead. 
+
+------------------------
+| Module 3: Containers |
+------------------------
+In this module, you'll be introduced to the concept of containers and you will learn about Google Kubernetes Engine, Google Container Registry, and complete a hands-on lab.
+
+* Objectives
+	Understand the PaaS capabilities available through GCP using containers.
+	Recall that Google Kubernetes Engine provides a managed environment for deploying, managing, and scaling your containerized applications using Google infrastructure.
+	Create a Kubernetes cluster using Google Kubernetes Engine.
+
+3.1 Overview : Video: Module Overview (Intro)
+---------------------------------------------
+
+Containers
+	introduction
+	GKE: A managed version of Kubernetes, an open-source Container Management System. 
+	Google Container Registry. 
+	
+There is a sizable hands-on lab you will complete around Kubernetes load balancing.
+Choosing among: GKE, GAE, or only simply Containers
+
+3.2 Container Concepts
+----------------------
+
+3.2.1 Video: Containers
+-----
+Check Image: ECICS-10.jpg
+IaaS + PaaS
+
+History:
+-
+					Bare Metal			VMs			Containers
+Applications			|				|				|
+Dependencies			|				|				|
+OS						|				|				X
+Infrastructure			|				X				X
+
+
+Benefits:
+	Manage Apps, not machines
+	maintain vendor independence
+	WORA:
+		Develop in premices and
+		Upload to cloud for Prod and scale
+	Workload relocatability
+		Migrate to a new platform
+	Decouple applications from dependencies
+		Ex: namespaces, services, DNS, Secrets, specific APIs
+
+3.2.2 Video: Kubernetes Engine
+-----
+Kubernetes
+	Open source
+	framework for container management and automation
+	based on Google's systems
+	kubernetes.io
+
+Kubernetes Engine
+	fully managed servie
+		Kubernetes software maintained
+		SLA
+	Docker format containers
+	Autoscaling
+	Stackdriver logging and monitoring
+	Cloud VPN Integration
+		Hybrid cloud and on premices solution
+	Cloud IAM Integration
+
+Container cluster:
+	Group of compute engine instances running Kubernetes
+	At its core, Kubernetes will start with what we call a Container Cluster. 
+	The cluster consists of physical hardware resources. They're going to be virtual machines. 
+	A standard minimum cluster is going to have exactly one master to start with. 
+	That master is going to be the coordinator. 
+	It will be providing the API access to communicate with the individual nodes. 
+	Each of these individual nodes is going to be running a Docker runtime. 
+	They are going to be running a Kubelet agent which is going to handle the managing and scheduling. 
+	They also include a network proxy. So this way, they can communicate internally with each other and with other containers inside of the virtual machines. 
+	We recommend a minimum of three node instances for a standard high availability. 
+
+Kubernetes Master:
+	Kubernetes Master is the Cloud endpoint towards the Kubernetes Cluster itself. 
+	It's running the Kubernetes API server and it handles all of the scheduling. 
+	It runs the health checks to ensure everything is running and it offers all the cloud Service integration for you. 
+	Google Kubernetes Engine is going to be running this Master node on a VM that you do not see and do not manage. 
+	In your own environment though, you will set up your own Kubernetes master and individual nodes if you run Kubernetes by itself. 
+	When utilizing Kubernetes Engine, Google takes over this management node for you, integrates that with Stackdriver applications with IAM and other automated processes that we will discuss a little bit later. 
+	
+How are containers organized? 
+	They're organized inside of what we call a Pod, which is an abstraction. 
+	It's similar to a target group when we discuss load balancers. 
+	We recommend you usually only run one container per pod because we aren't distributing containers. 
+	We're distributing pods across multiple physical nodes. 
+	A pod is going to be able to allow you to expose these applications through a public IP address. 
+	Containers in the pod share a single IP address and a single namespace so they can communicate with the other nodes in the cluster. 
+
+Pod:
+	A pod also gives you access to centralized storage. 
+	There is important information that needs to be shared, perhaps SSL certificate keys, for example, those can be stored on a central storage device. 
+	Some type of network-attached volumes will be associated with these individual pods, and those containers will have access to them. 
+
+	Kubernetes engine labels:
+		You might recall that in load balancing, you can load balance based on target pools or managed instance groups. 
+		In this case here, we will be load balancing using labels. 
+		A label is an arbitrary key value pair that you apply to pods and other objects. 
+		They're used by Kubernetes Engine to configure orchestration. 
+			For example, if you want to shutdown all the production pods, you'd look up those labels and shutdown matching pods. 
+			If you want to expand the pod of the production cluster, you do so by looking up labels. 
+			You can query based on those labels, giving you the ability to have full command and control over any pods that match those query labels.
+		
+	Here's an example to explain the Kubernetes Engine Service concept. The problem depicted is as follows. An application needs to communicate with a group of pods, "A" and "B." What happens if a pod has to be restarted? 
+		When the pod restarts, it will be dynamically assigned a new internal IP. The solution would be the service has a persistent IP, which can be either an internal IP or an external IP. 
+		The application communicates with the pods through the service IP. 
+		The service is connected to the pods by label. 
+		If a pod has the correct label, it will be connected to the service. 
+		If a pod restarts, the pod's label causes it to be picked up by the service. 
+		Some other important points include services come in different types. 
+		They can expose internally, externally, and they can load balance incoming requests to the pods in the group. 
+		They combine the functions of a group and a load balancer. 
+
+Kubernetes engine deployment
+	A deployment gives you the rules for how are you going to autoscale those individual nodes. 
+	It drives the number of pods that are actually running towards the ideal state of the number that we want to be running. 
+	In this example, we have a service which will say in front, that will create the target pool of instances. 
+	Then a deployment group defines exactly how scaling will happen. 
+	Here, we can automatically spin up additional pods based on health checks, load balancing requirements, or other definitions
+	
+Check Image: ECICS-11.jpg	
+In this slide, we can see how pods are scheduled onto nodes. 
+Once you have a deployment, we now specify a particular service we want to deploy, which consists of pods and individual containers. 
+You can start to see the hierarchy. 
+I can deploy a deployment onto individual nodes. 
+The master node is going to be responsible for doing that, but it's going to equally distribute the number of pods across these nodes depending on what your container cluster looks like. 
+Remember, a container cluster is going to consist of physical nodes. 
+These are going to be actual virtual machines, Compute instances that you can go into your console and see. 
+
+Resiliency:
+	Deployments provide you with built-in resilience. 
+	If you have a pod or a physical node failure that has running pods, all of these pods will be eliminated. 
+	However, the deployment will have specific rules saying that we have a minimum of two pods running at all times. 
+	So, if there is only one physical node, fill in the remainder number of containers onto the remaining node. 
+	So, when node "2" fails, the deployment redeploys pod "B" to another node in the cluster. 
+	
+Rolling updates:
+	Allowing you to upgrade systems to a new version. 
+	Check Image: ECICS-12.jpg
+	In this case, version "1" of the software is running on three separate nodes.
+	The deployment is making sure we keep three pods running. 
+	We're showing a service in the diagram so you can see the IP changes, as well as the node changes. 
+	
+	What we can do is launch a fourth pod to node three with the new version of the application. 
+	Once it is operational, the service picks up the pod based on the label and begins serving it. We now have four pods, but only need three. 
+	So, Deployment Manager shuts down the version one pod in node three.
+	This process is continued until all three nodes have a pod with the updated version of the application. 
+	
+IAM Support:
+	Another benefit of running Google Kubernetes Engine is the IAM support. 
+	So, all of the things that you can do on a containerized environment can be command and control using the same level of security that you give to somebody to manage the network, to manage storage, or to manage other APIs. 
+	It gives you central access control when it comes to managing the rest of the platform objects. 
+	You can design Container Clusters so that they are spread across multiple zones for resiliency. 
+	
+	Roles:
+		container.admin			: Full management of Container clusters and Kubernetes cluster APIs
+		container.clusterAdmin	: management of Container clusters
+		container.developer		: Full access to  Kubernetes API objects inside Container clusters
+		container.viewer		: Readonly access to Kubernetes Engine resources
+
+Multiple zone container clusters:
+	When you enable multi-zone Container Clusters, the container resources are replicated in the additional zones and work is scheduled across all of them. 
+	If one zone fails, the others can pick up the slack. 
+	In this case, any single zone is capable of running the entire application. 
+	
+Node pools:
+	Node pools are instance groups in the Kubernetes cluster. 
+	They're much like a Managed Instance group. 
+	All of the VMs in a pool are going to be exactly the same. 
+	Pools can contain different virtual machines from one another. So, pools can also be in different zones. 
+	The cool thing is Google Kubernetes Engine is node pool-aware. 
+	So, based on the labels that you provided the pool, we can manage those accordingly inside of Kubernetes Engine. 
+	Kubernetes Engine will replicate all node pools and multi-zone Container Clusters, but you should be aware of any quotas associated with the region you're running in. 
+	
+More Kubernetes Engine features:
+	Network load balancing 
+	Cluster autoscaler. 
+	Cluster Federation: Multi-region Cluster Containers: how you'd utilize Cluster Federation, if you're going to be running environments in Asia, Europe, and the Pacific, or even through other cloud providers, Cluster Federation will allow you to manage and deploy this in a multi-cloud solution. 
+
+Cluster Federation:
+	Cluster Federation is useful when you want to deploy resources across more than one cluster, region, or cloud provider. 
+	You may want to do this to enable high availability, offer greater geographic coverage for your app, use more than one cloud provider, combined cloud providers and on-premise solutions, or for ultra-high scalability. 
+	Cluster Federation is also helpful when you want resources to be contactable in a consistent manner from both inside and outside your clusters without incurring unnecessary latency or bandwidth costs penalties or being susceptible to individual cluster outages.	
+
+3.2.3 Video: Container Registry
+-----
+provides secure, private, Docker image storage on GCP. 
+While Docker provides a central registry to store public images, you may [not] want your images to be accessible to the world. 
+In this case, you must use a private registry. 
+The Container Registry runs on GCP, so it can be relied upon for consistent uptime and security. 
+The registry can be accessed through an HTTPS endpoint, so you can pull images from any machine, whether that machine is a Google Compute Engine instance or your own hardware.
+
+3.3 Lab
+-------
+
+3.3.1 Video: Lab Kubernetes Load Balancing (Overview and Objectives)
+3.3.2 Video: Getting Started with Google Cloud Platform and Qwiklabs
+-----
+create a Kubernetes cluster using Google Kubernetes Engine with the built-in network load balancer. 
+deploy nginx into the cluster and verify that the application is working. 
+undeploy the application, 
+redeploy the cluster using ingress to connect it to a Google Compute Engine HTTPS load balancer. 
+redeploy and test. 
+
+3.3.3 Graded External Tool: Graded External ToolLab Kubernetes Load Balancing
+3.3.4 Video: Lab Kubernetes Load Balancing (Review)
+-----
+Objectives
+	Create a Kubernetes cluster using Google Kubernetes Engine with the built-in network load balancer
+	Deploy nginx into the cluster and verify that the application is working
+	Undeploy the application
+	Re-deploy the cluster using ingress to connect it to a Google Compute Engine HTTPS load balancer.
+	Redeploy and test.
+
+3.4 Container Environment Comparison : Video: Kubernetes Engine, App Engine, or Containers on Compute Engine?
+--------------------------------------------------------------------------------------------------------------------
+
+Containers on Compute Engine
+	when you want total control over VM resources but want benefit of Docker image development
+
+App Engine Standard
+	Very fast scaleup
+	scales down to zero
+	no Docker containers
+
+App Engine Flexible
+	Code first
+	developer focused
+	simpler to use than Kubernetes Engine
+
+Kubernetes Engine
+	Multi-cloud on on-premises
+	deep controls over container orchestration
+	
+3.5 Review
+----------
+
+3.5.1 Quiz: Module 3 Quiz
+-----
+Done - 3 questions

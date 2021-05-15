@@ -1,0 +1,97 @@
+----------
+Kubernetes
+----------
+Container Management Platform
+By Google
+Written in Go
+
+https://jee-appy.blogspot.com/2018/08/understanding-kubernetes-architecture.html
+
+Cluster = Master Node + Nodes
+Nodes depend on number of applications and workload
+
+Master Node = api-server + Cluster Store  + Scheduler + Controller
+--
+
+api-server
+	Consumes JSON
+	Exposes REST API to talk to k8s cluster, consumes json, only api-server talks to Cluster Store.
+	Talks to rest of rest of Master Components
+	We'll talk to API Server in form of json/yml via kubectl
+
+Cluster Store (KV)
+	Stores Cluster related data
+	Key Value
+	Cluster state and config management
+
+Scheduler
+	Watches api-server for new pods and assign node to work
+
+Controller
+	A daemon that watches the state of the cluster to maintain desired state. 
+	Example: replication-controller, namespace-controller etc. 
+	Other than this it performs garbage collection of pods, nodes, events etc
+	If POD or node goes out, controller updates config and tries to make it up
+
+
+Node = Kubelet + Container Engine + kube-proxy
+--
+	VM instance on which our K8S Application will be running
+
+Kubelet
+	Runs on Node
+	K8S agent which register nodes with cluster, watches api-server, instantiate pods, report back to the api-server
+	Interacts only with API Server
+	If pod fails, it reports to master and master decides what to do. 
+	Exposes port 10255 on node
+
+Container Engine
+	Container runtime environment
+	It does container management like pulling images, starting/stopping containers. 
+	Usually Docker is used for container runtime.
+
+kube-proxy
+	Responsible for networking
+	Provide unique IP to Pods
+	All container in a pod share same IP, Load balances across all pods in a service
+	
+
+Pods
+--
+	Unit of scaling in k8s
+	An environment to run containers
+	It have network stack, kernel namespaces and one or more container running
+	Container always runs inside a pod
+	Pod can have multiple containers
+	If we want to increase number of instances, increase Pods
+
+
+Services
+--
+	Single source of interaction with Pods
+	Pods comes and go with different IPs. 
+	To distribute load and act as a single source of interaction to all pods of an application, service play the role.
+	Has single IP and DNS
+	Created with a manifest JSON file
+	All new pods gets added/registered to the service
+	Which pod should be assigned to which services is decided by labels
+	Services send traffic only to healthy pods
+	Service and pods have labels on the basis of which service identifies its pods
+	Uses TCP by default (UDP is also supported)
+	Service can point things outside the cluster
+
+
+Deployments
+--
+	It is a K8S object whose task is to manage identical pods running and upgrading them in controlled way.
+	Deployed using YAML/JSON manifest
+	Deployed via api-server
+	Provide update of pods
+	Provide rollbacks
+
+
+Overall Flow of (deployment) request:
+--
+kubectl writes to the API Server --> API Server validates the request and persists it to Cluster store(etcd) --> Cluster store (etcd) notifies back the API Server --> API Server invokes the Scheduler --> Scheduler decides where to run the pod on and return that to the API Server --> API Server writes back to etcd --> etcd notifies back the API Server --> API Server invokes the Kubelet in the corresponding node --> Kubelet tells container runtime(Docker, using API) to create a container --> Kubelet updates the pod status to the API Server --> API Server persists the new state in etcd
+
+

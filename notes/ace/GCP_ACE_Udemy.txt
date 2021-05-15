@@ -1,0 +1,4456 @@
+---------------------------------------------------------------
+Udemy - Google Certified Associate Cloud Engineer Certification
+---------------------------------------------------------------
+
+Udemy: https://www.udemy.com/course/google-certified-associate-cloud-engineer/
+
+Author: Mattias Anderson
+
+Duration: 13:47:53 Hours
+Lectures: 123
+
+Started on: 29 July
+Targeted on: 13 August
+-------------------------------------------
+
+1. Course Info
+----
+
+1.1 Course Introduction (with guest Ryan Kroonenburg)
+1.2 Making Comparisons (with guest Ryan Kroonenburg)
+--
+ACE: more towards running systems, command line access
+PCA: business analysis and trade off
+
+1.3 Course Outline & Student Background
+--
+How to setup,
+GCP Account/projects?
+Various GCP services?
+GCP system which we've designed?
+
+
+2. Certification Intro
+---
+
+2.1 Exam Guide (Blueprint)
+--
+
+link: https://cloud.google.com/certification/guides/cloud-engineer/
+
+Job Role:
+Deploy Application
+Monitor operations on multiple projects
+maintain enterprise solutions to ensure they meet target performance metrics
+experience on public clouds and on-premises solutions
+able to use Google cloud console and CLI
+
+5 sections
+
+3. Intro to Google Cloud Platform (GCP)
+---
+
+3.1 GCP Context
+--
+details about exam
+
+3.2 GCP Design and Structure
+--
+Setup:
+vCPU
+Physical Server
+Rack
+Data Center(building)
+Zone(independent from one another) power failre doesn't impact other zone
+Region
+Multi-Region
+Private Global 53
+People who work on Data Centers have no access to GCP Services
+&&
+People who work on GCP Services have no access to Data Centers
+
+Network Ingress and Egress
+Normal Network: Routes via Internet to edge location closest to destination
+Google: Routes to traffic enter from Internet at edge closest to the source
+		So that single global IP Address can load balance worldwide
+		No DNS issues
+We can opt for 'Normal Network' to reduce cost
+
+
+Pricing by,
+Provisioned - We ask Google to make sure it is able to handle X
+Usage - Charge me for what I use
+Network Traffic - 
+		Always free on way in (ingress)
+		Charged on way out(egress), by GBs used. 
+			free with GCP service
+			Depends on destination of that service
+			Depends on location of that service
+
+Security
+Separation of duties
+everything is encrypted
+strong key and identity management
+network encryption
+	All control info encrypted
+	All WAN traffic encrypted automatically
+	Moving towards encrypting all local traffic within data centers
+Distrust the network, anyway
+	BeyondCorp model: zero trust
+
+Quota
+	Scale everything
+	
+Resource Quota
+	Scope
+		Regional
+		Global
+	Changes
+		Automatic
+		On request
+			Response in 24-48hr
+			may be refused
+
+Organization
+	Projects are similar to AWS Accounts
+	Projects own resources
+	Projects can be shared with other projects
+	Projects can be grouped and controlled in a hierarchy
+	
+	
+4. Intro to GCP Products Services
+---
+
+4.1/2/3
+--
+refer to Cheatsheet
+
+
+5. Getting Started
+---
+Mega Thread: https://acloud.guru/forums/gcp-certified-associate-cloud-engineer/discussion/-LHq7ia97ot7POrc6Nw7/exam_report_mega-thread
+
+
+6. Account Setup
+---
+
+6.1 Free-Tier GCP Accounts
+--
+By default, billing account is not charged
+    must manually upgrade to a paying account
+    https://cloud.google.com/free/ #done
+    https://cloud.google.com/free/docs/gcp-free-tier #done
+
+Free: 300$ valid up to 12 months
+	Not >8 CPUs
+	No GPUs
+	No TPUs
+	No Quota increases
+	No cryptomining
+	No SLAs
+	No Premium OS licenses(Windows)
+	No cloud launcher products with extra usage fees
+
+6.2 Create Free-Tier GCP Account (Lab)
+--
+Create free trial GCP Account
+	Don't link it with existing email address
+New GMail account for billing
+	secure it with 2FA
+	Can forward mail to normal account
+
+Why separate Gmail Account?
+Least Privilege!: Every program and privileged user of the system should operate using the least amount of privilege necessary tp complete the job
+Using Admin account to run normal activities, bad habit
+Admin account will billing access very rarely needed
+
+https://console.cloud.google.com/freetrial/signup/tos #done
+
+pratikaambani.gcp@gmail.com : NewP@..1
+Enable 2FA for 8320481769
+HSBC 0524 CC
+Add forwarding address to pratikaambani@gmail
+
+pratikaambani.gcp.user@gmail.com : NewP@ss1
+Enable 2FA for 8320481769
+HSBC 0524 CC
+Add forwarding address to pratikaambani@gmail
+
+6.3 Explore GCP Console (Lab)
+--
+https://console.cloud.google.com #done
+Dismiss the dismiss button
+
+Rename billing account: My Trial Billing Account
+
+Customize homepage: move APIs card on top
+
+6.4 Set Up Billing Export (Lab)
+--
+Export must be setup per billing account
+Resources should be placed into appropriate projects
+Resources should be tagged with labels
+Billing Export is not realtime
+	Delay is hours
+
+To setup an export of billing information
+Create Project: Admin Project
+Search for Billing --> Big Query --> Create Dataset(billing_export)
+
+Labels: key:value pair
+department:finance
+function:billing
+Tables won't be created yet, billing_export will create required tables itself
+
+6.5. Set Up Billing Alert (Lab)
+--
+We can set budget to,
+	billing account as well as
+	projects
+Alert: 
+	at specific amount as well as
+	compare with previous month
+Alerts to notify Billing Administrators when spends reach X% of amount
+
+https://console.cloud.google.com/billing/013483-2823A6-AB50A1/budgets?project=admin-project-247923 #done
+Login to GCP Admin account and set budget
+We can also do this programmetically
+
+6.6. Set Up Non-Admin User Access (Lab)
+--
+We should not access GCP with overpowered GCP Account, so non-admin account
+
+Go to Admin account grant a role of "Billing Account User" to gcp.user account
+
+Go to gcp.user account --> create project --> My User Project --> navigate to it
+
+
+7. Cloud Shell and Data Flows
+---
+
+7.1 Explore Cloud Shell and Editor (Lab)
+--
+Direct CLI to cloud resources
+Can be used directly from the browser without SDK or other tools
+Has built-in authorization for access to projects and resources 
+
+Accepts Linux commands: cd, pwd
+cat README TAB
+dl filename : downloads a file
+
+gcloud help
+gcloud config set project projectId: to change project 
+
+git clone https://github.com/acloudguru/gcp-cloud-engineer.git
+ls -lrt
+cd gcp-cloud-engineer
+cd cloud-shell-hello
+
+.js files
+node hello.js
+starts at 127.0.0.1:8080 (not local)
+
+Go to Web preview --> Preview on port 8080
+Observe URL : https://8080-dot-8191260-dot-devshell.appspot.com/?authuser=3
+devshell mentioned, means running on cloud shell
+
+Now, if we run another app, it will run on different port: 8081
+
+Go to Cloud Shell Code editor to access GUI console
+edit the code
+nodemon hello.js : to run updated code everytime
+
+clear
+diff file1 file2
+
+Try with Spring Boot - Done
+
+
+7.2 Data Flows
+--
+Positive: If learned to identity and control dataflows
+Negative: If tried to memorize situations and responses
+
+Dataflows: Taking some data/info, and moving it around, processing it, and remembering
+
+Moving		=~ Network Services
+Processing	=~ Compute Services
+Remembering =~ Storage Services
+
+Mental Models:
+Simplified representation of reality
+Used by our mind to enticipate events or draw conclusions
+Systems Combile
+	Build larger systems out of smaller ones(abstractions)
+	Zoom in and out
+
+Cloud Shell Lab Data Flow
+
+Example:
+Task to choose appropriate vehicle while dropping all dancers to their home
+
+Key Takeaways:
+Dataflows are foundation of every system
+Moving, Processing, Remembering information, not just networking, computing, storing it
+Build mental models while planning dataflows
+Identify and think through dataflows, and highlight the potential issues
+Requirements and options not always clear
+
+7.3 Update Course Lab Files (Lab)
+--
+./update.sh
+
+7.4 Milestone Open World
+--
+2 quotas:
+each user account has a quota of howmany projects we can own
+and trial billing account has separate quota for howmany projects can we link to it
+
+
+8. Basic Services
+---
+
+8.1. GCS Google Cloud Storage (Lab)
+--
+gcp.user account
+New Project each time we work on new things: Service Exploration Labs
+
+GC lets us store unstructured objects in containers called buckets.
+Name and Location cannot be changed after bucket is created, Default storage can be
+Go to Storage --> Create Bucket
+Name: gc-storage-lab-console (must be unique) --> Multi-Region --> Google Managed Keys --> label-function/learning --> Create --> Done --> Bucket Details --> Upload Random Files(images :D) --> Open em
+
+URL is long because it is signed, every request is private by default, to make it public edit permission --> User|allUsers|Reader
+URL is shortened now,
+https://storage.googleapis.com/BUCKET-NAME/OBJECT-NAME
+https://storage.googleapis.com/gc-storage-lab-console/IMG_20150818_132258.jpg
+
+We can create folders, every object with trailing / is folder
+We can rename files, URL renamed
+
+Thee bucket are assigned the selected storage class by default. Choose based on where and how often your objects will be accessed. Learn more
+
+Storage Class:
+Multi-Region	: Best for data accessed frequently in multiple regions
+Regional		: Best for data accessed frequently in a single region
+Nearline		: Best for backups and data accessed once a month or less
+Coldline		: Best for disaster recovery and data accessed once a year or less
+
+Edit bucket permissions to make it public, but dangerous and no more safe
+
+8.2. GCS via gsutil in Command Line (Lab)
+--
+GC Access via command line using gsutil in cloud shell
+
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gcloud config list
+[component_manager]
+disable_update_check = True
+[compute]
+gce_metadata_read_timeout_sec = 5
+[core]
+account = pratikaambani.gcp.user@gmail.com
+disable_usage_reporting = False
+project = inbound-footing-248221
+[metrics]
+environment = devshell
+
+gsutil: to use GC Storage via commandline 
+
+GS Storage: gs://
+gsutil
+
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gsutil ls
+gs://gc-storage-lab-console/
+
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gsutil ls gs://gc-storage-lab-console/ 
+gs://gc-storage-lab-console/1. GCS Google Cloud Storage (Lab).vtt
+gs://gc-storage-lab-console/2. GCS via gsutil in Command Line (Lab).vtt
+gs://gc-storage-lab-console/2.2 Bucket Locations.html
+gs://gc-storage-lab-console/3. Starting Our First GCE VM Google Compute Engine Setup (Lab).vtt
+gs://gc-storage-lab-console/4. Rundown on gcloud.vtt
+gs://gc-storage-lab-console/5. GCE In and Out (Lab).vtt
+gs://gc-storage-lab-console/6. GCE via Console (Lab).vtt
+gs://gc-storage-lab-console/7. Milestone Solid Foundation.vtt
+gs://gc-storage-lab-console/MUMBAI.jpg
+
+to enlist everything (including files in nested directories) use below,
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gsutil ls gs://gc-storage-lab-console/**
+
+Console: asks us every field
+Command Line: expects us to provide everything in the command
+
+make bucket: mb
+gsutil mb --help
+gsutil mb class location proj_url
+
+Check below for bucket location:
+https://cloud.google.com/storage/docs/locations
+
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gsutil mb -l northamerica-northeast1 gs://gc-storage-lab-cli
+Creating gs://gc-storage-lab-cli/...
+
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gsutil ls
+gs://gc-storage-lab-console/
+gs://gc-storage-lab-cli/
+
+Getting labels we had set via GCP Console #json
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gsutil label get gs://gc-storage-lab-console
+{
+  "function": "learning"
+}
+
+store to separate json
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gsutil label get gs://gc-storage-lab-console > bucketlist.json
+{
+  "function": "learning"
+}
+
+setting label
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gsutil label set bucketlist.json gs://gc-storage-lab-cli
+Setting label configuration on gs://gc-storage-lab-cli/...
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gsutil label get gs://gc-storage-lab-cli
+{
+  "function": "learning"
+}
+
+setting an extra label
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gsutil label ch -l "extralabel:extravalue" gs://gc-storage-lab-cli
+Setting label configuration on gs://gc-storage-lab-cli/...
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gsutil label get gs://gc-storage-lab-cli
+{
+  "extralabel": "extravalue",
+  "function": "learning"
+}
+
+Object version control is not available on console, only CLI/API call
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gsutil versioning get gs://gc-storage-lab-cli
+gs://gc-storage-lab-cli: Suspended
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gsutil versioning set on gs://gc-storage-lab-cli
+Enabling versioning for gs://gc-storage-lab-cli/...
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gsutil versioning get gs://gc-storage-lab-cli
+gs://gc-storage-lab-cli: Enabled
+
+copying files into bucket:
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gsutil cp README-cloudshell.txt bucketlist.json  gs://gc-storage-lab-cli
+Copying file://README-cloudshell.txt [Content-Type=text/plain]...
+Copying file://bucketlist.json [Content-Type=application/json]...
+- [2 files][  942.0 B/  942.0 B]
+Operation completed over 2 objects/942.0 B.
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gsutil ls gs://gc-storage-lab-cli
+gs://gc-storage-lab-cli/README-cloudshell.txt
+gs://gc-storage-lab-cli/bucketlist.json
+
+-a for versioning, so that even after deleting the file it will show the versions
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gsutil ls gs://gc-storage-lab-cli
+gs://gc-storage-lab-cli/README-cloudshell.txt
+gs://gc-storage-lab-cli/bucketlist.json
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gsutil ls -a gs://gc-storage-lab-cli
+gs://gc-storage-lab-cli/README-cloudshell.txt#1564465766608848
+gs://gc-storage-lab-cli/bucketlist.json#1564465766987718
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gsutil rm gs://gc-storage-lab-cli/README-cloudshell.txt
+Removing gs://gc-storage-lab-cli/README-cloudshell.txt...
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gsutil ls -a gs://gc-storage-lab-cli
+gs://gc-storage-lab-cli/README-cloudshell.txt#1564465766608848
+gs://gc-storage-lab-cli/bucketlist.json#1564465766987718
+
+transferring/copying objects internally, without local os onvolvement
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gsutil cp gs://gc-storage-lab-console gs://gc-storage-lab-cli
+Omitting bucket "gs://gc-storage-lab-console/". (Did you mean to do cp -r?)
+CommandException: No URLs matched
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gsutil cp -r gs://gc-storage-lab-console gs://gc-storage-lab-cli
+Copying gs://gc-storage-lab-console/1. GCS Google Cloud Storage (Lab).vtt [Content-Type=application/octet-stream]...
+Copying gs://gc-storage-lab-console/2. GCS via gsutil in Command Line (Lab).vtt [Content-Type=application/octet-stream]...
+Copying gs://gc-storage-lab-console/2.2 Bucket Locations.html [Content-Type=text/html]...
+Copying gs://gc-storage-lab-console/3. Starting Our First GCE VM Google Compute Engine Setup (Lab).vtt [Content-Type=application/octet-stream]...
+/ [4 files][ 37.9 KiB/ 37.9 KiB]
+==> NOTE: You are performing a sequence of gsutil operations that may
+run significantly faster if you instead use gsutil -m cp ... Please
+see the -m section under "gsutil help options" for further information
+about when gsutil -m can be advantageous.
+
+Copying gs://gc-storage-lab-console/4. Rundown on gcloud.vtt [Content-Type=application/octet-stream]...
+Copying gs://gc-storage-lab-console/5. GCE In and Out (Lab).vtt [Content-Type=application/octet-stream]...
+Copying gs://gc-storage-lab-console/6. GCE via Console (Lab).vtt [Content-Type=application/octet-stream]...
+Copying gs://gc-storage-lab-console/7. Milestone Solid Foundation.vtt [Content-Type=application/octet-stream]...
+Copying gs://gc-storage-lab-console/MUMBAI.jpg [Content-Type=image/jpeg]...
+- [9 files][768.6 KiB/768.6 KiB]
+Operation completed over 9 objects/768.6 KiB.
+
+change access type(making it public/private)
+gsutil accessControlList change user allUsers:ReadAccess
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gsutil acl -r ch -u allUsers:R gs://gc-storage-lab-cli/gc-storage-lab-console
+Updated ACL on gs://gc-storage-lab-cli/gc-storage-lab-console/1. GCS Google Cloud Storage (Lab).vtt
+Updated ACL on gs://gc-storage-lab-cli/gc-storage-lab-console/2. GCS via gsutil in Command Line (Lab).vtt
+Updated ACL on gs://gc-storage-lab-cli/gc-storage-lab-console/2.2 Bucket Locations.html
+Updated ACL on gs://gc-storage-lab-cli/gc-storage-lab-console/3. Starting Our First GCE VM Google Compute Engine Setup (Lab).vtt
+
+==> NOTE: You are performing a sequence of gsutil operations that may
+run significantly faster if you instead use gsutil -m acl ... Please
+see the -m section under "gsutil help options" for further information
+about when gsutil -m can be advantageous.
+
+Updated ACL on gs://gc-storage-lab-cli/gc-storage-lab-console/4. Rundown on gcloud.vtt
+Updated ACL on gs://gc-storage-lab-cli/gc-storage-lab-console/5. GCE In and Out (Lab).vtt
+Updated ACL on gs://gc-storage-lab-cli/gc-storage-lab-console/6. GCE via Console (Lab).vtt
+Updated ACL on gs://gc-storage-lab-cli/gc-storage-lab-console/7. Milestone Solid Foundation.vtt
+Updated ACL on gs://gc-storage-lab-cli/gc-storage-lab-console/MUMBAI.jpg
+
+To remove bucket
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gsutil rm -r gs://storage-lab-cli20190730
+Removing gs://storage-lab-cli20190730/...
+
+
+8.3. Starting Our First GCE VM Google Compute Engine Setup (Lab)
+--
+Open shell
+
+Current Project
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gcloud config get-value project
+Your active configuration is: [cloudshell-6052]
+inbound-footing-248221
+
+Check Instances
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gcloud compute instances list
+API [compute.googleapis.com] not enabled on project [59622613457].
+Would you like to enable and retry (this will take a few minutes)?
+(y/N)?  N
+ERROR: (gcloud.compute.instances.list) HTTPError 403: Access Not Configured. Compute Engine API has not been used in project 59622613457 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=59622613457 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.
+
+List of services
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gcloud services list
+NAME                              TITLE
+bigquery-json.googleapis.com      BigQuery API
+cloudapis.googleapis.com          Google Cloud APIs
+clouddebugger.googleapis.com      Stackdriver Debugger API
+cloudtrace.googleapis.com         Stackdriver Trace API
+datastore.googleapis.com          Cloud Datastore API
+logging.googleapis.com            Stackdriver Logging API
+monitoring.googleapis.com         Stackdriver Monitoring API
+servicemanagement.googleapis.com  Service Management API
+serviceusage.googleapis.com       Service Usage API
+sql-component.googleapis.com      Cloud SQL
+storage-api.googleapis.com        Google Cloud Storage JSON API
+storage-component.googleapis.com  Cloud Storage
+
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gcloud services list -h
+Usage: gcloud services list [optional flags]
+  optional flags may be  --available | --enabled | --filter | --help | --limit |
+                         --page-size | --sort-by
+
+enabled services list --enabled is default
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gcloud services list --enabled
+NAME                              TITLE
+bigquery-json.googleapis.com      BigQuery API
+cloudapis.googleapis.com          Google Cloud APIs
+clouddebugger.googleapis.com      Stackdriver Debugger API
+cloudtrace.googleapis.com         Stackdriver Trace API
+datastore.googleapis.com          Cloud Datastore API
+logging.googleapis.com            Stackdriver Logging API
+monitoring.googleapis.com         Stackdriver Monitoring API
+servicemanagement.googleapis.com  Service Management API
+serviceusage.googleapis.com       Service Usage API
+sql-component.googleapis.com      Cloud SQL
+storage-api.googleapis.com        Google Cloud Storage JSON API
+storage-component.googleapis.com  Cloud Storage
+
+List of available services
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gcloud services list --available
+
+Searching for compute service
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gcloud services list --available | grep compute
+compute.googleapis.com                                Compute Engine API
+
+We can disable/enable/list services
+CLI: pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gcloud services enable compute.googleapis.com
+Console: Google API https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=59622613457
+
+Go to Google API Dashboard
+https://console.developers.google.com/apis/dashboard?authuser=3&project=inbound-footing-248221
+
+IAM & Admin
+Permissions already set on this project
+
+Navigate IAM - Service Accounts
+No service account yet
+
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gcloud services enable compute.googleapis.com
+Operation "operations/acf.cfe6cc32-307d-4466-ab76-32ff5f94490a" finished successfully.
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gcloud services enable compute.googleapis.com^C
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gcloud compute instances list
+Listed 0 items.
+
+Now check list of services and see
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gcloud services list
+NAME                              TITLE
+bigquery-json.googleapis.com      BigQuery API
+cloudapis.googleapis.com          Google Cloud APIs
+clouddebugger.googleapis.com      Stackdriver Debugger API
+cloudtrace.googleapis.com         Stackdriver Trace API
+compute.googleapis.com            Compute Engine API
+datastore.googleapis.com          Cloud Datastore API
+logging.googleapis.com            Stackdriver Logging API
+monitoring.googleapis.com         Stackdriver Monitoring API
+oslogin.googleapis.com            Cloud OS Login API
+servicemanagement.googleapis.com  Service Management API
+serviceusage.googleapis.com       Service Usage API
+sql-component.googleapis.com      Cloud SQL
+storage-api.googleapis.com        Google Cloud Storage JSON API
+storage-component.googleapis.com  Cloud Storage
+
+This one is enabled now: compute.googleapis.com            Compute Engine API 
+apart from this, oslogin.googleapis.com is also enabled
+
+Go to IAM Console
+See, apart from gcp.user service account, multiple compute accounts are created now
+email addresses
+
+
+Now lets create compute engine
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gcloud compute instances create myvm
+Did you mean zone [asia-southeast1-b] for instance: [myvm] (Y/n)?  Y
+Created [https://www.googleapis.com/compute/v1/projects/inbound-footing-248221/zones/australia-southeast1-a/instances/myvm].
+NAME  ZONE                    MACHINE_TYPE   PREEMPTIBLE  INTERNAL_IP  EXTERNAL_IP    STATUS
+myvm  australia-southeast1-a  n1-standard-1               10.152.0.2   35.189.10.192  RUNNING
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gcloud compute instances list
+NAME  ZONE                    MACHINE_TYPE   PREEMPTIBLE  INTERNAL_IP  EXTERNAL_IP    STATUS
+
+To delete instance
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gcloud compute instances delete myvm
+Did you mean zone [asia-southeast1-b] for instance: [myvm] (Y/n)?  n
+
+No zone specified. Using zone [australia-southeast1-a] for instance: [myvm].
+The following instances will be deleted. Any attached disks configured
+ to be auto-deleted will be deleted unless they are attached to any
+other instances or the `--keep-disks` flag is given and specifies them
+ for keeping. Deleting a disk is irreversible and any data on the disk
+ will be lost.
+ - [myvm] in [australia-southeast1-a]
+Do you want to continue (Y/n)?  Y
+Deleted [https://www.googleapis.com/compute/v1/projects/inbound-footing-248221/zones/australia-southeast1-a/instances/myvm].
+
+Check and confirm deletion
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gcloud compute instances list
+Listed 0 items.
+
+
+8.4. Rundown on gcloud #beforeExam
+--
+
+gcloud:
+CLI tool to interact with GCP
+gsutil ~= gcloud storage
+bq ~= gcloud bigquery
+
+Powerful: console < CLI < REST API
+
+Alpha and Beta version available via "gcloud alpha" and "gcloud beta"
+
+Example:
+gcloud alpha commandName
+gcloud beta commandName
+
+Basic Syntax:
+gcloud <global flags> <service/product> <group/area> <command> <flags> <parameters> 
+
+Always drill down (from left to right)
+i.e. gcloud create instances: not possible coz, "create" is command, not service. First specify that we want to use compute "service"
+
+space is equal to =
+gcloud --project myprojId compute instances list #noflag #noparameter
+gcloud --project=myprojId compute instances list #noflag #noparameter
+
+gcloud compute instances create myvm
+gcloud services list --available #noparam
+gsutil ls 
+
+Global Flags:
+--help === -h
+--project <projectId>
+--account <account>
+--filter to cut down the information
+	not always available but better than grep
+--format JSON, YAML, CSV etc
+--quit == -q No prompt to confirm any action
+
+Config Properties
+Values used once and used by any command that needs them
+Can be overridden on specific command with corresponding flag
+Used very often for: account, project, region, zone
+
+Set custom:
+gcloud config set <property> <value>
+
+Get value:
+gcloud config get-value <property>
+
+To clear
+gcloud config unset <property>
+
+Existing Configurations:
+gcloud config configurations list
+
+
+Make new config:
+gcloud config configurations create CONFIG_NAME
+
+Start using it:
+gcloud config configurations activate CONFIG_NAME
+
+https://cloud.google.com/sdk/gcloud/reference/ #done
+https://cloud.google.com/sdk/gcloud/ #done
+https://cloud.google.com/sdk/docs/configurations #done
+https://cloud.google.com/sdk/docs/properties #done
+
+8.5. GCE In and Out (Lab)
+--
+Google Compute Instance
+ls -a gets hidden files
+
+before create compute instance
+
+add machine-type and zone
+gcloud compute instances create myhappyvm --help
+    --machine-type=MACHINE_TYPE
+        Specifies the machine type used for the instances. To get a list of
+        available machine types, run 'gcloud compute machine-types list'. If
+        unspecified, the default type is n1-standard-1.
+
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gcloud compute machine-types list --filter="NAME:f1-micro"
+NAME      ZONE                       CPUS  MEMORY_GB  DEPRECATED
+f1-micro  us-central1-f              1     0.60
+f1-micro  europe-west1-d             1     0.60
+f1-micro  asia-east1-a               1     0.60
+f1-micro  asia-east1-b               1     0.60
+f1-micro  us-east1-c                 1     0.60
+f1-micro  us-west1-b                 1     0.60
+f1-micro  us-west1-c                 1     0.60
+f1-micro  europe-west1-b             1     0.60
+f1-micro  europe-west1-c             1     0.60
+f1-micro  us-east1-d                 1     0.60
+f1-micro  us-east1-b                 1     0.60
+f1-micro  asia-east1-c               1     0.60
+f1-micro  us-central1-a              1     0.60
+f1-micro  us-central1-c              1     0.60
+f1-micro  us-central1-b              1     0.60
+f1-micro  asia-northeast1-a          1     0.60
+f1-micro  asia-northeast1-b          1     0.60
+f1-micro  asia-northeast1-c          1     0.60
+f1-micro  us-west1-a                 1     0.60
+f1-micro  europe-west3-b             1     0.60
+f1-micro  europe-west3-c             1     0.60
+f1-micro  europe-west3-a             1     0.60
+f1-micro  europe-west2-c             1     0.60
+f1-micro  europe-west2-b             1     0.60
+f1-micro  southamerica-east1-c       1     0.60
+f1-micro  southamerica-east1-b       1     0.60
+f1-micro  southamerica-east1-a       1     0.60
+f1-micro  europe-west2-a             1     0.60
+f1-micro  australia-southeast1-a     1     0.60
+f1-micro  asia-southeast1-b          1     0.60
+f1-micro  asia-southeast1-c          1     0.60
+f1-micro  asia-southeast1-a          1     0.60
+f1-micro  australia-southeast1-c     1     0.60
+f1-micro  asia-south1-b              1     0.60
+f1-micro  us-east4-a                 1     0.60
+f1-micro  us-east4-c                 1     0.60
+f1-micro  us-east4-b                 1     0.60
+f1-micro  asia-south1-a              1     0.60
+f1-micro  australia-southeast1-b     1     0.60
+f1-micro  asia-east2-a               1     0.60
+f1-micro  us-west2-b                 1     0.60
+
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gcloud compute machine-types list --filter="NAME:f1-micro AND ZONE~us-west"
+NAME      ZONE        CPUS  MEMORY_GB  DEPRECATED
+f1-micro  us-west1-b  1     0.60
+f1-micro  us-west1-c  1     0.60
+f1-micro  us-west1-a  1     0.60
+f1-micro  us-west2-b  1     0.60
+f1-micro  us-west2-a  1     0.60
+f1-micro  us-west2-c  1     0.60
+
+
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gcloud config set compute/zone us-west2-b
+Updated property [compute/zone].
+
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gcloud config set compute/region u
+s-west2
+Updated property [compute/region].
+
+
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gcloud compute instances create --
+machine-type=f1-micro myhappyvm                                                                 
+Created [https://www.googleapis.com/compute/v1/projects/inbound-footing-248221/zones/us-west2-b/instances/myhappyvm].
+NAME       ZONE        MACHINE_TYPE  PREEMPTIBLE  INTERNAL_IP  EXTERNAL_IP   STATUS
+myhappyvm  us-west2-b  f1-micro                   10.168.0.2   34.94.110.49  RUNNING
+
+Hurrrrraaaaaaaaaaah!! Instance created
+
+
+We can connect via external IP, not internal one
+
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ ping -c 3 34.94.110.49
+PING 34.94.110.49 (34.94.110.49) 56(84) bytes of data.
+64 bytes from 34.94.110.49: icmp_seq=1 ttl=61 time=168 ms
+64 bytes from 34.94.110.49: icmp_seq=2 ttl=61 time=166 ms
+64 bytes from 34.94.110.49: icmp_seq=3 ttl=61 time=167 ms
+
+--- 34.94.110.49 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2002ms
+rtt min/avg/max/mdev = 166.935/167.496/168.477/0.771 ms
+
+SSH permission denied
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ ssh 34.94.110.49
+The authenticity of host '34.94.110.49 (34.94.110.49)' can't be established.
+ECDSA key fingerprint is SHA256:eJ3YiG4FUY1QiBUpBlS9rhafA+E8qWcFTTM+KAuF4wA.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added '34.94.110.49' (ECDSA) to the list of known hosts.
+Permission denied (publickey).
+
+Adding ssh
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gcloud compute ssh myhappyvm
+WARNING: The public SSH key file for gcloud does not exist.
+WARNING: The private SSH key file for gcloud does not exist.
+WARNING: You do not have an SSH key for gcloud.
+WARNING: SSH keygen will be executed to generate a key.
+Generating public/private rsa key pair.
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /home/pratikaambani_gcp_user/.ssh/google_compute_engine.
+Your public key has been saved in /home/pratikaambani_gcp_user/.ssh/google_compute_engine.pub.
+The key fingerprint is:
+SHA256:o76ni/wKV5dlAPFZ5Bs2gnG9wplDSY+/sBemAuJtLJs pratikaambani_gcp_user@cs-6000-devshell-vm-6da3c708-b573-49fd-9fc5-df65dfce6134
+The key's randomart image is:
++---[RSA 2048]----+
+|      ++++o      |
+|       =oB.      |
+|      .o=oO.     |
+|        *B.+     |
+|  . . . So=      |
+| . + o o * o     |
+|  + = o o o      |
+|   O o ...       |
+|  E +o*=         |
++----[SHA256]-----+
+Updating project ssh metadata...⠧Updated [https://www.googleapis.com/compute/v1/projects/inbound-footing-248221].
+Updating project ssh metadata...done.
+Waiting for SSH key to propagate.
+Warning: Permanently added 'compute.3453058724995606968' (ECDSA) to the list of known hosts.
+Enter passphrase for key '/home/pratikaambani_gcp_user/.ssh/google_compute_engine':
+Linux myhappyvm 4.9.0-9-amd64 #1 SMP Debian 4.9.168-1+deb9u4 (2019-07-19) x86_64
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+
+
+Now results of below commands will be different than previous ones
+pratikaambani_gcp_user@myhappyvm:~$ whoami
+pratikaambani_gcp_user
+pratikaambani_gcp_user@myhappyvm:~$ hostname
+myhappyvm
+pratikaambani_gcp_user@myhappyvm:~$ curl api.ipify.org
+34.94.110.49
+
+exit vm
+pratikaambani_gcp_user@myhappyvm:~$ exit
+logout
+Connection to 34.94.110.49 closed.
+
+
+
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ ls -a
+.  ..  .bash_history  .bash_logout  .bashrc  bucketlist.json  .cache  .config  .docker  gcp-cloud-engineer  .gsutil  .lesshst  .npm  .profile  README-cloudshell.txt  .ssh  .theia  .yarn
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ cd .ssh
+pratikaambani_gcp_user@cloudshell:~/.ssh (inbound-footing-248221)$ ls -a
+.  ..  google_compute_engine  google_compute_engine.pub  google_compute_known_hosts  known_hosts
+
+public key
+pratikaambani_gcp_user@cloudshell:~/.ssh (inbound-footing-248221)$ cat google_compute_engine.pub 
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDIYCxCGnRlIpcKDf2LQZ/8pVdZbqzCMlO5masmFOJ55Ulp3wLhVk+j+PiR9bavfK1SJ+WTdTLCh/rM5XHLR27D1rfatnLO2PLAxDi9zLOLGfFi6nMo0gCCPiwDcW+BWJZx4q5UEI5OmfM7F8L+fMNz1K5zfFArqM8ljsrGIjLNtCpq3raLxa+792QUIz2mQnvC0tzgRbZng1g2MSnsYmRbEDYQlrIQZZ//p54sqMCYOzg1wXlHsn9vYPKi8S2qYik9bZQv1YBk/IHNUTBoybCwyG0e+rkgy9ME3P+CkKhNvzKkEDVRV/gcdD54Ztlal/N/PAPjwhUp22LOHlr22Jyj pratikaambani_gcp_user@cs-6000-devshell-vm-6da3c708-b573-49fd-9fc5-df65dfce6134
+
+private key
+pratikaambani_gcp_user@cloudshell:~/.ssh (inbound-footing-248221)$ head -n 10 google_compute_engine
+-----BEGIN RSA PRIVATE KEY-----
+Proc-Type: 4,ENCRYPTED
+DEK-Info: AES-128-CBC,EFFC4CA742D5FAB869E81B821C0C32CC
+
+gG/DIH2DXx2vO1RPmsKxM/Uf9QoPSLdeCRkAEd7X7d92HuoFi9JW1duoD3iToJ7V
+oAqGm4CEhgfh9+pQ+reY8X+m7qImT3QhtpwVgZUsDWnF9KzHFy3nL4wzi+G10koJ
+tGKb1mVAWX6um/xtAwA9mwHXYoMzsFdRiWwvjUbvnjXyZBzMcIfvIN8kcgMBBoiM
+ePjfrFS0qXTkin6KEIo8z72LfW/XWrAFcOv3Htrxbfvn60SNoPocqNvEQujYeKkF
+e25NVcz3OkP7pG1v19oqP5n4d+/eDm2zRq9w18PBI7JwGjEYH1bhkmiWjT7/mHJo
+d5C39t5RLWbrWtzTrPJdv9ZNc9kmm+EifWpkRk910idy1YSVRACTpvPYAjD+XpRc
+
+
+
+
+Now going to myhappyvm
+pratikaambani_gcp_user@cloudshell:~/.ssh (inbound-footing-248221)$ gcloud compute ssh myhappyvm
+Enter passphrase for key '/home/pratikaambani_gcp_user/.ssh/google_compute_engine':
+Linux myhappyvm 4.9.0-9-amd64 #1 SMP Debian 4.9.168-1+deb9u4 (2019-07-19) x86_64
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+Last login: Tue Jul 30 19:21:51 2019 from 35.240.162.70
+pratikaambani_gcp_user@myhappyvm:~$ cd .ssh/
+pratikaambani_gcp_user@myhappyvm:~/.ssh$ cat authorized_keys
+# Added by Google
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDIYCxCGnRlIpcKDf2LQZ/8pVdZbqzCMlO5masmFOJ55Ulp3wLhVk+j+PiR9bavfK1SJ+WTdTLCh/rM5XHLR27D1rfatnLO2PLAxDi9zLOLGfFi6nMo0gCCPiwDcW+BWJZx4q5UEI5OmfM7F8L+fMNz1K5zfFArqM8ljsrGIjLNtCpq3raLxa+792QUIz2mQnvC0tzgRbZng1g2MSnsYmRbEDYQlrIQZZ//p54sqMCYOzg1wXlHsn9vYPKi8S2qYik9bZQv1YBk/IHNUTBoybCwyG0e+rkgy9ME3P+CkKhNvzKkEDVRV/gcdD54Ztlal/N/PAPjwhUp22LOHlr22Jyj pratikaambani_gcp_user@cs-6000-devshell-vm-6da3c708-b573-49fd-9fc5-df65dfce6134
+
+Ah! public keys on local and myhappyvm are same
+
+
+Significance of Metadata:
+-------------------------
+
+While looking for metadata, below header is mandatory
+Metadata-Flavor: Google
+
+improper request
+pratikaambani_gcp_user@myhappyvm:~$ curl metadata.google.internal/computeMetadata/v1/
+<!DOCTYPE html>
+<html lang=en>
+  <meta charset=utf-8>
+  <meta name=viewport content="initial-scale=1, minimum-scale=1, width=device-width">
+  <title>Error 403 (Forbidden)!!1</title>
+  <style>
+    *{margin:0;padding:0}html,code{font:15px/22px arial,sans-serif}html{background:#fff;color:#222;padding:15px}body{margin:7% auto 0;max-width:390px;min-height:180px;padding:30px 0 15px}* > body{background:url(//www.google.com/images/errors/robot.png) 100% 5px no-repeat;padding-right:205px}p{margin:11px 0 22px;overflow:hidden}ins{color:#777;text-decoration:none}a img{border:0}@media screen and (max-width:772px){body{background:none;margin-top:0;max-width:none;padding-right:0}}#logo{background:url(//www.google.com/images/branding/googlelogo/1x/googlelogo_color_150x54dp.png) no-repeat;margin-left:-5px}@media only screen and (min-resolution:192dpi){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat 0% 0%/100% 100%;-moz-border-image:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) 0}}@media only screen and (-webkit-min-device-pixel-ratio:2){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat;-webkit-background-size:100% 100%}}#logo{display:inline-block;height:54px;width:150px}
+  </style>
+  <a href=//www.google.com/><span id=logo aria-label=Google></span></a>
+  <p><b>403.</b> <ins>That’s an error.</ins>
+  <p>Your client does not have permission to get URL <code>/computeMetadata/v1/</code> from this server. Missing Metadata-Flavor:Google header. <ins>That’s all we know.</ins>
+
+checking metadata
+pratikaambani_gcp_user@myhappyvm:~$ curl -H "Metadata-Flavor:Google" metadata.google.internal/computeMetadata/v1/
+instance/
+oslogin/
+project/
+
+pratikaambani_gcp_user@myhappyvm:~$ curl -H "Metadata-Flavor:Google" metadata.google.internal/computeMetadata/v1/project/
+attributes/
+numeric-project-id
+project-id
+
+pratikaambani_gcp_user@myhappyvm:~$ curl -H "Metadata-Flavor:Google" metadata.google.internal/computeMetadata/v1/project/project-id
+inbound-footing-248221
+
+pratikaambani_gcp_user@myhappyvm:~$ curl -H "Metadata-Flavor:Google" metadata.google.internal/computeMetadata/v1/instance/name
+myhappyvm
+
+pratikaambani_gcp_user@myhappyvm:~$ curl -H "Metadata-Flavor:Google" metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/
+aliases
+email
+identity
+scopes
+token
+
+pratikaambani_gcp_user@myhappyvm:~$ curl -H "Metadata-Flavor:Google" metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/email
+59622613457-compute@developer.gserviceaccount.com
+
+pratikaambani_gcp_user@myhappyvm:~$ curl -H "Metadata-Flavor:Google" metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/aliases
+default
+
+pratikaambani_gcp_user@myhappyvm:~$ gcloud config list
+[core]
+account = 59622613457-compute@developer.gserviceaccount.com
+disable_usage_reporting = True
+project = inbound-footing-248221
+
+Your active configuration is: [default]
+
+
+To take a quick anonymous survey, run:
+  $ gcloud alpha survey
+
+pratikaambani_gcp_user@myhappyvm:~$ gsutil ls
+gs://gc-storage-lab-cli/
+gs://gc-storage-lab-console/
+
+pratikaambani_gcp_user@myhappyvm:~$ gsutil ls gs://gc-storage-lab-console/
+gs://gc-storage-lab-console/1. GCS Google Cloud Storage (Lab).vtt
+gs://gc-storage-lab-console/2. GCS via gsutil in Command Line (Lab).vtt
+gs://gc-storage-lab-console/2.2 Bucket Locations.html
+gs://gc-storage-lab-console/3. Starting Our First GCE VM Google Compute Engine Setup (Lab).vtt
+gs://gc-storage-lab-console/4. Rundown on gcloud.vtt
+gs://gc-storage-lab-console/5. GCE In and Out (Lab).vtt
+gs://gc-storage-lab-console/6. GCE via Console (Lab).vtt
+gs://gc-storage-lab-console/7. Milestone Solid Foundation.vtt
+gs://gc-storage-lab-console/MUMBAI.jpg
+
+
+Deleting instance from within 
+pratikaambani_gcp_user@myhappyvm:~$ gcloud compute instances delete myhappyvm
+Did you mean zone [us-west2-b] for instance: [myhappyvm] (Y/n)?  Y
+
+The following instances will be deleted. Any attached disks configured
+ to be auto-deleted will be deleted unless they are attached to any
+other instances or the `--keep-disks` flag is given and specifies them
+ for keeping. Deleting a disk is irreversible and any data on the disk
+ will be lost.
+ - [myhappyvm] in [us-west2-b]
+
+Do you want to continue (Y/n)?  Y
+
+ERROR: (gcloud.compute.instances.delete) Could not fetch resource:
+ - Insufficient Permission: Request had insufficient authentication scopes.
+
+pratikaambani_gcp_user@myhappyvm:~$ exit
+logout
+Connection to 34.94.110.49 closed.
+
+Deleting instance:
+pratikaambani_gcp_user@cloudshell:~/.ssh (inbound-footing-248221)$ gcloud compute instances delete myhappyvm
+The following instances will be deleted. Any attached disks configured
+ to be auto-deleted will be deleted unless they are attached to any
+other instances or the `--keep-disks` flag is given and specifies them
+ for keeping. Deleting a disk is irreversible and any data on the disk
+ will be lost.
+ - [myhappyvm] in [us-west2-b]
+
+Do you want to continue (Y/n)?  Y
+Deleted [https://www.googleapis.com/compute/v1/projects/inbound-footing-248221/zones/us-west2-b/instances/myhappyvm].
+
+
+
+Use the --format flag to change the default output format of a command. For details run $ gcloud topic formats.
+Use the --filter flag to select resources to be listed.
+
+
+
+
+Practice on CLI
+
+Project List
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gcloud projects list
+PROJECT_ID              NAME                      PROJECT_NUMBER
+inbound-footing-248221  Service Exploration Labs  59622613457
+my-user-project-248212  My User Project           1030856106109
+stunning-vertex-248013  My First Project          70623525217
+
+Project List in JSON
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gcloud projects list --format=json
+[
+  {
+    "createTime": "2019-07-29T21:30:44.626Z",
+    "lifecycleState": "ACTIVE",
+    "name": "Service Exploration Labs",
+    "projectId": "inbound-footing-248221",
+    "projectNumber": "59622613457"
+  },
+  {
+    "createTime": "2019-07-29T12:27:08.496Z",
+    "lifecycleState": "ACTIVE",
+    "name": "My User Project",
+    "projectId": "my-user-project-248212",
+    "projectNumber": "1030856106109"
+  },
+  {
+    "createTime": "2019-07-27T13:37:12.632Z",
+    "lifecycleState": "ACTIVE",
+    "name": "My First Project",
+    "projectId": "stunning-vertex-248013",
+    "projectNumber": "70623525217"
+  }
+]
+
+Flattened results
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gcloud projects list --format=flattened
+---
+createTime:     2019-07-29T21:30:44.626Z
+lifecycleState: ACTIVE
+name:           Service Exploration Labs
+projectId:      inbound-footing-248221
+projectNumber:  59622613457
+---
+createTime:     2019-07-29T12:27:08.496Z
+lifecycleState: ACTIVE
+name:           My User Project
+projectId:      my-user-project-248212
+projectNumber:  1030856106109
+---
+createTime:     2019-07-27T13:37:12.632Z
+lifecycleState: ACTIVE
+name:           My First Project
+projectId:      stunning-vertex-248013
+projectNumber:  70623525217
+
+Only 1 result
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gcloud projects list --format=flattened --limit=1
+---
+createTime:     2019-07-29T21:30:44.626Z
+lifecycleState: ACTIVE
+name:           Service Exploration Labs
+projectId:      inbound-footing-248221
+projectNumber:  59622613457
+
+
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gcloud projects list --format="table[box, title=Projects](name, lifecycleState)"
+┌────────────────────────────────────────────┐
+│                  Projects                  │
+├──────────────────────────┬─────────────────┤
+│           NAME           │ LIFECYCLE_STATE │
+├──────────────────────────┼─────────────────┤
+│ Service Exploration Labs │ ACTIVE          │
+│ My User Project          │ ACTIVE          │
+│ My First Project         │ ACTIVE          │
+└──────────────────────────┴─────────────────┘
+
+csv format
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gcloud projects list --format="csv[no-heading, separator=' '](name, lifecycleState)"
+"Service Exploration Labs" ACTIVE
+"My User Project" ACTIVE
+"My First Project" ACTIVE
+
+
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gcloud projects list --format="csv(name, createTime)"
+name,create_time
+Service Exploration Labs,2019-07-29T21:30:44.626Z
+My User Project,2019-07-29T12:27:08.496Z
+My First Project,2019-07-27T13:37:12.632Z
+
+
+pratikaambani_gcp_user@cloudshell:~ (inbound-footing-248221)$ gcloud projects list --format="json(zone.basename():sort=1:label=zone,name)"
+[
+  {
+    "name": "Service Exploration Labs"
+  },
+  {
+    "name": "My User Project"
+  },
+  {
+    "name": "My First Project"
+  }
+]
+
+
+To return the last URL path component, use basename():
+
+
+gcloud compute zones list --format="table[box,title=Zones](id:label=zone_id, selfLink.basename())"
+
+
+Align content to the center
+gcloud compute zones list \
+    --format="table[box,title=Zones](name:sort=1:align=center, \
+    region.basename():label=region:sort=2, \
+    status)"
+
+
+Filtering:
+gcloud compute zones list \
+    --filter="region:asia*"
+
+parenttype not an organization
+gcloud projects list --format=json \
+    --filter="NOT \
+    parent.type:organization"
+
+Projects created after specific date
+gcloud projects list --format=json \
+    --filter="createTime.date('%d-%m-%Y')>1-1-2017"
+
+
+8.6. GCE via Console (Lab)
+--
+
+Google Compute Engine via GCP Console
+Same Project
+Compute Engine Service --> Multiple sub sections --> 
+	settings --> default region and zone
+	Metadata --> ssh keys(automatically created)
+	VM Instances --> Create --> myveryhappyvm --> region --> zone US, freeMemory 0.6, 
+	default OS: debian 9 --> Create
+	Edit --> add labels function:learning, creationmode:console --> save
+
+Another usecase:
+Create Similar Instance-->  cost $4.28
+Go to, --> management security --> enable preemptibility  --> changes cost --> $2.96 
+														  --> Auto restart also disabled
+														  --> Host Maintenance also disabled
+Auto Restart: In case of disaster, systems will be restarted on another rack
+Host Maintenance: during periodic infrastructure maintenance, server will be migrated withour downtime
+
+Automation: 
+startup script: will run automatically whenever instance turns up
+passes metadata
+
+Security: 
+SSH: certain stuff should not be available to use ssh
+Cancel this and don't create this VM, will cost you.
+
+Delete myveryhappyvm via shell and go to activiy.
+
+All activiies are logged as. by user
+but last two activities are by computeengine service account
+
+Go to, metadata --> ssh
+two new ssh keys are created, total 3
+
+When CLI used,
+public: listed above
+private: stored in filesystem
+
+Wien Console used,
+generates temp keys
+private: they'll soon be deleted
+public: they'll soon be deleted
+
+
+8.7. Milestone Solid Foundation
+--
+
+
+
+9. Basic Services Challenge Lab
+---
+9.1. GCE-GCS Challenge Lab
+--
+Challenge 1:
+Brand new project
+gce instance that runs provided script
+system logs available in Stackdriver logs
+new GCS bucket for resulting log files
+Log file apprears in new bucket after instance finished starting up
+No need to ssh to instance
+
+Challenge 2:
+only shell
+
+
+
+9.2. GCE-GCS Challenge Lab Data Flow
+--
+
+
+9.3. GCE-GCS Challenge Lab Demo
+--
+
+Create Project: challenge-lab-gce
+Create bucket: challenge-lab-gce-bkt
+Compute Engine: create instance: challenge-lab-instance2
+			label: function/learning
+			Startup script
+			metadata: bucket name
+3 Tabs:
+Go to, instances--> monitoring
+	   storage--> 	no files written yet
+	   details --> Stackdriver
+
+Once instance started, 
+monitoring will be rendered
+logs will be generated
+logs will be stored as stackdriver in storage section
+
+9.5. Basic Services Sample Practice Questions Breakdown
+--
+Understand question
+Eliminate false answers
+Evaluate the left answers
+
+
+9.6. Milestone Standing On Your Own
+--
+
+
+
+10. Scaling
+---
+
+10.1. Managed Instance Groups (Lab)
+--
+MIG
+Go o challenge-lab-gce project
+Compute Engine --> Instance Templates --> (UI similar to create instance, but zone is not option here) --> name: worker-instance-template --> storage:write only --> label-function:learning --> Automation script --> metadata --> Create
+
+Once done, we can not change templates, they're immutable, but can copy
+
+Create VM instance from inside --> Here we can change zone and other details --> name:worker-instance-template-1 --> Create
+Now,
+create instance --> create instance from template --> name:worker-instance-template-2 --> 2CPU machine --> Create 
+
+Go to the monitoring of both the instances, instead of monitoring em separately, we can club them using Instance Group
+
+Go to Instance Group --> Create instance group --> my-unmanaged-instance-group --> (unmanaged-instance-group can not be multizone) --> VM instances --> add created ones--> Create
+Monitoring shows aggregate results of both the instances
+Stop 2nd instance, won't be charged
+
+This is manual process
+
+Let's automate this:
+Create instance group --> select multizone --> add all zones --> here  we can see  option of instance template --> Autoscaling(off and manual number of instances, we'll keep it on) --> Autoscaling based on CPU Usage --> target CPU usage 30-->minimum and maximum instances1-5 --> cool down period 30sec--> Create
+Cool off period: When new instance starts, after X seconds the CPU usage will be considered
+Cool down period: When setting up autoscaling, specify a cool down period to allow your instances to finish initializing before the autoscaler begins collecting information from them. Information during an instance's boot up period might not be reliable for autoscaler decisions, so you might want to omit this data. By default, the cool down period is 60 seconds.
+
+Go to Google Cloud --> storage --> check the bucket --> logs are generated 
+				   --> compute engine --> managed group is available here --> monitoring --> no change --> go to instance groups --> details
+					Name						Zone						Instances			Template					Creation time			Recommendation	Auto-scaling			In use by	
+					my-managed-instance-group	us-central1 (4/4 zones)		3 → 5				worker-instance-template 	3 Aug 2019, 18:44:49					Target CPU usage 30%	
+Purpose: even if datacentre goes down in one of the zones, no worries
+Analyze the monitoring tab
+
+delete both, managed and unmanaged instance-groups
+Go to storage - buckets - logs - too many logs generated
+instances -stackdriver logging - we can check individual logs
+deleting managed-instance-group deletes its all instances because it owns them, 
+deleting unmanaged-instance-group will leave instances behind  - need to delete them manually - delete them manually from VM instancs section
+
+Conclusion: 
+using instance template is much better than manually creating instances
+	we can do above via CLI also
+managed instance groups are much better than unmanaged-instance-groups
+	unmanaged-instance-groups are more restricted and not much useful, because: autoscaling available via managed-instance-group
+	setup things once and it will manage the things by its own
+Autoscaling treats most of its resources as ephemeral/expandable
+Automation, bouy
+
+10.2. Milestone Robust Mental Model
+--
+Managed instance groups: autoscaling, autohealing, regional (multi-zone) deployment, and auto-updating.
+Each VM instance in a MIG is created from an instance template.
+
+A zonal MIG, which deploys instances to a single zone.
+A regional MIG, which deploys instances to multiple zones across the same region
+
+Autoscaling policies include scaling based on CPU utilization, load balancing capacity, Stackdriver monitoring metrics, or, for zonal MIGs, by a queue-based workload like Google Cloud Pub/Sub
+
+Set Up, Run and Update Scalable and Highly Available Deployments (Cloud Next '18)
+	Application deployment #demo
+	https://www.youtube.com/watch?v=uaoauF5p7gw
+	Deploying container to Managed Instance Group
+	Stateless LBed application
+	Autohealing a VM instance with failed application #demo
+	High availability with regional MIG #demo
+	Autoscaling #demo
+		Rolling update
+		Canary update
+	Scaling batch pool of workers
+	Queue based autoscaling #demo
+	Conclusion
+
+11. Security
+---
+
+11.1. What is Security (Data Flow)
+--
+Information Security: preventing unauthorized access/use/destruction of info, while maintaining a focus on policy implementation, all without hampering organization productivity.
+					  ensuring dataflow, not too much, not too little
+
+Proper Dataflow:
+can't view data you should not
+can't change data you should not
+can access data you should
+
+AAA
+Authentication: Who are you?
+Authorization: What are you allowed to do?
+Accounting: What did you do? view/write/delete data
+
+Resiliency: Keep it running
+
+What enables security in GCP:
+Security Projects
+Security Features
+Security Mindset
+	includes availability mindset
+	
+Security Mindset:
+Least privilege
+Defence in depth
+Fail securely
+.
+.
+.
+.
+.
+
+OWASP
+
+Key security products/features in GCP
+--
+Identity
+	G Suite, Cloud Identity
+	Applications and setvices use service account
+Identity Hierarchy
+	Google Groups
+GCDS
+	Google Cloud Directory Sync to pull from LDAP(no push)
+
+
+Authorization
+--
+Identity Hierarchy
+	Google Groups
+Resource Hierarchy
+	Organization, Folder, Projects
+Identity and Access Management(IAM)
+	Permissions
+	Roles
+	Bindings
+GCS ACLs
+Billing Management
+Networking structure and restrictions
+
+Accounting
+--
+Audit/Activity Logs
+	Via Stackdriver
+Billing Export
+	to bigquery
+	to file(in GCS bucket)
+		can be JSON or CSV
+GSC Object Lifecycle management
+	to ensure we properly destroy sensitive material in correct schedule
+
+
+11.2. IAM Breakdown Resource Hierarchy (To which thing)
+--
+
+IAM is Authorization, not Authentication
+
+In Cloud IAM, you grant access to members. Members can be of the following types:
+Google account: Person
+Service account: belongs to application, not individual end user
+Google group: named collection of Group Accounts and Service Accounts. Every group has a unique email address that is associated with the group, Google groups don't have login credentials, and you cannot use Google groups to establish identity to make a request to access a resource
+G Suite domain: virtual group of all the Google accounts that have been created in an organization's G Suite account
+Cloud Identity domain: like a G Suite domain because it represents a virtual group of all Google accounts in an organization, but don't have access to G Suite applications and features
+
+Resource: Whatever we create in GCP
+				|
+				|
+				|
+				\/				
+Project: Container for set of related resources
+				|
+				|
+				|
+				\/				
+Folder: Contains Projects and SubFolders
+				|
+				|
+				|
+				\/				
+Organization: Tied to G Suite or Cloud Identity domain
+
+
+11.3. IAM Breakdown Permissions and Roles (Can do what)
+--
+A permission allows you to perform a certain action
+Each one follows the form Service.Resource.Verb
+Communicates via REST API methods
+Examplease:
+	pubsub.subscription.consume
+	pubsub.topics.publish
+
+Roles:
+Collection of permissions to use or manage GCP Resources
+A role is a collection of permissions. You cannot assign a permission to the user directly; instead you grant them a role. When you grant a role to a user, you grant them all the permissions that the role contains
+
+Primitive Roles: 
+	Viewer: Read Only 
+	Editor: V + change things
+	Owner: V + E + control access and billing
+
+Predefined Roles: fine grained access control than primitive roles. 
+Ex. Pub/Sub Publisher - only to publish
+
+Custom Roles: to cater permissions to needs of organization when predefined roles don't meet needs
+Only @ organization && project level, not folder level
+
+Permissions format: <service>.<resource>.<verb>
+
+Predefined Roles examples: - App Engine
+Role Name						Role Title						Description
+roles/appengine.appAdmin		App Engine Admin			Read/Write/Modify access to all app configs and settings
+roles/appengine.serviceAdmin	App Engine Service Admin	Readonly access to all app configs and settings, Write access to module+version level settings, can't deploy new version
+roles/appengine.deployer		App Engine Deployer			Readonly access to all app configs and settings, write access to create new version, can't modify existing version
+
+"Organization Role Administrator" role: roles/iam.organizationRoleAdmin	
+To administer all custom roles in your organization
+
+Has below permissions
+iam.roles.create
+iam.roles.delete
+iam.roles.undelete
+iam.roles.get
+iam.roles.list
+iam.roles.update
+resourcemanager.projects.get
+resourcemanager.projects.getIamPolicy
+resourcemanager.projects.list
+resourcemanager.organizations.get
+resourcemanager.organizations.getIamPolicy
+
+
+"Role Administrator" role: roles/iam.roleAdmin
+To administer all custom roles for a project
+iam.roles.create
+iam.roles.delete
+iam.roles.undelete
+iam.roles.get
+iam.roles.list
+iam.roles.update
+resourcemanager.projects.get
+resourcemanager.projects.getIamPolicy
+
+The following Cloud IAM permissions are not supported in custom roles:
+iam.serviceAccounts.getAccessToken
+iam.serviceAccounts.actAs
+iam.serviceAccounts.signBlob
+iam.serviceAccounts.signJwt
+
+11.4. IAM Breakdown Members and Groups (Who)
+--
+Members:
+	Some google known identity
+	identified by email id
+	Types:
+		user: google account
+		service account: for access to apps/services
+		group: Google group of users and service accounts
+		domain: whole domain managed by G Suite or Cloud Identity
+		allAuthenticatedUsers: 	Any Google Account or Service Account
+		allUsers - anyone on Internet
+		
+Groups:
+	Named collection of Google Accounts and Service Accounts
+	Each group has unique email address
+	we never act as group #onlyMembership
+	Can be nested
+
+
+11.5. IAM Breakdown Policies (Bindings)
+--
+
+Policies bind members to roles for scope of resources
+It Answers: Who can do, What, to which things?
+Attached to some level in Resource Hierarchy
+	Can be attached at Organization, Folder, Project, Resource levels
+Always Allow or Deny
+	Child policies cannot restrict access granted at higher level
+
+IAM Policy
+Collection of statements that define who has what type of access
+
+structure of a Cloud IAM policy.
+{
+  "bindings": [
+   {
+     "role": "roles/storage.objectAdmin",
+     "members": [
+       "user:alice@example.com",
+       "serviceAccount:my-other-app@appspot.gserviceaccount.com",
+       "group:admins@example.com",
+       "domain:google.com" ]
+   },
+   {
+     "role": "roles/storage.objectViewer",
+     "members": ["user:bob@example.com"]
+   }
+   ]
+}
+
+One policy per resource
+Max 1500 member bindings per policy. Don't use too many policies, use groups bro!
+250 group bindings in a policy
+Takes <60 sec to apply changes(documentation: up to 7 minutes)
+
+Managing:
+We can use get-iam-policy and set-iam-policy but use add-iam-policy-binding and remove-iam-policy-binding, because they are atomic an less error-prone, avoids race conditions
+
+
+11.6. IAM Breakdown Wrap-Up
+--
+
+
+
+11.7. Billing Access Control
+--
+
+Billing Account can belong to organization. So
+	it inherits Org level IAM policies
+Can be linked to Projects
+1 project can be linked to only single billing account
+
+Billing IAM Roles:
+	Role						Purpose														Scope				
+Billing Account Creator			Create new self-serve billing accounts						Org
+Billing Account Administrator	manage billing accounts(can't create)						Billing Account
+Billing Account User			link project to billing accounts							Billing Account
+Billing Account Viewer			View billing accounts cost information and transactions		Billing Account
+Project Billing Manager			Link/Unlink project to/from billing accounts 				Project
+
+Monthly invoiced billing:
+Get billed monthly and pay by invoice due date
+Can pay via check or wire transfer
+Can increase project and quota limits
+Billing Admin of organization's current billing account contacts Google Cloud Billing Support
+	to determine eligibility
+	to apply: switching to monthly invoicing
+Eligibility depends on:
+	Account age
+	monthly spend
+	country
+
+
+12. Networking
+---
+
+
+12.1. Routing Overview
+--
+OSI Layers: PDNTSPA
+Routing: Where data should go next
+
+12.2. Routing To Google's Network (Premium Routing Tier)
+--
+Getting data to Google's network
+
+Standard routing: already needs to know where the data is supposed to go in world before it gets to Google's network
+Example: If data hosted on server which is in california, traffic across world will travel to california
+Premium Routing
+If any place is better than california, wherever the user is located, it'll send the request to closest node
+
+Premium Tier delivers traffic over Google’s well-provisioned, low latency, highly reliable global network
+This network consists of an extensive global private fiber network with over 100 points of presence (POPs) across the globe
+
+http://2.bp.blogspot.com/-Za3HWtGbQK8/WZ3TuWoVxzI/AAAAAAAAETc/bkqmGj9TBXYGTMO6naL3t_pRh_LIz7XtACK4BGAYYCw/s1600/image2.gif
+
+12.3. Routing To the Right Resource (Load Balancing)
+--
+Latency Reduction
+	use servers physically close to clients
+	Fix: Using Cross Region Load Balancing(with global anycast IPs)
+
+Load Balancing
+	Separate from autoscaling
+	Fix: Cloud Load Balancer(all types: internal+external)
+
+System Design
+	Different servers may handle different parts of the system
+	Specially when using micro services
+	Ex: HTTPS Load Balancer (with URL Map)
+
+Unicast vs Anycast: 
+	Routing schemes
+	Describe how data can travel from one place to another
+Unicast: Says there is only one unique device that can handle this, send it there	
+Anycast: Says there are unique devices that can handle this, send it to anyone, ideally the closest one
+
+Layer 4(TCP)
+Works only with IP Addresses
+Has no idea about HTTP or HTTPs
+HTTP and HTTPs works at level 7, they know URLs and Paths
+
+Hence L4 cannot route based on URL Paths defined in L7
+
+DNS: 
+Name resolution can be the first step in routing
+DNS knows only L4 IP Addresses
+DNS often cached and reused
+Sticky: high TTL, and high cost
+	Extra latency because of round trip of each request
+	more money for additional DNS request processing
+Solution: Premium routing with anycast
+
+12.4. Routing Among Resources (VPC)
+--
+via VPC: private SDN space in GCP
+Subnets create logical spaces to contain resourcs
+	all subnets are interconnected, without any need of VPNs
+Routes define "next hop" for traffic based on destination IP
+Firewall Rules: filter data flow that would otherwise route
+
+IPs and CIDRs
+a.b.c.d, each piece is 0-255
+CIDR block is group of IP Addresses specified in IP/XY form
+
+VPC Networks are global resources, they are not associated with any particular region or zone
+Traffic to and from instances can be controlled with network firewall rules
+Instances with internal IP addresses can communicate with Google APIs and services. 
+Network administration can be secured using Identity and Access Management (IAM) roles
+VPC networks can be connected to other VPC networks in different projects or organizations by using VPC Network Peering
+VPC networks only support IPv4 unicast traffic. They do not support broadcast, multicast, or IPv6 traffic within the network: VMs in the VPC network can only send to IPv4 destinations and only receive traffic from IPv4 sources. It is possible to create an IPv6 address for a global load balancer, however
+
+
+12.5. Creating Auto-Mode VPCs (Lab)
+--
+Practice
+Create Project - my networking playground - vpc network - default
+
+Auto mode has 1 subnet in every Google cloud region
+Automatically created subnets use a set of predefined IP ranges which fit within the 10.128.0.0/9 CIDR block
+Firewall rules 4 by default
+	ICMP: manages pin, tracert, diagnostics etc
+	Internal: internal traffic
+	RDP: remote desktop, 3389
+	SSH: ssh, 22
+
+Custom mode no subnet is automatically created
+Provides complete control over subnets and IP Addresses
+We can switch from auto mode to custom mode, other way is not allowed
+Custom mode networks are more flexible and are better suited to production
+
+Create VPC Network
+my-auto-vpc - set auto - firewall rules(deny-all-ingress and allow-all-egress not optional) - 4 default: icmp, internal, rdp, ssh - allow all(customizable) - dynamic routing: regional
+
+Keeping it won't cost
+
+Default Network:
+Unless disabled, new project starts with default network
+Auto mode + Prepopulated firewall rules
+
+
+12.6. Custom-Mode VPCs (Lab) - Part 1 Creating the VPC
+--
+Creating VPC
+Go to my networking playground - delete default VPC - delete auto VPC - create new VPC Network - app-vpc-custom - custom - oregon-subnet - us-west1 - 192.168.0.0/24
+Private Google Access: We can connect without being able to connect to Internet
+Flow Logs: Detailed logs on traffic - Regional - Create
+
+
+12.7. Custom-Mode VPCs (Lab) - Part 2 Creating the Custom IAM Role & Service Account
+--
+setting IAM - go to Console - IAM - Roles - filter:title:"writer" - logs writer and monitoring metrics writer - Create Role From Selection - 
+	- Case GCE Role - BaseGVERole - General Availability - Create
+We can update/delete this
+Purpose: Instead of granting roles to individual service accounts, create a combined role and assign accounts, so modifications will be at once only.
+Drawback: In case new permissions added by Google in future, they won't be added into our created Role
+
+Go to, Service Accounts - delete default email(502393819894-compute@developer.gserviceaccount.com) - delete it.
+
+Create Service Account - frontend-sa - Service Account for frontend servers - create - Role - filter:Base GCE Role - Continue - Done
+
+12.8. Custom-Mode VPCs (Lab) - Part 3 Using the VPC and Configuring Firewall Rules
+--
+
+network tag
+text attributes we can add to Compute Engine VM Instances, can't tag to other GCP resources
+Tags allow you to make firewall rules and routes applicable to specific VM instances
+can be edited without stopping instance
+
+Compute Engine - Create instance template - frontend-it - choose newly created Service Account - Access scopes will be disabled when not choosing default Service Account - 			Advance - Networking - see app-vpc-custom(only VPC ;)) - subnet:oregon-subnet - network tags(no change) - Create
+
+Go to Compute Engine - Create Instance Group - frontend-ig - multiple zone - us-west1 - managed - template(frontend-it) - minimum instances(2) - max3 - Create
+
+Open created - copy external IP Address of it 
+35.197.114.59
+34.83.140.43
+- cloud shell - ping it - it will fail to reach
+pratikaambani_gcp_user@cloudshell:~ (my-networking-playground-24807)$ ping 35.197.114.59
+PING 35.197.114.59 (35.197.114.59) 56(84) bytes of data.
+^C
+--- 35.197.114.59 ping statistics ---
+12 packets transmitted, 0 received, 100% packet loss, time 11261ms
+
+Why: No rules defined to allow shell access
+Console - VPC Network - app-vpc-custom - firewall rules - no rules
+Lets allow incoming traffic - add firewall rule - allow-incoming-to-frontend-fwr - direction(ingress) - allow - Targets(all / specified targets/ specific SA): Specified SA - Scope(In this project) - Target(frontend-sa) - Source Filter(IP Ranges) = 0.0.0.0/0 - Specific protocols - Protocols and Ports(other) - icmp - Create
+
+ping again - response received
+pratikaambani_gcp_user@cloudshell:~ (my-networking-playground-24807)$ ping -c 5 35.197.114.59
+PING 35.197.114.59 (35.197.114.59) 56(84) bytes of data.
+64 bytes from 35.197.114.59: icmp_seq=1 ttl=56 time=164 ms
+64 bytes from 35.197.114.59: icmp_seq=2 ttl=56 time=162 ms
+64 bytes from 35.197.114.59: icmp_seq=3 ttl=56 time=162 ms
+64 bytes from 35.197.114.59: icmp_seq=4 ttl=56 time=181 ms
+64 bytes from 35.197.114.59: icmp_seq=5 ttl=56 time=162 ms
+--- 35.197.114.59 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 4004ms
+rtt min/avg/max/mdev = 162.127/166.403/181.196/7.457 ms
+
+SSHing
+Compute Engine Instances - pick one - ssh - unable to connect to VM on 22 
+Error Message: Connection Failed: We are unable to connect to the VM on port 22. Learn more about possible causes of this issue.
+Reason: only ICMP is configured 
+
+Go to VPC - rules - add - open-ssh-by-tag-fwr - Ingress - allow - open-ssh-tag - source IP Ranges(0.0.0.0/0) - Specified(tcp): 22 - Create
+Instance Groups - Select Group - Zone A - edit - network tags:(open-ssh-tag) - Save - Retry ssh connection
+
+Instead of clicking remove network tag - Instance Group(frontend-ig) - Rolling Restart - Replace
+VM Instances - older isntances are gone, new Instances created - click it - network tag is gone - ssh again fails
+
+Clean Up: 2 instances - MIG - edit - Off Autoscaling - Number of instances(0) - no cost
+
+Rules:
+GRE protocol not allowed in VPC 
+169.254.169.254 always allowed
+Every network has two implied firewall rules which permit outgoing connections and block incoming connections. Firewall rules that you create can override these implied rules
+The default network is pre-populated with firewall rules that you can delete or modify
+Any rule applies to only one of incoming and outgoing traffics
+rules are stateful
+
+
+Implied Rules(2)
+implied allow egress rule
+lets any instance send traffic to any destination, except for traffic blocked by GCP
+
+implied deny ingress rule
+protects all instances by blocking incoming traffic to them
+
+The implied rules cannot be removed, but they have the lowest possible priorities
+
+Pre-populated rules in the default network
+default-allow-internal
+default-allow-ssh
+default-allow-rdp
+default-allow-icmp
+
+Always blocked traffic
+GRE Traffic
+App protocols other than TCP, UDP, ICMP, IPIP
+EGRESS on TCP port 25
+
+Always allowed traffic
+169.254.169.254: local metadata server
+DHCP
+Instance Metadata
+NTP
+
+Firewall Rule Components
+Numerical priorities
+direction of traffic: ingress and egress
+Target
+source for ingress and destination for egress
+protocol and port
+enforcement status of firewall rules
+
+
+12.9. Custom-Mode VPCs Challenge Lab
+--
+
+Challenge:
+Two tier setup: frontend and backend
+	each Auto-scaled across 2+ zones
+ICMP to represent allowed traffic
+	Only accessible bia TCP 80, 443, 3306
+Frontend
+	Accepts incoming from Internet
+	Can connect to outbound to backend and internet
+Backend
+	only accepts incoming from frontend and other backend
+	no outbound elsewhere
+All firewall rules based on service accounts
+
+Validation
+From cloudshell or computer
+	can ping frontend instances
+	cannot ping backend instances
+When SSHed to a frontend instance
+	Can ping backend instances
+	can ping google.com
+When SSHed to a frontend instance
+	Cannot ping frontend instances
+	Cannot ping google.com
+Can ping backend instances	
+
+Remember to Cleanup the stuff after setup
+
+12.10. Custom-Mode VPCs Challenge Lab Solution - Main Setup
+--
+
+12.11. Custom-Mode VPCs Challenge Lab Solution - Firewall Rules
+--
+
+12.12. Networking Exam Tips
+--
+
+Practice CIDR blocks
+	/16, /24, /28 etc
+	Subnet Masks:
+		CIDR /16 is same as 255.255.0.0
+		CIDR /24 is same as 255.255.255.0
+		CIDR /32 is same as 255.255.255.255
+
+Practice common port numbers
+	HTTP: 80
+	HTTPS: 443
+	SSH: 22
+
+Subnet CIDR Ranges
+	We can edit a subnet to increase its CIRD range, No need to recreate subnets or instances, but newer range nust contain old range
+	/29 contains 8 IPs, only 30, 31, 32 can change it.
+	/28: 2^4
+	/27: 2^5
+	/26: 2^6
+ 
+In organization, we can share VPCs among multiple projects
+Host Project: Owns VPC
+Service Project: Granted access to the shared VPC
+This lets multiple projects coexist on same local network(with same private IP space)
+Lets a centralized team manage network security
+
+13. GKE Introduction Google Kubernetes Engine
+---
+Instructor: Nigel
+Kubernetes
+
+13.1. GKE Everything You Need
+13.2. Kubernetes Deep Dive Intro
+
+14. kubernetes Course Introduction
+---
+
+14.1. What You Need
+--
+
+Requirement:
+kubernetes cluster (minor differences across cloud providers)
+
+Lappy:
+minikube #singleNodeCluster
+docker for desktop #singleNodeCluster
+
+Cloud:
+AKS (hosted)
+EKS (hosted)
+GKE (hosted)
+Kops
+
+On Premices:
+Kubeadm
+
+
+14.2. Schedule
+--
+K Picture
+K Architecture
+K Networking
+K Storage
+From code to K
+K Deployments
+Scaling K Apps
+RBAC & Admission Control
+Other K Stuff
+What Next
+
+15. Kubernetes Big Picture
+---
+
+15.1. Kubernetes Big Picture
+--
+K Primer
+K API
+K Objects
+Getting a quick K cluster
+
+15.2. Kubernetes Primer
+--
+Open Source to run cloud native apps
+
+Layer that sits on Infrastructure layer
+Provides rich API 
+Primitive for running cloud native apps
+
+Cloud Natuve Apps:
+Built from lots of interactive cloud services, that come together to form something meaningful(App)
+
+This small components makes them really easy to scale and update
+
+Opposite of Monolithic Apps
+
+K cluster is made of bunch of Linux nodes
+
+Linux nodes = Control Plane + Workers
+
+Workers = where app resides
+Control Plane = API Server + Scheduler + bunch of controllers + persistent store
+
+persistent store = etcd
+Stateful
+In prod we should deploy separate etcd with its own HA
+So rest of control becomes stateless 
+upgrades will be easier
+beware at scale
+
+API Server:
+Gateway into the cluster
+Implements API
+Grand Central Station of control planes
+All CRUD goes through API Server
+while deploying and managing server, All nodes in bits of control place, Vast traffic on K cluster is : are talking with API Server
+Central to everything
+
+
+15.3. The Kubernetes API
+--
+
+Everything in K is defined as API
+
+REST: CRUD
+Most of CRUD will be via kubectl command line
+
+yml file to make post request to API Server
+
+Declarative Configuration: Maintaining balance between Desired State and Current State
+
+if desired: 10 replicate and current is 5: failure
+
+SIG(Special Interset Group) looks after API Groups 
+
+Alpha < Beta < GA
+
+kubectl get apiservices
+
+15.4. Kubernetes Objects
+--
+POD: An object on cluster
+smallest thing(Atomic unit) we can deploy on Kubernetes
+Contains one or more containers
+Defined in V1 API Group
+
+Deployments: Scaling and Rolling updates
+
+Pods and deployments exist in API
+
+Daemon: where other objects reside
+Ensures one Pod per node
+
+15.5. Spin Up a Quick Cluster
+--
+cloud.google.com
+
+Go to - K Engine  - cluster - Create Cluster - create
+
+16. Kubernetes Application Architecture
+---
+
+16.1. Kubernetes App Architecture
+--
+
+16.2. Theory
+--
+		Norman application				|			Kubernetes							
+										|	
+				External LB				|	SVC
+					|					|
+					|					|
+					|					|
+					|					|
+				External Web Services	|		deploy		
+					|					|
+					|					|
+Secrets-------------|					|	secrets
+					|					|
+					|					|
+database-----Persistent backend			|	PV/PVC 			deploy
+
+Persistent Volume
+Persistent Volume Client Object
+
+16.3. Sample Kubernetes App
+--
+
+Simple App
+
+Main Repo:https://github.com/nigelpoulton/k8s-sample-apps/
+
+Things to look upon
+https://github.com/nigelpoulton/k8s-sample-apps/blob/master/mysql-wordpress-pd/mysql-deployment.yaml
+https://github.com/nigelpoulton/k8s-sample-apps/blob/master/mysql-wordpress-pd/wordpress-deployment.yaml
+
+16.4. Recap
+--
+--
+
+17. Kubernetes Networking
+---
+17.1. Networking
+--
+Topics
+
+17.2. Common Networking Requirements
+--
+IPs, Ports, LBs
+
+In microservics, too many IPs and Ports: K8S
+
+17.3. Sample App Requirements
+--
+manifest files
+
+wordpress-deployment.yaml
+
+
+Below indicates LB:
+Port is 80
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: wordpress
+  labels:
+    app: wordpress
+spec:
+  ports:
+    - port: 80
+  selector:
+    app: wordpress
+    tier: frontend
+  type: LoadBalancer
+---
+
+
+Below indicates Storage:
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wp-pv-claim
+  labels:
+    app: wordpress
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+---
+
+
+Below indicates Deployment Pods:
+kind: Deployment
+Tells how to deploy a wordpress application as Pods
+
+
+Observe: containerPort: 80
+Defines single container, it says app running inside this port is configured to listen on port 80
+
+apiVersion: apps/v1 #  for k8s versions before 1.9.0 use apps/v1beta2  and before 1.8.0 use extensions/v1beta1
+kind: Deployment
+
+metadata:
+  name: wordpress
+  labels:
+    app: wordpress
+spec:
+  selector:
+    matchLabels:
+      app: wordpress
+      tier: frontend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: wordpress
+        tier: frontend
+    spec:
+      containers:
+      - image: wordpress:4.8-apache
+        name: wordpress
+        env:
+        - name: WORDPRESS_DB_HOST
+          value: wordpress-mysql
+        - name: WORDPRESS_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-pass
+              key: password
+        ports:
+        - containerPort: 80
+          name: wordpress
+        volumeMounts:
+        - name: wordpress-persistent-storage
+          mountPath: /var/www/html
+      volumes:
+      - name: wordpress-persistent-storage
+        persistentVolumeClaim:
+          claimName: wp-pv-claim
+
+In this file, LB and Deployment Pods,
+app: wordpress
+tier: frontend
+
+Means LB will redirect the traffic to multiple set of Pods/labels configured with same app and tier
+
+This yml has all that a K8S requires to run an application, let's see documentation
+
+
+17.4. Kubernetes Networking Basics
+--
+
+Rules:
+All nodes can talk to each other
+All nodes can communicate to each other(Without NAT)
+Every POD has its own IP Address
+
+POD Network:
+Big and Flat
+CNI Plugin: container network interface
+Every POD has its IP
+Once you are in, you're able to communicate with everybody
+
+17.5. Service Basics
+--
+If demand increases, new POD with new IP
+While scaling down, we loose Pods with IP
+So we have Stable Network Abstraction which handles these Pods, instead of hitting individual Pods, hut the services(SNA)
+Services are clever enough to handle all the stuff going with Pods
+
+Every service has Name andIP, they are stable, They never change in their entire life
+Name and IP gets registered with cluster's built-in DNS
+
+Label Selector: balance traffic with all custers having XXX Label
+
+How does service know which Pods are alive and kicking: When we create service with label selector, K8S also creates objects on cluster called endpoint object
+
+Endpoint has X number of entries: X=number of Pods
+
+Service object always watches API Server to see if new POD(that matches selector) is added/removed
+
+Thus it automatically updates Endpoint server, and EP Server has always has same name as API Object has
+
+Next: 3 major types of services
+
+17.6. Service Types
+--
+example: below line in the above yml
+type: LoadBalancer
+
+Types: LoadBalancer, NodePort, ClusterIP
+
+ClusterIP: 
+default and basic
+Gets own IP
+only accessible from within cluster and not outside
+
+NodePort:
+Gets cluter-wide port
+Accessible from outside cluster
+default range of ports: 30K-32767
+We can change port range
+
+LoadBalancer:
+When we deploy on cloud
+Cloud Platform has to support LB creation and config via public APIs
+
+Some platforms use NodePort service
+Google Cloud: doesn't require
+AWS and Azure: requires to create
+
+17.7. Service Network
+--
+Summary:
+Create Service - gets unique IP
+This is not on  Node Network or POD Network
+On the third network: Service Network
+
+
+kube-proxy
+Every node on the network has process running: 1 kube-proxy/node
+Runs on cluster as Deamon set
+Its job is to create IP Tables rules, rewrite headers and send them back to appropriate Pods on the POD Network
+
+IPTABLES Mode
+Default sunce K8S 1.2
+Doesn't scale well
+Not really designed for LB
+
+IPVS Mode
+Stable since 1.11
+Uses Linux kernel IP Virtual Server
+Native Layer-4 LB
+Supports more algorithms
+
+17.8. Demo
+--
+
+GCloud Console - K8S Create K8S Cluster - my-first-cluster - 1.12.8 - nodes(3) - create
+
+
+GCloud Console - K8S Create K8S Cluster - my-ubuntu-cluster - 1.12.8 - nodes(3) - os(ubuntu) - service account(select one) - create
+
+
+Once created
+pratikaambani_gcp_user@cloudshell:~ (my-networking-playground-24807)$ gcloud container clusters get-credentials my-first-cluster --zone us-west1-a --project my-networking-playground-24807
+Fetching cluster endpoint and auth data.
+kubeconfig entry generated for my-first-cluster.
+
+Clone this
+git clone https://github.com/ACloudGuru-Resources/Course_Kubernetes_Deep_Dive_NP.git
+pratikaambani_gcp_user@cloudshell:~ (my-networking-playground-24807)$ cd Course_Kubernetes_Deep_Dive_NP/lession-networking
+
+Getting K8S Nodes
+pratikaambani_gcp_user@cloudshell:~ (my-networking-playground-24807)$ kubectl get nodes
+NAME                                               STATUS     ROLES    AGE   VERSION
+gke-my-ubuntu-cluster-default-pool-9fe958b2-7bvw   NotReady   <none>   26m   v1.12.8-gke.10
+gke-my-ubuntu-cluster-default-pool-9fe958b2-9hwg   NotReady   <none>   71m   v1.12.8-gke.10
+gke-my-ubuntu-cluster-default-pool-9fe958b2-r07r   NotReady   <none>   71m   v1.12.8-gke.10
+
+Getting K8S Nodes (detailed)
+pratikaambani_gcp_user@cloudshell:~ (my-networking-playground-24807)$ kubectl get nodes -o wide
+NAME                                               STATUS     ROLES    AGE   VERSION          INTERNAL-IP    EXTERNAL-IP     OS-IMAGE             KERNEL-VERSION    CONTAINER-RUNTIME
+gke-my-ubuntu-cluster-default-pool-9fe958b2-7bvw   NotReady   <none>   26m   v1.12.8-gke.10   192.168.0.15   35.230.62.128   Ubuntu 18.04.2 LTS   4.15.0-1034-gke   docker://17.3.2
+gke-my-ubuntu-cluster-default-pool-9fe958b2-9hwg   NotReady   <none>   71m   v1.12.8-gke.10   192.168.0.16   34.83.44.156    Ubuntu 18.04.2 LTS   4.15.0-1034-gke   docker://17.3.2
+gke-my-ubuntu-cluster-default-pool-9fe958b2-r07r   NotReady   <none>   71m   v1.12.8-gke.10   192.168.0.14   35.230.25.145   Ubuntu 18.04.2 LTS   4.15.0-1034-gke   docker://17.3.2
+
+CIDR Details:
+pratikaambani_gcp_user@cloudshell:~/Course_Kubernetes_Deep_Dive_NP/lesson-networking (my-networking-playground-24807)$ kubectl get nodes -o jsonpath='{.items[*].spec.podCIDR}'
+10.60.2.0/24
+10.60.0.0/24
+10.60.1.0/24
+This is the same thing we can see under Cluster - my-first-cluster - nodes -  click any node - Details - cidr
+
+Deploy the application
+pratikaambani_gcp_user@cloudshell:~/Course_Kubernetes_Deep_Dive_NP/lesson-networking (my-networking-playground-24807)$ kubectl apply -f ping-deploy.yml
+deployment.apps/pingtest created
+
+get status
+pratikaambani_gcp_user@cloudshell:~/Course_Kubernetes_Deep_Dive_NP/lesson-networking (my-networking-playground-24807)$ kubectl get deploy
+NAME       DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+pingtest   3         3         3            0           15m
+
+get Pods
+pratikaambani_gcp_user@cloudshell:~/Course_Kubernetes_Deep_Dive_NP/lesson-networking (my-networking-playground-24807)$ kubectl get Pods
+NAME                        READY   STATUS    RESTARTS   AGE
+pingtest-57cc454bcd-9tnsg   1/1     Unknown   0          86m
+pingtest-57cc454bcd-9ws4m   1/1     Running   0          26m
+pingtest-57cc454bcd-bjqqg   1/1     Unknown   0          86m
+pingtest-57cc454bcd-ljpbl   1/1     Running   0          26m
+pingtest-57cc454bcd-r5rh6   1/1     Running   0          26m
+pingtest-57cc454bcd-w7x6c   1/1     Unknown   0          86m
+
+get Pods (detailed)
+pratikaambani_gcp_user@cloudshell:~/Course_Kubernetes_Deep_Dive_NP/lesson-networking (my-networking-playground-24807)$ kubectl get Pods -o wide
+NAME                        READY   STATUS    RESTARTS   AGE   IP           NODE                                               NOMINATED NODE
+pingtest-57cc454bcd-9tnsg   1/1     Unknown   0          87m   10.60.0.12   gke-my-ubuntu-cluster-default-pool-9fe958b2-9hwg   <none>
+pingtest-57cc454bcd-9ws4m   1/1     Running   0          26m   10.60.2.2    gke-my-ubuntu-cluster-default-pool-9fe958b2-7bvw   <none>
+pingtest-57cc454bcd-bjqqg   1/1     Unknown   0          87m   10.60.0.10   gke-my-ubuntu-cluster-default-pool-9fe958b2-9hwg   <none>
+pingtest-57cc454bcd-ljpbl   1/1     Running   0          26m   10.60.2.3    gke-my-ubuntu-cluster-default-pool-9fe958b2-7bvw   <none>
+pingtest-57cc454bcd-r5rh6   1/1     Running   0          26m   10.60.1.3    gke-my-ubuntu-cluster-default-pool-9fe958b2-r07r   <none>
+pingtest-57cc454bcd-w7x6c   1/1     Unknown   0          87m   10.60.0.9    gke-my-ubuntu-cluster-default-pool-9fe958b2-9hwg   <none>
+
+each POD is running on separate node
+each POD has separate IP
+
+Observe each POC IP falls within its equivalent Node IP
+
+Node IP       POD IP
+  
+10.60.0.0/24 10.60.0.12 
+			 10.60.0.10 
+			 10.60.0.9  
+10.60.1.0/24 10.60.1.3  
+10.60.2.0/24 10.60.2.2  
+			 10.60.2.3  
+
+Going inside one of the Pods
+pratikaambani_gcp_user@cloudshell:~/Course_Kubernetes_Deep_Dive_NP/lesson-networking (my-networking-playground-24807)$ kubectl exec -it pingtest-57cc454bcd-ljpbl bash
+
+Updating
+root@pingtest-57cc454bcd-7bc97:/# apt-get update
+0% [Connecting to archive.ubuntu.com] [Connecting to security.ubuntu.com]
+
+install following tool
+apt-get install iputils-ping curl dnsutils iproute2 -y
+
+pratikaambani_gcp_user@cloudshell:~ (my-networking-playground-24807)$ ip a
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+2: docker0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default
+    link/ether 02:42:3f:30:0e:42 brd ff:ff:ff:ff:ff:ff
+    inet 172.18.0.1/16 brd 172.18.255.255 scope global docker0
+       valid_lft forever preferred_lft forever
+12: eth0@if13: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default
+    link/ether 02:42:ac:11:00:02 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet 172.17.0.2/16 brd 172.17.255.255 scope global eth0
+       valid_lft forever preferred_lft forever
+
+Check this line
+inet 172.17.0.2/16 brd 172.17.255.255 scope global eth0
+
+We should be able to ping two other Pods, and we are able to.
+
+
+Now we'll deploy simple-web.yml which has nodePort: 30001
+
+Deploying
+pratikaambani_gcp_user@cloudshell:~/Course_Kubernetes_Deep_Dive_NP/lesson-networking (my-networking-playground-24807)$ kubectl apply -f simple-web.yml
+service/hello-svc created
+deployment.apps/hello-deploy created
+
+get deployed node details
+pratikaambani_gcp_user@cloudshell:~/Course_Kubernetes_Deep_Dive_NP/lesson-networking (my-networking-playground-24807)$ kubectl get svc
+NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
+hello-svc    NodePort    10.254.4.156   <none>        8080:30001/TCP   11s
+kubernetes   ClusterIP   10.254.0.1     <none>        443/TCP          7h22m
+
+NodePort also has Cluster IP: 10.254.4.156
+Means we should be able to access Pods behind this service with combination of clusterIP:8080 OR IP of any node in cluster:30001
+
+curl hello-svc:8080
+
+
+
+
+
+
+
+
+
+
+
+
+
+LoadBalancer Service
+type: LoadBalancer
+
+check lb.yml file
+only in case of cloud platform
+
+selector:
+    app: hello-world
+Means  create a LB service and balance over any Pods in the server with above label
+
+Deploying
+pratikaambani_gcp_user@cloudshell:~/Course_Kubernetes_Deep_Dive_NP/lesson-networking (my-networkpratikaambani_gcp_user@cloudshell:~/Course_Kubernetes_Deep_Dive_NP/lesson-networking (my-networking-playground-24807)$ kubectl apply -f lb.yml
+ service/lb-svc created
+
+pratikaambani_gcp_user@cloudshell:~/Course_Kubernetes_Deep_Dive_NP/lesson-networking (my-networking-playground-24807)$ kubectl get svc --watch
+NAME         TYPE           CLUSTER-IP     EXTERNAL-IP      PORT(S)          AGE
+hello-svc    NodePort       10.254.4.156   <none>           8080:30001/TCP   136m
+kubernetes   ClusterIP      10.254.0.1     <none>           443/TCP          9h
+lb-svc       LoadBalancer   10.254.9.248   35.230.100.167   8080:31053/TCP   60s
+
+
+Exernal IP for LB is 35.230.100.167
+This is an IP external components to interact with, open it in browser: 35.230.100.167:8080
+
+17.9. Recap
+--
+Node Network:
+All nodes need to be able to talk
+K8S <--> API Server
+POD Network Ports
+
+Not implemented by K8S
+
+POD Network:
+K8S implements via CNI Plugins
+Big and Flat
+IP Per POD
+
+All containers in a particular POD share that POD's IP and network stack == Containers inside same POD can talk to each other using ports on local host
+
+Pods come and go all time so we can't communicate with them directly
+
+To solve this, we have single communicator: Service 
+Service:
+	Proxis all LB requests 
+	Provides long lived stable networking
+	Keep up todate list of healthy Pods that match their label selector. So that always know when new Pods are added and old ones are removed
+	3 types
+
+
+18. Kubernetes Storage
+---
+
+18.1. Storage
+--
+
+- High-level requirements
+- CSI: COntainer Storage Interface
+- K8S PersistentVolume Subsystem
+- StorageClasses
+- Lab
+- Recap
+
+18.2. Big Picture
+--
+Place to persistently store data
+Volumes = LUNs = Devices = Shares = Mounts = Spaces
+If data resides on Pods what if Pods destroy, so it will reside on Volumes, Volumes exist on cluster in their own right
+If pod wants to use it, it needs to claim it and mount it later. So that even if POD destroys, data still exists.
+
+Multiple Pods can share same volume, Volumes decouple storage from Pods
+
+Firstclass in K8S
+Standards based
+Pluggable backend
+Rich API
+
+Fundamental Storage Requirement
+Speed
+Replicated
+Resiliency...
+
+K8S provides an interface for the Pods to consume it
+
+Container Storage Model(CSI):
+Storage System plugs into K8S and K8S gives an appropriate option to consume App
+
+Means,
+Storage System -------> K8S -------> PV Subsystem(PV, PVC, SC)
+
+Persistent Volume:
+	Storage resources
+	example: Storage:20GB
+
+Persistent Volume Claim
+	Ticket to use PV
+	If an application wants to use PV, it needs PVC(ticket)
+
+Storage Class:
+	
+18.3. Container Storage Interface(CSI)
+--
+This is non-K8S context
+
+Wasn't available in past
+
+Previously meadiator between Storage and PV Subsystem was a Tree but in that case,
+driver(external) code had to be inside tree
+Tied to K8S release cycle
+code had to be opensource, no storage provider will be fine with that
+
+So Flex Volumed got introduced: failed
+
+Then CSI
+	Out of tree
+	Independent open standard
+	All external code that used to reside inside K8S, will be out of it and decoupled: storage providers can release/update on their schedule and no problem of making code opensource + K8S also doesn't have to worry about third party sourcecode
+	Storage providers will write CSI Plugins
+	It is in Beta Versions
+	
+On Google Cloud it comes in two flavours:
+	Standard: slow
+	SSD: faster
+
+18.4. PV and PVC
+--
+
+PV exists independently just like a Pod or a Node
+Pod needs a PVC to access PV via yml
+
+https://github.com/ACloudGuru-Resources/Course_Kubernetes_Deep_Dive_NP/tree/master/lesson-storage
+gke-pv.yml
+Kind: PersistentVolume
+Storage: 20Gi
+getPersistentDisk:
+	pdName: uber-disk
+
+
+Create cluster
+standard-gke-cluster
+us-west1-1
+
+
+
+Check nodes
+kubectl get nodes
+NAME                                                  STATUS   ROLES    AGE   VERSION
+gke-standard-gke-cluster-default-pool-4197bb20-61v7   Ready    <none>   53m   v1.12.8-gke.10
+gke-standard-gke-cluster-default-pool-4197bb20-8l2h   Ready    <none>   54m   v1.12.8-gke.10
+gke-standard-gke-cluster-default-pool-4197bb20-w6xx   Ready    <none>   53m   v1.12.8-gke.10
+
+Deploy PV
+pratikaambani_gcp_user@cloudshell:~ (my-networking-playground-24807)$ cd Course_Kubernetes_Deep_Dive_NP/lesson-storage/
+
+Error: uber-disk: this has to be there as SSD on GC backend as volume called this.
+pratikaambani_gcp_user@cloudshell:~/Course_Kubernetes_Deep_Dive_NP/lesson-storage (my-networking-playground-24807)$ kubectl apply -f gke-pv.yml
+Error from server (Forbidden): error when creating "gke-pv.yml": persistentvolumes "pv1" is forbidden: error querying GCE PD volume uber-disk: disk is not found
+
+Create an SSD named uber-disk
+
+Now reattempt to deploy the PV
+pratikaambani_gcp_user@cloudshell:~/Course_Kubernetes_Deep_Dive_NP/lesson-storage (my-networking-playground-24807)$ kubectl apply -f gke-pv.yml
+persistentvolume/pv1 created
+
+Get PV Details
+pratikaambani_gcp_user@cloudshell:~/Course_Kubernetes_Deep_Dive_NP/lesson-storage (my-networking-playground-24807)$ kubectl get pv
+NAME   CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM   STORAGECLASS   REASON   AGE
+pv1    20Gi       RWO            Retain           Available           ssd                     11s
+
+Name: from manifest
+Capacity: 20Gi
+Access Modes: RWO/RWM/ROM (Read Write Once/Many)
+	File based volumes i.e. NFS	support RWM
+	Block Volumes don't allow RWM
+Reclaim Policy(Retain/Delete): 
+	Action done by cluster When claim on volume is released
+	Delete - Deletes post claim released
+	Retain - Keeps volume and its contents
+CLAIM: None yet
+
+
+Now lets claim to use PV:
+gke-pvc.yml
+	kind:PersistentVolumeClaim
+	Access Mode: RWM
+	storageClassName: SSD
+
+To claim: accessModes storageClassName and capacity have to match in PV manifest file
+
+
+How to mount this in Pod?
+Pod definition: gke-volpod.yml --> Volumes, mention the claim object created in PVC
+
+18.5. Storage Classes
+--
+
+In a microservics world, storage needs to be dynamic
+
+Storage Classes 
+	enable dynamic provisioning of Volumes
+	An API resource
+	Will contain references of any backend plugin used	
+	
+We'll create,
+
+	SC						------------>				PVC						------------>					Pod
+	PVCs					that references 	storageClassName(sc-fast) and 	that references	 		Pods Spects
+	metadata.name:sc-fast	 					metadata.name:pvc1										volumes.persistentVolumeClaim.claimName:pvc1
+Done
+
+sc.yml
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: fast
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: io1
+  zones: eu-west-1a
+  iopsPerGB: "10"
+---
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: slow
+  annotations: 
+    storageclass.kubernetes.io/is-default-class: "true"
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: gp2
+  zones: eu-west-1a
+reclaimPolicy: Retain
+mountOptions:
+  - debug
+
+Has two storage classes identified by names
+
+
+
+portworx,yml
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: portworx-db-secure
+provisioner: kubernetes.io/portworx-volume
+parameters:
+  fs: "xfs" #filesystem
+  block_size: "32"
+  repl: "2" #replication
+  snap_interval: "30"
+  io-priority: "medium"
+  secure: "true"
+  
+This file is for portworx backend, This is implemented by backend, K8S has no role in this
+
+K8S Guy cares about:
+	parameters:
+	  fs: "xfs" #filesystem
+	  block_size: "32"
+	  repl: "2" #replication
+	  snap_interval: "30"
+	  io-priority: "medium"
+	  secure: "true"
+
+Backend Guy cares about
+	metadata,name: portworx-db-secure
+
+Get list of storage classes
+pratikaambani_gcp_user@cloudshell:~/Course_Kubernetes_Deep_Dive_NP/lesson-storage (my-networking-playground-24807)$ kubectl get sc
+NAME                 PROVISIONER            AGE
+standard (default)   kubernetes.io/gce-pd   128m
+
+Deploying the application
+pratikaambani_gcp_user@cloudshell:~/Course_Kubernetes_Deep_Dive_NP/lesson-storage (my-networking-playground-24807)$ kubectl apply -f sc.yml
+storageclass.storage.k8s.io/fast created
+storageclass.storage.k8s.io/slow created
+
+getting list of deployed storage classes
+pratikaambani_gcp_user@cloudshell:~/Course_Kubernetes_Deep_Dive_NP/lesson-storage (my-networking-playground-24807)$ kubectl get sc
+NAME                 PROVISIONER             AGE
+fast                 kubernetes.io/aws-ebs   12s
+slow (default)       kubernetes.io/aws-ebs   12s
+standard (default)   kubernetes.io/gce-pd    128m
+
+
+Describe will give detailed information on SC
+pratikaambani_gcp_user@cloudshell:~/Course_Kubernetes_Deep_Dive_NP/lesson-storage (my-networking-playground-24807)$ kubectl describe sc fast
+Name:            fast
+IsDefaultClass:  No
+Annotations:     kubectl.kubernetes.io/last-applied-configuration={"apiVersion":"storage.k8s.io/v1","kind":"StorageClass","metadata":{"annotations":{},"name":"fast"},"parameters":{"iopsPerGB":"10","type":"io1","zones":"eu-west-1a"},"provisioner":"kubernetes.io/aws-ebs"}
+
+Provisioner:           kubernetes.io/aws-ebs
+Parameters:            iopsPerGB=10,type=io1,zones=eu-west-1a
+AllowVolumeExpansion:  <unset>
+MountOptions:          <none>
+ReclaimPolicy:         Delete
+VolumeBindingMode:     Immediate
+
+Check parameters: 
+Parameters:            iopsPerGB=10,type=io1,zones=eu-west-1a
+
+deploy this PVC: gke-pvc.yml
+pratikaambani_gcp_user@cloudshell:~/Course_Kubernetes_Deep_Dive_NP/lesson-storage (my-networking-playground-24807)$ kubectl apply -f gke-pvc.yml
+persistentvolumeclaim/pvc1 created
+
+Check the PVC:
+pratikaambani_gcp_user@cloudshell:~/Course_Kubernetes_Deep_Dive_NP/lesson-storage (my-networking-playground-24807)$ kubectl get pvc
+NAME   STATUS   VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+pvc1   Bound    pv1      20Gi       RWO            ssd            56s
+
+pvc1 is dynamically created with 20GB space
+Check from Console: Console - K8S Engine - Storage
+
+pratikaambani_gcp_user@cloudshell:~/Course_Kubernetes_Deep_Dive_NP/lesson-storage (my-networking-playground-24807)$ kubectl get pv
+NAME   CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM          STORAGECLASS   REASON   AGE
+pv1    20Gi       RWO            Retain           Bound    default/pvc1   ssd                     77m
+
+Check CLAIM: default/pvc1
+
+18.6. Demo | 18.7. Recap
+--
+
+
+19. From Code to Kubernetes
+---
+
+19.1. Code to Kubernetes
+--
+Running code on K8S Cluster
+
+Big Picture
+Walkthrough example
+Recap
+
+Write code - bundle dependencies into a Docker image - add to registry - (K8S starts now) - create K8S Object that references the image that we made - bit stuff that tells K8S how to run it
+
+K8S Object: We can either prepare container and then do rest of the stuff manually OR  wrap everything(end-to-end script) in a high level set. 
+
+Covering 24*7 up, Auto-scaled, autorollout stuff
+
+Testing, Scanning, Version Control etc
+
+In short a proper CIDD pipeline
+
+We'll separate them out in 3 stages:
+Coding + Docker + K8S == Sourcecode and Dependencies + Dockerfile + K8S
+
+1. We'll place code and its Dependencies into a directory and 
+2. then write a DockerFile telling Docker how to build it into an image and push it to a registry(public/private cloud)
+3. Here it comes to K8S. We'll prepare a deployment manifest file while will rollout deployment for the docker image
+
+19.2. Big Picture
+--
+3rd part in above 
+
+19.3. Demo
+--
+https://github.com/ACloudGuru-Resources/Course_Kubernetes_Deep_Dive_NP/tree/master/lesson-code-k8s
+
+Check Dockerfile on this location
+https://github.com/ACloudGuru-Resources/Course_Kubernetes_Deep_Dive_NP/blob/master/code-k8s/Dockerfile
+
+
+kubectl get nodes
+
+docker image build -t myapp/1.0.0 .
+
+docker image ls
+
+image is there in REPOSITORY
+
+docker login
+
+docker image push myapp/1.0.0 .
+
+deploy this on K8S
+
+20. Kubernetes Deployments
+---
+20.1. Kubernetes Deployments
+--
+deployment.yml
+Any change has to be documented. Any change.
+
+Even a version change has to be maintained in Version Control
+
+ReplicaSet: While version is changed, it will incrementally add new pods and will remove older pods
+
+No labels, no K8S
+
+20.2. Deployment Theory
+--
+
+Code < bundle < Image < Pod < rs < deploy
+
+ReplicaSet: 
+	Scaling mechanism
+	Managed by deployment
+
+deploy objects:
+	All about scaling and updates
+	Manages single Pod
+	They don't make efforts on scaling, RS will do
+	At a time Deployment will take care of one type of Pod. If another Pod, another Deployment
+
+Case of Rolling Update:
+Without taking downtime we can roll the updates, in this case RS comes into the picture. Deployment object creates new RS and new versions are deployed here. Older onces get deleted one by one
+
+20.3. Deployments in Action
+--
+
+inside yml:
+
+replicas: handled by RS
+
+strategy: App update section
+	maxSurge: 2 sets, one gets up,  2nd will go down
+	maxUnavailale: 0
+	
+minReadySeconds: wait minimum X seconds after each update, to healthcheck
+
+
+spec: container running said server
+
+20.4. Recap
+--
+
+Pod, RS, Deployment: Everything is object in K8S
+
+We'll manage only Deployment object
+
+Won't touch Pod and RS directly, let Deployment object take care of them
+
+Deployment in K8S are all about Declarative
+
+All changes should go via yml files, no direct change, even while decrementing image version - manage yml file
+
+21. Kubernetes Auto-scaling Apps
+---
+21.1. Scaling Applications
+--
+Previously we did scaling manually via yml file, we'll now look at Autoscaling
+
+Big Picture
+Horizontal Pod Autoscaler(HPA)
+	Theory
+	Demo
+Cluster Autoscaler(CA)
+	Theory
+	Demo
+Vertical Pod Autoscaler(VPA)
+Recap
+
+21.2. Big Picture
+--
+Demand goes up --> Speed up more Pods and Nodes
+
+Demand goes down --> Turn them off
+
+If load increases: Scale it up, but what if Nodes are full. Add the nodes first - add nodes - scale it up
+
+in yml: replicas: 3 (manually)
+
+
+
+To automatically add more,
+	Pods: Horizontal Pod Autoscaler (HPA)
+	Nodes: Cluster Autoscaler (CA)
+	
+Dealing with increased load means adding more Pods --> HPA
+
+CA:
+If the cluster is full and no more capacity to add more Pods, those new Pods go to the pending state - CA is gonna check with these Pending Pods - If it finds some - it will add new Nodes
+
+VPA:
+Alpha Product
+Getting Pods to schedule with right amount of resources
+
+Support
+	autoscaling v1: CPU Metric
+	autoscaling v2: CPU Metric + Memory	
+
+21.3. HPA Theory
+--
+Horizontal Pod Autoscaler(HPA)
+Scaling Pods, all about Pods
+
+Defining HPA:
+--
+We tell HPA which Deployment object to focus on - 1-1 relationship
+kind: HorizontalPodAutoscaler
+targetCPUUtilizationPercentage: 50 (%)
+spec:
+	scaleTargetRef:
+	minReplicas: 1 #don't go below this
+	maxReplicas: 10 #don't go above this
+
+
+Defining Deployment:
+--
+Always add resources for HPA
+
+resources:
+	limits: 
+		cpu: 1
+	requests:
+		cpu: 0.2 #asking for 20% of CPU / 200m: mili cores ==> 1000m = 1CPU, 200m=0.2
+
+
+
+A Pod asking for 20% of CPU, an HPA Object of kind HorizontalPodAutoscaler will keep an eye on it(every 30secs) and checks it will not use 10% of CPU(50% of 20% = 10% of CPU)
+
+
+
+Link between Deployment and HPA is 
+Deployment								HPA
+metadata.name				==			spec.scaleTargetRef.name
+spec.replicas				==			spec.minReplicas / spec.maxReplicas
+
+Specify the time before upscaling and downscaling the instances ~5 minutes, so there is no chaos
+
+21.4. HPA Demo
+--
+https://github.com/ACloudGuru-Resources/Course_Kubernetes_Deep_Dive_NP/tree/master/lesson-auto-scaling
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: acg-ns
+  
+Namespace: Good Practice
+
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: acg-ns
+  name: acg-lb
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: acg-stress
+	
+Service: 
+	Service Object
+type: LB
+same namespace
+Gonna balance traffic on acg-stress
+
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: acg-ns
+  labels:
+    app: acg-stress
+  name: acg-web
+spec:
+  selector:
+    matchLabels:
+      app: acg-stress
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: acg-stress
+    spec:
+      containers:
+      - image: k8s.gcr.io/hpa-example
+        name: stresser
+        ports:
+          - containerPort: 80
+        resources:
+          requests:
+            cpu: 0.2
+			
+
+replicas: 1
+we'll start with single replica
+
+template.spec.containers.image: respective image to refer
+
+resources.requests.cpu: 0.2
+
+
+Now HPA
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: acg-hpa
+  namespace: acg-ns
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: acg-web
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 50
+.
+same namespace
+spec.scaleTargetRef.name = Deployment.metadata.name
+
+1 <= replicas >= 10
+
+targetCPUUtilizationPercentage: 50
+So 20% of 50% = 10%
+So if any Pod whom HPA is watching brings 10% of CPU ==> Scale it up
+
+
+21.5. Cluster Autoscaler Theory
+--
+CA only works if we use Pod Resource Requests
+
+HPA: Triggers new Pods, works on ACTUAL values
+
+CA: Works on REQUESTED values
+
+CA wakes up every 10secs
+
+WARNING:
+Don't mess with the node pool
+check cloud for support
+Test performance on big clusters
+
+21.6. Cluster Autoscaler Demo
+--
+
+URL: https://github.com/ACloudGuru-Resources/Course_Kubernetes_Deep_Dive_NP/tree/master/lesson-auto-scaling
+
+GC - Create K8S Cluster(acg-autoscale) - west1a - 3 nodes - Advanced(nodes1, Enable Autoscaling-min1, max10) - Create
+
+See: Cluster size = 1, CPU 3.75
+
+click on Connect - paste on console
+pratikaambani_gcp_user@cloudshell:~ (my-networking-playground-24807)$ gcloud container clusters get-credentials acg-autoscale --zone us-west1-a --project my-networking-playground-24807
+Fetching cluster endpoint and auth data.
+kubeconfig entry generated for acg-autoscale.
+
+see 1 cluster
+age1minute
+kubectl get nodes
+
+After 5-6minutes
+kubectl get nodes
+Age = 10hours :O
+
+autoscale.yml
+kind: Deployment
+replicas: 1
+spec.image: nginx
+
+Important:
+resources:
+	limits:
+		cpu: 1
+	requests:
+		cpu: 0.5
+Every replica that we spin up for this deployment is gonna ask for 50% of CPU
+
+kubectl apply -f autoscale.yml
+deployment.apps/test created
+
+
+kubectl get deploy
+NAME   DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+test   1         1         1            0           12s
+
+kubectl get pods
+NAME                   READY   STATUS    RESTARTS   AGE
+test-96c84944f-tm6hg   0/1     Pending   0          48s
+
+Failed scheduling, insufficient CPU
+kubectl describe pods
+Name:               test-96c84944f-tm6hg
+Namespace:          default
+Priority:           0
+PriorityClassName:  <none>
+Node:               <none>
+Labels:             pod-template-hash=96c84944f
+                    run=test
+Annotations:        <none>
+Status:             Pending
+IP:
+Controlled By:      ReplicaSet/test-96c84944f
+Containers:
+  nginx:
+    Image:      nginx:1.12
+    Port:       <none>
+    Host Port:  <none>
+    Limits:
+      cpu:  1
+    Requests:
+      cpu:        500m
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-5tqdh (ro)
+Conditions:
+  Type           Status
+  PodScheduled   False
+Volumes:
+  default-token-5tqdh:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  default-token-5tqdh
+    Optional:    false
+QoS Class:       Burstable
+Node-Selectors:  <none>
+Tolerations:     node.kubernetes.io/not-ready:NoExecute for 300s
+                 node.kubernetes.io/unreachable:NoExecute for 300s
+Events:
+  Type     Reason             Age                  From                Message
+  ----     ------             ----                 ----                -------
+  Normal   TriggeredScaleUp   2m57s                cluster-autoscaler  pod triggered scale-up: [{https://content.googleapis.com/compute/v1/projects/my-networking-playground-24807/zones/us-west1-a/instanceGroups/gke-acg-autoscale-default-pool-2176a836-grp 1->2 (max: 10)}]
+  Warning  FailedScheduling   33s (x4 over 3m2s)   default-scheduler   0/1 nodes are available: 1 Insufficient cpu.
+  Normal   NotTriggerScaleUp  8s (x13 over 2m13s)  cluster-autoscaler  pod didn't trigger scale-up (it wouldn't fit if a new node is added): 1 in backoff after failed scale-up
+  
+  
+kubectl get nodes
+See 1 is not ready
+
+kubectl get nodes
+Now both are up and running 
+
+kubectl get deploy
+
+kubectl get deploy --watch
+All running now
+
+
+Now change autoscale.yml
+replicas: 10
+kubectl apply -f autoscale.yml
+kubectl get deploy
+See 10 running, 1 available
+
+kubectl get nodes
+
+kubectl get nodes --watch
+watch node names, refreshes
+Ready and Not Ready
+
+Go to GC - cluster - Nodes
+New Nodes are visible
+Hurrrraaaahhh!!
+
+
+21.7. Recap
+--
+Scaling up and Down without disturbance
+Automate this.
+
+HPA: 1.2, focus this, for Pods
+VPA: Beta
+
+CA: for Nodes
+checks every 10secs
+
+
+22. Kubernetes Security
+---
+22.1. RBAC and Admission Control
+--
+1.6 to 1.10 - security much upgraded
+
+Authentication
+Authorization
+Admission Control
+Demo
+Recap
+
+22.2. Big Picture
+--
+Entire Kuberverse is modeled as an API Object
+
+
+kubectl				https								   prove your id												 	are you allowed			mutate and validate
+Client			---------------->		API Server		---------------->		Authentication		---------------->		Authorisation		---------------->		Admission Control		---------------->		Schema Validation
+
+Some clusters open an insecure local port where Auths are bypassed.
+Disable this for Prod
+
+
+RBAC (since 1.6)
+Deny by default
+
+
+22.3. Authentication
+--
+Who are you?
+Prove who you are who you say you are
+
+
+We can't create users in K8S
+Manage Users externally: AD/IAM/Other
+
+We can use,
+	Client Certificate, maintain username by CN from the certificate
+	Service Accounts
+
+
+22.4. Authorization
+--
+Node, RBAC
+
+WHO can perform which ACTIONS on which RESOURCES ?
+
+RBAC Enabled:
+WHO = SUBJECT: Ram, Shyam, Ramesh, Paresh, Suresh
+ACTIONS = VERB: CRUD, watch
+RESOURCES = RESOURCE: deployments, pods, services, crd
+
+Check config file
+
+Cluster and Context, Uses:
+
+Why no restrictions so far?
+By default while creating clusters we are granted Powerful default Users(Too powerful for production)
+
+We need to create two objects to grant permission
+RBAC Roles and RoleBindings - for least privilege
+
+RBAC Role:
+kind: Role
+metadata.name: Partik
+metadata.namespace:
+rules: #roles are about rules
+	apiGroups: [""]
+	resources: ["pods"] #Which resources
+	verbs: ["get","list","watch"] #permission to get list and watch pods #Which Actions
+	
+
+Admin Access:
+	apiGroups: ["*"]
+	resources: ["*"]
+	verbs: ["*"]
+
+
+Here we have found WHICH ACTIONS and WHICH RESOURCES, but not Who.
+
+
+To answer WHO, we have RBAC RoleBinding
+
+subjects:
+	kind: User #type
+	name: Partik
+	kind: Group
+	name: ops
+	apiGroups: a.b.c.d
+
+
+Role				RoleBinding
+metadata.name == subjects.name
+
+22.5. Admission Control
+--
+Not stable GA
+
+After Authentication and Authorisation
+
+To ensure policies and standards were enforced
+
+					webhooks
+Admission Control <----------> External Admission Controller
+
+Two main types:
+Mutating
+Validating
+
+22.6. Demo
+--
+This is on RBAC
+
+role.yml
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: acgrbac
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list", "watch"]
+
+
+
+rolebinding.yml
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: acgrbac
+  namespace: acg
+subjects:
+- kind: User
+  name: mia
+  apiGroup: ""
+roleRef:
+  kind: ClusterRole
+  name: acgrbac
+  apiGroup: ""
+
+
+23. More Kubernetes Stuff
+---
+23.1. Other Kubernetes Stuff
+--
+DaemonSet: ds
+Runs on every node
+While adding/removing nodes from the cluster, ds ensures there is 1 pod in every node
+
+StatefulSet: sts
+Manage and scale K8S
+
+Job: job
+Batch Jobs
+Job manages pods
+
+CronJob: cronjob
+Schedule tasks
+
+PodSecurityPolicy: psp
+security
+
+Pod resource requests and limits:
+always schedule pods with Requests and Limits
+
+ResourceQuora
+linked with namespace, sets limit on namespaces
+
+CustomResourceDefinition: crd
+extensibility via crd
+
+24. Kubernetes and GKE Wrap-up
+---
+
+24.1. Welcome Back
+--
+NA
+
+25. GAE Google App Engine
+---
+
+25.1. App Engine - Lab Challenge
+--
+
+App Engine
+	In scope of exam
+	OG: Original GC Service
+	Easy to learn basics
+	Deeper than it seems
+	Powerful
+	
+	codelab: >=1
+	quicklab: All
+	
+	Choose deployment with and without K8S
+	
+	Two different programming languages
+
+
+1. Profiler
+
+Check access
+pratikaambani_gcp_user@cloudshell:~ (my-networking-playground-24807)$ gcloud auth list
+         Credentialed Accounts
+ACTIVE  ACCOUNT
+*       pratikaambani.gcp.user@gmail.com
+
+To set the active account, run:
+    $ gcloud config set account `ACCOUNT`
+
+check project
+pratikaambani_gcp_user@cloudshell:~ (my-networking-playground-24807)$ gcloud config list project
+[core]
+project = my-networking-playground-24807
+
+Go to GC Console - Profiler - No Profiler so far
+
+Use following git repo
+go get -u github.com/GoogleCloudPlatform/golang-samples/profiler/...
+
+
+go to following directory
+cd ~/gopath/src/github.com/GoogleCloudPlatform/golang-samples/profiler/hotapp
+
+it has main.go which has a profiling agent
+pratikaambani_gcp_user@cloudshell:~/gopath/src/github.com/GoogleCloudPlatform/golang-samples/profiler/hotapp (my-networking-playground-24807)$ go run main.go
+2019/08/17 07:57:23 profiler has started
+2019/08/17 07:58:05 successfully created profile HEAP_ALLOC
+2019/08/17 07:58:15 start uploading profile
+2019/08/17 07:58:15 successfully created profile THREADS
+2019/08/17 07:58:15 start uploading profile
+2019/08/17 07:58:27 successfully created profile CPU
+2019/08/17 07:58:37 start uploading profile
+2019/08/17 07:58:38 successfully created profile HEAP
+2019/08/17 07:58:38 start uploading profile
+2019/08/17 07:58:50 successfully created profile CONTENTION
+2019/08/17 07:59:00 start uploading profile
+2019/08/17 07:59:01 successfully created profile HEAP_ALLOC
+2019/08/17 07:59:11 start uploading profile
+2019/08/17 07:59:11 successfully created profile THREADS
+2019/08/17 07:59:11 start uploading profile
+2019/08/17 07:59:41 successfully created profile THREADS
+2019/08/17 07:59:41 start uploading profile
+2019/08/17 07:59:46 successfully created profile HEAP
+2019/08/17 07:59:46 start uploading profile
+2019/08/17 07:59:52 successfully created profile CPU
+2019/08/17 08:00:03 start uploading profile
+2019/08/17 08:00:10 successfully created profile CONTENTION
+2019/08/17 08:00:20 start uploading profile
+2019/08/17 08:00:21 successfully created profile HEAP_ALLOC
+2019/08/17 08:00:31 start uploading profile
+2019/08/17 08:00:49 successfully created profile THREADS
+
+
+Check the GC Console, hurraaah!!
+
+
+
+2 IOT Project
+https://console.cloud.google.com/cloudshell/open?authuser=1&project=my-networking-playground-24807&git_repo=https:%2F%2Fgithub.com%2FGoogleCloudPlatform%2Fpython-docs-samples&page=editor&open_in_editor=iot%2Fapi-client%2FREADME.md
+
+git clone https://github.com/GoogleCloudPlatform/python-docs-samples.git
+
+
+https://console.cloud.google.com/cloudshell/open?authuser=1&project=my-networking-playground-24807&git_repo=https://github.com/GoogleCloudPlatform/python-docs-samples&page=editor&open_in_editor=iot/api-client/README.md
+ #done
+
+
+26. Services Breadth
+---
+
+26.1. Compute
+--
+
+GAE:
+	Google App Engine
+	Paas, takes code and runs it
+	more than just compute
+	Supports: Java, Go, Php, python + Flex Mode(other sites)
+	Auto-scaled based on load
+		even stops if no traffic
+	Pay for underlying instances
+	
+	We need to shoot only gcloud app deploy
+
+GCE:
+	Compute oriented GCP Services
+	They are Zonal services
+	IAAS ~= Ec2 from Amazon
+	Instances boot up quickly
+	Auto: repair, Upgrade, scale
+	CPU count and RAM customizable
+	Pay per second
+	Automatically cheaper if you keep it running
+	Also cheaper for preemptible
+	Can add GPUs, other OSes on extra cost
+
+GKE:
+	Managed K8S cluster for running Docker containers(with Autoscaling)
+	previously Google Container Engine
+	Scale containers up and down based on load
+	Already studied
+	K8S DNS on by default for Service Discovery
+	No IAM Integration(unlike AWS' ECS)
+	Integrates with Persistent Disk for storage
+	Pay for underlying GCE Instances
+		Prod cluster should have 3+ nodes
+	No GKE mgmt free, irrespective of howmany nodes in cluster
+	
+GCF:
+	No server management
+	Google Cloud Functions
+	Runs node.js code in response to event
+	Faas: Serverless, ~AWS Lambda
+	Pay only for CPU and RAM assigned per 100ms
+	Pay only when code runs
+	Automatically scaling
+	Every function automatically gets an HTTP Endpoint
+	can be triggered by GCS Objects,   pub/sub messages etc
+	Massively scalable(horizontally)
+
+
+26.2. Storage, DB and Transer
+--
+
+Data is always encrypted in GC
+
+SSD: 
+	Very fast 375GB solid state drives physically attached to the server ~EC2 in AWS
+	data lost once instance goes down
+		but can survive a Live Migration
+	Pay by GB month provisioned
+	Not replicated
+
+Persistent Disk(PD)
+	Zonal
+	block based network-attached storage
+	boot disk for every GCE instance
+	Equivalent to EBS SAN in AWS
+	Performance scales with volume size
+	fast but way below SSD
+	Persistent disks persist, and are replicated for durability even after shutting down instance
+	Can resize while in use(up to 10GB) but needs file system to update within VM
+	Snapshots add more capability and flexibility (available Globally)
+		Magical: pay for incremental($ and time), but use/delete like full backups
+	Pay per GB/month
+
+Cloud SQL
+	When we want to store data in sql database
+	Equivalent to RDS in AWS
+	Fully managed and reliable MYSQL/PostgreSQL database
+	Supports automatic replication, backup, fallover etc db management stuff
+	Scaling is manual (Horizontal and Vertical)
+	Payment for underlying GCE Instances and PDs + baked-in service fees
+
+Cloud Spanner
+	Regional, Multi-Regional, Global
+	When we are outgrown with Cloud SQL
+	1st horizontally scalable, strongly consistent, RDBMS
+	Equivalent to Sharded MySQL
+	Can scale up to hundreds OR thousands of nodes
+	Minimum 3 nodes recommended for Prod environment
+	Chooses consistency and partition tolerance
+	High Availability: SLA:99.999% (5 nines) for multi-region instances
+		Nothing is 100% really
+		Not based on failover
+	Pay for provisioned node time + used storage time
+
+BigQuery
+	Multi-Regional
+	Most significant service on Google Cloud
+	Serverless column-storage data warehouse for analytics using SQL
+	Equivalent to AWS RedShift 
+	Scales internally, so it can scan TB in seconds and PB seamlessly in minutes
+	Pay for GBs actually considered during queries
+		Attempts to reuse cached results, which are free
+	Pay for data stored
+		relatively inexpensive
+	More cheaper when table not modified for 90 days
+	Pay for per GBs added via streaming inserts
+
+Cloud Bigtable
+	A petabyte-scale, fully managed NoSQL database service for large analytical and operational workloads.
+	Low latency and high throughput NoSQL DB for large operational & analytics Apps
+	Similar to Amazon's DynamoDB, Cassandra, Apache hBASE
+	Supports open source HBase API, integrates with Hadoop, Dataflow, Dataproc
+	Scales seamlessly and unlimitedly
+		Storage Auto-scales
+		Processing nodes must be scaled manually
+	Pay for processing node hours
+	Pay for GB-hours used for storage (HDD or SSD)
+	
+Cloud Datastore
+	Regional and multi-regional
+	Managed and Auto-scaled NoSQL DB with indexes, queries and ACID trans support
+	Reach Admin dashboard
+	Supports variety of data types, including integers, floating-point numbers, strings, dates, and binary data among others
+	Similar to AWS DynamoDB
+	NoSQL: so queries can get complicated
+		No joins or aggregates and must line up with indexes
+		NOT, OR, and NOT EQUALS not natively supported
+	Automatic built-in indexes for simple filtering and sorting
+	Manual "composite" indexes for more complicated
+	Pay for	GB-month of storage used
+	No base amoutn, only pay for IO operations(deletes, reads, writes) performed
+
+Firebase Realtime DB and Cloud Firestore
+	Database: Zonal
+	Cloud Firestore: Multi-Regional
+	
+	NoSQL document stores with ~realtime client updates via managed websockets
+	Firebase DB is single JSON Doc, locaed only in central US
+	Cloud Firestore has collections, documents, and contained data
+	Free tier - Spark, flat tier - Flame or usage0based pricing(Blaze)
+		Realtime DB: Pay more for GB/month stored and GB downloaded
+		Firestore: Pay for operations and much less for storage and transfer
+	
+GCS
+	Google Cloud Storage
+	Regional and Multi-Regional
+	To store unstructured data
+	Similar to Amazon S3 and Glacier
+	Infinitely scalable, fully-managed, Versioned, and highly durable object storage
+	Designed for 99.99999999999% (total 11 9s) durability
+	Strongly consistent, even for overwrite PUTs and DELETEs
+	Integrated site hosting and CDN functionality
+	Lifecycle transitions across classes: Multi-Regional, Regional, Nearline, Coldline
+		Diffs in cost and availability(99.95, 99.9, 99, 99.99%), not latency
+	All classes have same API, so can use gsutil and gcsfuse
+	Pay for ops and GB months stored by clas + GBs retrieved for Nearline and Coldline
+	
+Data Transfer Appliance
+	Physical process
+	When we want to store bulky data on GCS
+	Rackable, high-capacity storage server to physically ship data into GCS
+	Ingest only, not a way to avoid egress charges
+	100TB or 480TB versions
+	480TB/week is faster than a saturated 6Gbps link
+	
+Storage Transfer Service
+	When data is not under your datacentre
+	Copies objects for you, so you don't need to setup a machine to do it
+	Destination is always GCS bucket
+	Source can be S3, HTTP/HTTPS endpoint, or another GCS Bucket
+	One time or scheduled recurring transfers
+	Free to use but pay for actions
+
+26.3. Networking
+--
+VPC: A private space within Google Cloud Platform
+global, shareable, expandable, transparent
+
+Features
+	VPC network: VPC can automatically set up your virtual topology, configuring prefix ranges for your subnets and network policies, or you can configure your own. You can also expand CIDR ranges without downtime
+	Cloud router: Enable dynamic Border Gateway Protocol (BGP) route updates between your VPC network and your non-Google network with our virtual router.
+	VPN: Securely connect your existing network to VPC network over IPsec.
+	Firewall: Segment your networks with a global distributed firewall to restrict access to instances. Firewall Rules Logging lets you audit, verify, and analyze the effects of your firewall rules.
+	VPC peering: Configure private communication across the same or different organizations without bandwidth bottlenecks or single points of failure.
+	Shared VPC: Configure a VPC network to be shared across several projects in your organization. Connectivity routes and firewalls associated are managed centrally. Your developers have their own projects with separate billing and quota, while they simply connect to a shared private network, where they can communicate.
+	Routes: Forward traffic from one instance to another instance within the same network, even across subnets, without requiring external IP addresses.
+	VPC flow logs: Flow logs capture information about the IP traffic going to and from network interfaces on Compute Engine. VPC flow logs help with network monitoring, forensics, real-time security analysis and expense optimization. GCP flow logs are updated every five seconds, providing immediate visibility.
+	Simple and complex architectures: Host globally distributed multi-tier applications by creating a VPC with subnets. Connect GCP- or externally hosted databases to Google’s machine learning services by creating a VPC with subnets and VPN access.
+	Disaster recovery: With application replication, create backup GCP compute capacity, then revert back once the incident is over.
+	Private access: Get private access to Google services, such as storage, big data, analytics, or machine learning, without having to give your service a public IP address. Configure your application’s front end to receive internet requests and shield your backend services from public endpoints, all while being able to access Google Cloud services.
+	Bring your own IPs: Bring your own IP addresses to Google’s network across all regions to minimize downtime during migration and reduce your networking infrastructure cost. After you bring your own IPs, GCP will advertise them globally to all peers. With GCP, your BYOIP prefixes can be broken into blocks as small as 16 addresses ( /28), creating more flexibility with the resources you already have
+
+Dedicated Interconnect Overview
+	Google Cloud Interconnect - Dedicated (Dedicated Interconnect) provides direct physical connections between your on-premises network and Google’s network. Dedicated Interconnect enables you to transfer large amounts of data between networks, which can be more cost effective than purchasing additional bandwidth over the public Internet.
+
+Cloud DNS
+	Scalable, reliable, and managed authoritative Domain Name System (DNS) service running on the same infrastructure as Google.
+	low latency, high availability and is a cost-effective
+	Cloud DNS translates requests for domain names like www.google.com into IP addresses like 74.125.29.101. 
+	Cloud DNS is programmable. You can easily publish and manage millions of DNS zones and records using our simple user interface, command-line interface or API.
+	
+Features:
+	100% availability and low latency
+	Automatic scaling
+	cheaper
+	
+Cloud Load Balancing
+	Worldwide autoscaling and load balancing
+	Global load balancing with single anycast IP
+	Software-defined load balancing
+	Over one million queries per second
+	Seamless autoscaling
+	Internal load balancing
+	Support for cutting-edge protocols
+
+CDN
+	Google Cloud CDN leverages Google's globally distributed edge points of presence to accelerate content delivery for websites and applications served out of Google Compute Engine and Google Cloud Storage. Cloud CDN lowers network latency, offloads origins, and reduces serving costs. Once you've set up HTTP(S) Load Balancing, simply enable Cloud CDN with a single checkbox.
+	
+	Global reach
+	no extra cost for SSL
+	Media CDN support
+
+CDN Interconnect
+	CDN Interconnect allows select CDN providers to establish direct peering links with Google's edge network at various locations.
+	Your network traffic egressing from Google Cloud Platform through one of these links benefits from the direct connectivity to supported CDN providers and is billed automatically with reduced pricing.
+
+Google Domains
+	Google's registrar for domain name
+	Similar to Amazon Route 53 or GoDaddy
+	Private Whois records
+	Built-in DNS or custom nameservers
+	Supports DNSSEC
+	Email forwarding with automatic setup of SPF and DKIM(for built-in DNS)
+	If we wish to use custom name servers, Google DNS
+
+Cloud DNS
+	Global
+	Scalable, reliable, anaged, authorative DNS service
+	100% uptime guaranteed
+	Supports DNSSEC
+	Manage via UI, CLI, or API
+	Pay fixed free per hosted zone to store and distribute DNS records
+	Pay for DNS Lookups
+
+						HA VPN					Classic VPN
+SLA						99.99%					99.9%
+
+Public IP 			Created from Pool		Must be created
+ 
+Forwarding			Not required			Must be created
+rules
+
+Routing				Only Dynamic			Static + Dynamic
+
+Two tunnels from
+1 cloud vpn GTW		Supported				Not Supported
+
+API Resources		VPN Gateway resource	Target VGR
+(Known as)
+
+
+	
+26.4. Machine LearningAI
+--
+
+pending
+https://www.youtube.com/watch?time_continue=141&v=hX71H78UYAc
+https://console.dialogflow.com/api-client/#/agent/0f41a740-3428-4fee-9c2a-aa7bd0575344/intents
+
+Cloud ML Engine
+--
+	Massively scalable managed service for training ML models and making predictions
+	based on TensarFlow
+	Enable Apps/Devs to use TensarFlow on datasets of any size, endless usecases
+	Integrates: GCS/BQ(Storage), Cloud Datalab(Dev), Cloud Dataflow(preprocessing)
+	Supports online and batch predictions, prioritizing latency(online) and job time(batch)
+	OR download models and make predictions anywhere: desktop, mobile, own servers
+	HyperTine: Tunes hyperparameters to avoid manual tweaking
+	Training: Pay per hour depending on chosen cluster capabilities(ML Training Units)
+	Predictions: Pay per provisioned node-hour + prediction volume made
+
+Cloud Vision API
+--
+	Global
+	An example of Pre-trained Model
+	Classifies images into categories, detects object/faces and finds/reads printed text
+	Similar to AWS Rekognition
+	Pre-trained ML model to analyze images and discover their contents
+	Classifies into thousands of categories(ie sailboats, lion, eiffel tower)
+	Upload image directly or point to ones stored in GCS
+	Pay per image, based on which detection feature you want
+		High price for OC of full documents and finding similar images on web
+		Some features are prices together: Labels + SafeSearch, ImgProps + Cropping
+		Other ones priced individually: Text, Faces, Landmarks, Logos
+
+Cloud Speech API
+--
+	Automatic Speech Recognition(ACR) to turn spoken audio into text
+	Pre-trained ML model for training speect in 110+ languages
+	Accepts prerecorded ot realtime audio and can stream results back in realtime
+	Handles noisy audio as well
+	Optionally filters inappropriate content in some languages
+	Accepts contexual hints: words and names that will likely be spoken
+	Pay per 15secs of Audio processed
+
+Cloud Natural Language API
+--
+	Analyzes text for sentiment, intent, and content classification and extracts information
+	Pre-trained ML to understand what text means 
+	Excellent with Speech API(Audio), VIsiob API(OCR), and Translation API
+	Syntax Analysis extracts tokens/sentences, parts of speech and dependency trees
+	Entity analysis finds people, places, things etc. Labels them, and links them to Wikipedia
+	Analysis for sentiment and entity sentiment detect positive/negative feelings and strength
+	Content classification puts each doc into one of 700+ predefined categories
+	Charged per request of 1000 characters, depending on analysis types requested
+	
+Cloud Translation API
+--
+	Translate text between 100+ languages optionally auto detects source language
+	Pre-trained ML movel for recognizing and translating semantics not just syntax
+	Supports multi-regional clients in non-native languages, 2-way
+	Combine with speech, vision and NLP APIs for powerful workflows
+	Send plain text/html and receive translation
+	Pay per character processed for translation
+		Also pay per character for language auto-detection
+	
+Dialogflow
+--
+	Chat engine
+	Builds conversational interfaces for websites, apps, messaging, IOT Devices
+	Accepting parsing lexing input and responding
+	Similar to Amazon Lex
+	Chatbots
+	Train it to identify custom entity types by providing a small dataset of examples
+	OR choose from 30+ prebuilt agents as starting template
+	Supports many languages and platform/devices
+	Free plan has unlimited text interactions and capped voice interactions
+	Paid plan is unlimited but charges per request: more for voice, less for text
+
+Cloud Video Intelligence API
+--
+	Annotates videos
+	for Video scene analysis and subject identification
+	Label Detection: it Dogs, flower, car
+	Shot Change Detection: scene changes
+	SafeSearch Detection: Adult content
+	Pay per minute, depending on asked Mode
+
+Cloud Job Discovery
+--
+	Search Jobs
+	Commute distance and other recognizing jargon
+	Example: Show me job with a 30 minutes commute on public transportation from my home
+
+Prediction API
+--
+	RESTful API to build ML Models
+	Deprecated and closed on 30 Apr, 2018
+	Use Cloud ML Engine or Pre-trained model
+
+26.5. Big Data and IoT
+--
+
+Cloud Dataflow
+--
+	Smartly autoscaled and fully managed batch or stream Mapreduce like processing
+	Released as open source Apace Beam
+	Similar to Mapreduce
+	Autoscales
+	Basics of the Cloud Dataflow service: By running a simple example pipeline using the Apache Beam Java SDK.
+	Basics of reading a text file: from Google Cloud Storage, counting the number of unique words in the file and finally writing the word counts back to Google Cloud Storage.
+	Dataflow pipelines are either batch (processing bounded input like a file or database table) or streaming (processing unbounded input from a source like Cloud Pub/Sub). The example in this tutorial is a batch pipeline that counts words in a collection of Shakespeare's works.
+
+mvn archetype:generate     -DarchetypeGroupId=org.apache.beam     -DarchetypeArtifactId=beam-sdks-java-maven-archetypes-examples  -DgroupId=com.example     -DartifactId=dataflow-intro      -Dversion="0.1"     -DinteractiveMode=false -Dpackage=com.example
+cd dataflow-intro
+
+make bucket:
+gsutil mb gs://challenge-lab-gce-248419
+
+Create and Launch pipeline
+Launch your pipeline on the Dataflow service
+mvn compile exec:java \
+    -Dexec.mainClass=com.example.WordCount \
+    -Dexec.args="--project=challenge-lab-gce-248419 \
+    --gcpTempLocation=gs://challenge-lab-gce-248419/tmp/ \
+    --output=gs://challenge-lab-gce-248419/output \
+    --runner=DataflowRunner \
+    --jobName=dataflow-intro" \
+    -Pdataflow-runner
+	
+Job is running
+Built on ML
+
+Go to,
+Dataflow console and check it out
+Storage console and check bucket
+
+	Powerful data exploration
+	Scalable
+	Data management and visualization
+	Machine learning with lifecycle support
+	Integrated: with Cloud BigQuery, Cloud Machine Learning Engine, Cloud Storage, and Stackdriver Monitoring. Authentication, cloud computation, and source control are taken care of out-of-the-box.
+	Multi-language support: Python, SQL, and JavaScript (for BigQuery user-defined functions)
+	Pay-per-use pricing
+	Interactive data visualization: Use Google Charting or matplotlib for easy visualizations.
+	Machine learning: Supports TensorFlow-based deep ML models in addition to scikit-learn.
+	IPython support: Datalab is based on Jupyter
+	Open source
+
+Data Lifecycle
+--
+pending https://cloud.google.com/solutions/data-lifecycle-cloud-platform
+4 steps: injest, store, process and analyse, explore and visualise
+
+
+Big Data Lifecycle:
+--
+Ingest --> Store --> Process/Analyse --> Explore/Visualize
+
+
+Cloud IOT Core Service
+--
+	Global
+	Similar to AWS IOT
+	To connect, manage, and ingest data from millions of devices globally
+	Device manager handles device identity, authentication, config,  and control
+	Protocol bridge: publishes incoming telemetry to Cloud pub/sub for processing
+	Connect securely using OIT Industry standard MQTT or HTTPS Protocols
+	CA signed certificates can be used to verify device ownership on first connect(We don't have to accept data from any device)
+	Two way device communication enables configuration and firmware updates
+	Device shadows enable querying and controlling changes while device is offline
+	Pay per MB
+
+Cloud Pub/Sub:
+--
+	Global, by default
+	Publish and consume from anywhere, with consistent latency
+	Similar to Amazon SNS: Pub/Sub
+	Similar to Amazon SQS: Queue
+	Infinitely scalable at-least-once messaging for ingest, decoupling etc
+	Simplifies development of event-driven micro services
+	Allows up to be production ready from day one
+	Shock absorber
+	One of most important services: Glues everything together
+	Publisher --> Topic --> Multiple Subscribers
+	Advantage: We can add listeners later on as well, without impacting existing structure
+
+	Messages can be upto 10MB and undelivered onces can be stored for 7 days, no DLQ though
+	Push Mode:
+		Delivers to HTTPS endpoints and succeeds on HTTP status code
+		"Slow-start" algorithm ramp ups on success and backsoff/retries on failures
+	Pull Mode:
+		Delivers messages to requesting clients and waits for Ack to delete
+		Lets client set rate of consumption, and supports batching and long-polling 
+	Pay for data volume; min 1KB per publish/pull/push request
+
+
+Cloud Dataprep 
+--
+	An intelligent cloud data service to visually explore, clean, and prepare data for analysis and machine learning without running servers.
+	Similar to AWS Glue
+	For BAs, not IT ppl
+	Not managed by Google, by Trifacta
+	Automatically detects schemas, datatypes, possible joins and various anomalies
+	Features:
+		Intelligent data preparation
+		Serverless simplicity
+		Fast exploration and anomaly detection
+		Easy and powerful data preparation
+	When: Users are different, Data is different, Usecases are different
+
+Cloud Proc
+--
+	When data is ready and we want to process it
+	A faster, easier, more cost-effective way to run Apache Spark and Apache Hadoop, fast and scalable data processing
+	Similar to Amazon EMR
+	Batch Mapreduce processing via configurable, managed spark and Hadoop clusters
+	Handles are being told to scale even while running jobs
+	Integrated with Cloud Storage, BigQuery, Bigtable, some stackdriver services
+	Best for moving existing Spark/Hadoop setups to GCP
+	
+
+Cloud Datalab
+--
+	An easy-to-use interactive tool for data exploration, analysis, visualization, and machine learning.
+	Uses Jupyter Notebook: used for data cleaning and transformation, numerical simulation
+	Supports iterative development of data analysis algo in Python/SQL/JS
+	Features:
+		Powerful data exploration
+		Integrated and Opensource
+		Scalable
+		Data mgmt and visualization
+		Machine Learning with lifecycle support
+		Notebook format
+		IPython support
+
+
+Cloud Data Studio
+--
+	https://datastudio.google.com/u/0/navigation/reporting
+	Business Intelligence
+	Big Data visualization tool for Dashboards and reporting 
+	Similar to Amazon Quicksite
+	Different kinda charts
+	When Data Studio is combined with BigQuery BI Engine, an in-memory analysis service, data exploration and visual interactivity reach sub-second speeds, over massive datasets.
+
+
+Cloud Genomics
+--
+	Ask bigger questions by efficiently processing petabytes of genomic data
+	Store and process genomes and related experiments
+	Query complete genomic
+	Process mant genomes and experiments in parallel
+	Open industry standards
+	Supports requester pays sharing
+	Can process large scale data
+	Features:
+		Interoperability
+		Real-time Data Processing
+		Fully Integrated
+		High Scalability
+		Security & Compliance
+
+
+26.6. Identity and Security
+--
+
+Roles
+--
+	Collections of permissions to use/manage GCP resources
+	Permissions allow you to perform certain actions: Service.Resource.Verb Example: services.pubsub.consume or compute.instances.start
+	Primitive Roles:
+		Owner: Control Access and billing
+		Editor: Change things
+		Viewer: Readonly
+	Predefined Roles: 
+		Grants granular access to specific GCP resources
+		part of IAM
+	Custom Roles:
+		Project or Org level collections you define of granular permissions
+		All roles: https://cloud.google.com/iam/docs/understanding-roles
+		
+Cloud IAM
+--
+	Controls to GCP resources
+	Authorization, Not authentication
+	Member is User, Group, Domain, Service Account, or public
+		Individual Google Account, Google Group, G Suite, Cloud Identity Domain
+		Service Account belongs to application/instance, not individual enduser
+		Every identity, including service account has unique email address
+	Details: https://cloud.google.com/iam/docs/resource-hierarchy-access-control
+
+
+	Policy:
+		Binds members to roles at hierarchy level: Org, Folder, Project, Resource
+		They answer: WHO can do WHAT on WHICH things		
+
+	Service Accounts:
+		Represents an application, not enduser
+		Can be assumed by applications or individual users
+		Important: While developing locally or in a prod application, we should use service accounts not User Accounts or API Keys
+		Use the least privilege principal
+		Can generate and download private keys but Cloud Platform Managed Keys are better for GCP
+			No direct downloading, Google manages private keys and rotates them once a day
+		Examples: https://cloud.google.com/iam/docs/understanding-service-accounts
+		
+	Cloud Identity:
+		Real People
+		IDaaS to provision and manage users and groups
+		G Suite or Gmail/Google Account
+		Provides free Google Accounts for non GSuite Users, tied to a verified domain
+		Centrally manage all users in Google Admin Console
+		2-Step Verification/MFA
+		Sync from AD and LDAP via GC Directory Sync
+		Identities can be used to SSO with other apps via OIDC, SAML, OAuth2
+		Free and Premium:
+			Cloud Identity Premium edition : offers enterprise security, application management, and device management services. These services include automated user provisioning, app whitelisting, and rules for automating mobile device management.
+			Cloud Identity Free edition : includes core identity and endpoint management services. Managed Google Accounts to users who don’t need G Suite Services, such as Gmail or Google Drive. You can use Cloud Identity accounts with other Google services, such as Google Cloud Platform (GCP), Chrome, Android enterprise, and a large catalog of third-party applications.
+		Example:
+			pratikaambani.gcp.user@temp.com/NewP@..1
+			Signed Up to Google account - was asked to manually enter certain information on  the domain site owned by me.
+		
+	Security Key Enforcement:
+		USB or Blue-tooth 2 Step Verification Device that prevents phishing
+		Device also verifies target service
+		Eliminates Man In The Middle attacks against GCP Credentials
+		FIDO security key technology that provides phishing-resistant two-factor authentication is now built-in on Android 7+
+		
+	Cloud Resource Manager:
+		Centrally managed and secure Organization's projects with custom folder hierarchy
+		Org Resource is root node in hierarchy, folders per business needs
+		Tied 1-1 to Cloud Identities, then wons all newly created projects
+			Without this organization, specific identities must own GCP Projects
+		Recycle Bin allows undeleting projects
+		We can define custom IAM roles at org level to define own structure on projects
+		IAM Policies can be applied at Org, Folder, Project levels
+	
+	Cloud Audit Logging:
+		WHO did WHAT, WHERE and WHEN
+	Maintains 3 audit logs for each GCP Project/Folder/Organization: Admin Activity, Data access, System Event
+		Admin Activity:
+			Always written, can't disable em
+			To view these logs, you must have the Cloud IAM role Logging/Logs Viewer or Project/Viewer.
+			Till 400 days
+		Data Access:
+			API calls that read the configuration or metadata of resources
+			User-driven API calls that create, modify, or read user-provided resource data
+			To view these logs, you must have the Cloud IAM roles Logging/Private Logs Viewer or Project/Owner.
+			Disabled by default because they can be quite large
+			Only for GCP Visible Services - cant see MySQL DB on GCE
+			Till 7 days, Paid: for 30 days
+		System Event:
+			Contain log entries for GCP administrative actions that modify the configuration of resources
+			To view these logs, you must have the Cloud IAM role Logging/Logs Viewer or Project/Viewer.
+			Always written; you can't configure or disable them. 
+			There is no charge for your System Event audit logs.
+
+
+		Stackdriver family service
+	
+	Cloud Key Management Service
+		Cloud KMS
+		Low Latency service to manage and use AES256 encryption keys to protect secrets
+		Similar to AWS KMS
+		Move secrets out of code and into the environment, in a secure way
+		Use Cloud KMS to protect secrets and other sensitive data that you need to store in Google Cloud Platform.
+		Does not keep secrets within it. It can encrypt and decrypt the secrets stored elsewhere
+		Integrated with Cloud IAM and Cloud Audit logging to authorize and track key usage
+		Rotate keys used so that everytime new encryption is introduced new keys will get generated
+			Still keeps old active key versions, to allow decrypting
+		Key deletion has 24 hours delay to prevent accidental/malicious data loss
+		Pay for active key versions stored
+		Pay for encrypt/decrypt operations
+		Integration with GKE
+	
+	Cloud Identity Aware Proxy
+		IAP, Similar to Amazon API Gateway
+		Guards apps though identity verification instead of VPN Access
+		Simpler for remote workers
+		Controls access without VPN: Faster to sign into than a VPN. No VPN client login - so saves end user's time
+		Based on Cloud LB and IAM, only passes authenticated and authorized requests
+		We can grant access to any AIM identities ie: Group and Service Accounts
+		Straightforward to setup
+		Pay for LB and protocol forwarding
+	
+	Cloud Security Scanner:
+		Free but limited GAE App vulnerability scanner with "very low false positive rates"
+		Similar to Amazon Inspector
+		Automatically scan your App Engine, Compute Engine, and Google Kubernetes Engine apps for common vulnerabilities.
+		Including cross-site-scripting (XSS), Flash injection, mixed content (HTTP in HTTPS), and outdated/insecure libraries
+		No additional charge for GCP users
+		Once scan started: It automatically crawls application, links within  starting URLs, and attempts to exercise multiple inputs at once
+		Can identify:
+			XSS
+			Flash Injection
+			Mixed Content
+			Outdated/Insecure libraries
+		
+		Features
+			Vulnerability detection
+			Simple control
+			Actionable results
+			Selection of agent browsers
+			User authentication
+			
+		Demo on https://console.cloud.google.com/apis/api/websecurityscanner.googleapis.com/landing?project=my-networking-playground-24807&authuser=1&folder&organizationId&supportedpurview=project&returnUrl=%2Fsecurity%2Fweb-scanner%2FscanConfigs%2Fdetails;configId%3DgetStarted%3Fauthuser%3D1%26_ga%3D2.133627726.-1154022347.1566010906%26project%3Dmy-networking-playground-24807%26folder%3D%26organizationId%3D%26supportedpurview%3Dproject
+
+
+	Cloud Data loss Prevention API:
+		For ML and AI
+		finds and optionally redacts(edit) sensitive information in unstructured data streams
+		Similar to AWS Macie
+		helps us minimize what we collect. expose or copy to other systems
+		Includes 50+ data collectors
+		Can be sent directly or API
+		Can scan both text and images
+		Pay for volume of data processed(per GB)
+		Cheapest is report-only
+
+
+26.7. Operations and Management Services in GCP
+--
+https://app.google.stackdriver.com/accounts
+Stackdriver:
+	not just logging
+	family of services for monitoring, logging, and diagnosing apps on GCP and AWS
+	Similar to amazon Cloud Watch
+	Basic Tier
+		Free: Stackdriver debugger, and profiler
+		Shorter retention period, smaller storage
+		More limitations
+	Premium Tier
+		Hourly charged: logging + error reporting, monitoring, tracing
+		includes user defined matrics
+		VM Monitoring agent, with dashboard
+		Uptime monitoring
+
+Stackdriver Monitoring:
+	perf, uptime ad health
+	Similar to AWS Cloud Watch
+	Includes built-in metrics, dashboard, global uptime monitoring and alerts
+	Follow the trail: Links from alerts to dashboards to charts to logs
+	Cross-Cloud: GCP to AWS
+	Alerting policy has multi-condition rules
+	Send alerts over email, GCP mobile app
+	Premium tier includes SMS, Slack, PagerDuty, AWS SNS, HipChat, Campfire, webhook
+
+Stackdriver logging:
+	To store, search, analyse, monitor, and alert on log data and events
+	Similar to CloudWatch logs
+	Collection built into some GCP, AWS support with agent or custom send via API
+	Powerful interface to browse, search and slice log data
+	We can export data to GCS to cost effectively store log archives
+	
+Stackdriver Error reporting:
+	Real-time exception monitoring and alerting
+	Shows the error details: time chart, occurrences, affected user count, first- and last-seen dates and a cleaned exception stack trace
+	Quickly understand errors
+	Instant error notification
+	Error details
+	Supports Java, JavaScript, JS, Go
+	We can directly jump to source and start debugging
+	
+Stackdriver Trace:
+	To Find performance bottlenecks in production.
+	Similar to AWS X-Ray
+	Automatically captures traces from Google App Engine
+	Distributed tracing for everyone
+	Fast, automatic issue detection
+	Broad platform support
+	
+	Easy to setup
+	Latency shift detection
+	Zipkin collector allows Zipkin traces to submit data to Stackdriver trace
+	No charge
+
+	Example:
+	git clone https://github.com/GoogleCloudPlatform/python-docs-samples
+	cd python-docs-samples/app  vvcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccengine/standard_python37/hello_world\
+	virtualenv env -p python3
+	source env/bin/activate
+	pip install -r requirements.txt
+	Run the app: python main.py
+	Upload app to GAE: gcloud app deploy
+	View app in browsers: gcloud app browse
+	Now let's introduce an error:
+		Edit main.py: from - return 'Hello World! to return 'Hello World! + 1000
+		gcloud app deploy
+		Error: 
+			Internal Server Error
+			The server encountered an internal error and was unable to complete your
+			request. Either the server is overloaded or there is an error in the
+			application.
+			
+Stackdriver Debugger:
+	To investigate your code's behavior in production.
+	Real-time application debugging
+	Debug in production
+	Multiple source options
+	Collaborate while debugging
+	
+	We can debug logpoints, logpoints repeat for upto 24 hours, but can be conditional
+	Supports: Cloud Source repo, Github, Bitbucket, local and upload
+	IDE Integration
+	Easy to setup
+	Conditional Debugging
+	Java and Python supported on GCE, GKE, and GAE
+	We can share debugging sessions with others via URL
+	Free to use
+	
+Cloud Deployment Manager:
+	Terraform
+	To create and manage cloud resources with declarative templates: Infra as a code
+	Similar to AWS Cloud Formation
+	Declarative allows automatic parallelization
+	Templates written in YAML, Python, Jinja2
+	Supports input and output parameters with JSON Schema
+	Create and update of deployments both support preview
+	Free, pay for resources
+	Repeatable deployment process
+	Template-driven
+	Parallel deployment
+	Preview mode
+	Console UI
+
+Cloud Billing API:
+		We can programmetically manage billing for GCP Projects and get GCP pricing
+		Programmetically configure Billing:
+			List billing accounts, get details of associated projects
+			enable/disable or change billing account of project
+		Pricing
+			List billable SKUs, get public pricing  for each
+			Get SKU metadata like regional availability
+		Export of current bill to GCS or BQ is possible but configured via console, not API
+
+26.8. Development and APIs
+--
+
+Cloud Source Repositories:
+	A single place for your team to store, manage, and track code.
+	More than just a private Git repository
+	Unlimited private Git repositories
+	Supports standard git functionality
+	No support for pull request
+	Auto sync from Github or Bitbucket
+	Pay per project-user active each month
+	Pay per GB-month of data usage
+	
+Container Builder:
+	Turns source code into build artifacts packaged as a Docker image
+	Trigger from Cloud Source Repository
+		Can trigger from Github or BB via Cloud Source Repositories
+	Runs several builds in parallel
+	We can build and deploy automatically
+	Secure, private Docker registry - Dockerfile: super-simple, JSON/YAM
+	We can push to GCR and export artifacts to GCS
+	Maintains build logs and build history
+	Pay per minute
+	Native Docker supports
+
+Container Registry:
+	Store, manage, and secure your Docker container images.
+	Similar to Amazon ECR
+	Secure, private Docker registry
+	Build and deploy automatically
+	In-depth vulnerability scanning
+	Lock down risky images
+	
+Cloud Endpoints:
+	https://cloud.google.com/endpoints/docs/images/endpoints_arch.png
+	https://cloud.google.com/endpoints/docs/openapi/architecture-overview
+	https://cloud.google.com/endpoints/docs/grpc/transcoding
+	Makes way for deployment
+	Handles authorization, monitoring, logging, and API keys for APIs backed up by GCP
+	Similar to amazon api gateway
+	Proxy instances are distributed and hook into cloud load balancer
+	Super fast Extensible Service Proxy(ESP) container based on nginx: <1ms/call
+	Uses JWTs and integrates with Firebase, Auth0 and Google Auth
+	Integrates with Stackdriver logging and Stackdriver Trace
+	ESP can transcode HTTP/JSON to gRPS
+	Pay per call to API
+
+Apigee API Platform:
+	Full featured and enterprise-scale API mgmt platform for whole API lifecycle
+	Transform calls between different protocols: SOAP, REST, XML, binary, custom
+	Authenticate via OAuth/SAMP/LDAP, authorize via role-based access control
+	https://cloud.google.com/apigee/?authuser=1
+
+Test lab for Android:
+	Cloud infrastructure for running test matrix across variety of real Android devices
+	Similar to AWS Device Farm
+	Robo Tests:
+		Captures logs, saves screenshots, videos
+	We can run Espresso and UI Automator 2.0 instrumentation tests
+
+27. System of Services
+---
+27.1. Putting It All Together
+--
+
+https://gcp.solutions
+
+API Hosting
+
+CICD
+Developer --> Code Repository(DevTools) --> Jenkins[Master(Pod) --> Slave(Replication Controller)] --> Docker Images(Container Registry) 
+	--> Staging Env(Frontend(Replication Controller) --> Backend(Replication Controller) --> Ops and Quality
+	--> Production Environment(FE+BE) --> Enduser
+
+Log Processing
+Microservices(Container Engine) --> Log Collection
+	 --> Log Storage(Cloud Storage)
+										 --> Log Processing(Cloud Dataflow) --> Log Analysis(Big Query)	
+	 --> Log Streaming(Cloud Pub/Sub)
+
+Live Streaming
+Live Event --> Recording --> Encoding --> GCE[Streaming Server --> CDN]  --> Fastly(CDN) --> Browser Client
+													|									 --> Moble/Tablet Client
+													|									 --> Streaming Player
+													|
+												   \|/
+												Segment Storage
+
+28. Wrapping Up
+28.1. Milestone Almost There
+--
+NA
+
+29. Exam Preparation
+
+https://www.webassessor.com/wa.do?page=publicHome&branding=GOOGLECLOUD
+https://cloud.google.com/certification/faqs/
+https://cloud.google.com/certification/cloud-engineer
+https://cloud.google.com/certification/practice-exam/cloud-engineer
+
+
+29.1. Logistics
+--
+Planning:
+	120 minutes
+	50 Questions
+	125$
+	Place: Kryterion Testing Center or onsite at GC Next
+	MCQ: 4 Options
+	Multiple Answers
+	Fail once: 14 days wait 
+	Fail another: 60 days wait 
+	Fail another: 365 days wait
+	Message him on LinkedIn
+
+
+Official Practice Exam:
+	45 minutes
+	20 Questions
+	Free!
+	Online
+	Google Forms based UI
+	Questions similar to real exam
+	Repeatable
+	Appear before week of real exam
+
+
+Booking Exam:
+	Company
+	Reschedulable before 772 hours, then charged
+	No papers/notes
+
+Exam software:
+	Countdown timer on pages
+	flag for reviewing later
+	Responses can be changed
+	For multiple responses:
+		Can't move forward/backword with wrong number selected
+	
+Recertification
+	Validity: 2 Years
+	
+29.2. Final Prep
+--
+https://cloud.google.com/vpn/docs/concepts/overview
+
+Exam Tips:
+	Know Kubernetes well
+	Read best practices
+https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations
+	Best practices on containers
+https://cloud.google.com/solutions/best-practices-for-operating-containers	
+	OWASP Security Principles
+https://www.owasp.org/index.php/Security_by_Design_Principles
+	Review IAM Roles
+https://cloud.google.com/iam/docs/understanding-roles
+	GCP Pricing Calculator
+https://cloud.google.com/products/calculator/
+	Review GCloud Structure
+	Cloud Audit Logging
+https://cloud.google.com/logging/docs/audit/
+	
+Validation:
+	Reread exam guide, make sure you can do every task
+https://cloud.google.com/certification/guides/cloud-engineer
+	Reread official docs
+	GC Minute videos
+https://www.youtube.com/playlist?list=PLIivdWyY5sqIij_cgINUHZDMnGjVx3rxi
+	
+Repeat Practice exam
+	identify gaps
+	check all responses and understand all of them
+https://codelabs.developers.google.com/?cat=Cloud
+
+Summary
+	Identify Gaps
+		Exam guide
+		Course practice exam
+		student reports
+	Close Gaps
+		This Course
+		Official Docs
+		Official Videos
+		Exploration
+		CodeLabs
+
+29.3. Milestone Soaring
+--
+NA
+
+29.4. Thank You and Good Luck
+--
+https://acloud.guru/forums/gcp-certified-associate-cloud-engineer/discussion/-LHq7ia97ot7POrc6Nw7/exam_reports_thread
+
+32. But Wait, There's More!
+--
+1. Bonus Lecture
+--
+https://acloud.guru/courses
+https://acloud.guru/series/release-review
+https://acloud.guru/learn/aws-certification-preparation
+https://info.acloud.guru/team-cloud-technology-training
+https://acloud.guru/series/acg-projects
+https://acloud.guru/membership
+
+---------------------------------------------------------------
+
+Links:
+------
+2.1			-	exam guide	-	https://cloud.google.com/certification/guides/cloud-engineer/
+3.2.1		-	beyondcorp	-	https://cloud.google.com/beyondcorp/
+3.2.2		-	security	-	https://cloud.google.com/security/infrastructure/design/
+4.1			-	Price Calc	-	https://cloud.google.com/products/calculator/
+6.3			-	Status		-	https://status.cloud.google.com

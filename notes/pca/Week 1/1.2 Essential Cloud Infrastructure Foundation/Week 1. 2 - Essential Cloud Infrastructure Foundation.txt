@@ -1,0 +1,1349 @@
+X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X
+X-- Essential Cloud Infrastructure Foundation --X
+X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X--X
+
+* 1 Week course: 16-20 September
+* Course URL: Essential Cloud Infrastructure: Foundation : https://www.coursera.org/learn/gcp-infrastructure-foundation
+* Previous: : Google Cloud Platform Fundamentals: Core Infrastructure : https://www.coursera.org/learn/gcp-fundamentals
+* Next: Google Cloud Platform Fundamentals for AWS Professionals: https://www.coursera.org/learn/gcp-fundamentals-aws
+
+
+About This Course and the Cloud Architecture Specialization
+-----------------------------------------------------------
+
+Video: Essential Cloud Infrastructure: Foundation Course Intro
+---
+For cloud solution architects, DevOps engineers
+We'll see What GCP is
+
+------------------------------------------------------------------
+| Module 1: Introduction to Google Cloud Platform Infrastructure |
+------------------------------------------------------------------
+
+Google Cloud Training
+In this module we're going to briefly cover an overview of the Google Cloud Platform Infrastructure. Then, we're going to experiment and show you a little bit on how to get started using GCP.
+Learning Objectives
+Recall that GCP is a rich platform and there are often multiple methods to accomplish a goal.
+List the different ways of interacting with GCP.
+Recognize that the Cloud Console and Cloud Shell are flexible and adaptive interfaces.
+Create Cloud Storage buckets through the GCP Console and Cloud Shell.
+Use Cloud Launcher to deploy a server and administer the server through SSH.
+
+1.2 Video: Module Overview (Intro)
+--------------------------------
+TO understand what GCP is 
+
+1.3 Introduction to GCP
+---------------------
+
+1.3.1 Video: Google Cloud Platform (GCP) Infrastructure
+---
+C:\Users\pratik\Desktop\GCP\gcp\ECIF
+See Image: ECIF-1.3.1.jpg
+
+GCP
+	Google Cloud: Chrome, Devices, Gmail, Maps, Analytics, Search, GSuite
+	Google Cloud Ecosystem: Open-source softwares, Providers, Partners, Developers, Third-party software, Other cloud providers
+
+GCP is "Set of cloud based products and services that are continuously expanding"
+	It has more than one solution for requirement
+
+
+See Image: ECIF-1.3.2.jpg
+
+See Image: ECIF-1.3.3.jpg
+GCP Infra(4 parts):
+	Foundation
+		GCP Introduction
+		VPC Networking
+		VMs
+
+	Scaling and Automation
+		Interconnecting Networks
+		Load Balancing
+		Autoscaling
+		Infrastructure Automation with Cloud API
+		Infra Automation with Deployment Manager
+		Managed Services
+		
+	Core Services
+		Cloud IAM
+		Data Storage Services
+		Resource Management
+		Resource Monitoring
+
+	Containers and Services
+		Application Infrastructure Services
+		Application Development Services
+		Containers
+
+1.3.2 Video: Using GCP
+---
+Cloud Shell:
+	Ephemeral VM
+	gcloud and gsutil are preinstalled
+	SDK APIS are preinstalled
+	OS+SW is reconstituted:
+		After 30 minutes
+		in case of connection interruption
+
+Temporary Compute Engine VM
+Command-line access to the instance via a browser
+5 GB of persistent disk storage ($HOME dir)
+Pre-installed Cloud SDK and other tools
+gcloud: for working with Google Compute Engine and many GCP services
+gsutil: for working with Cloud Storage
+kubectl: for working with Google Container Engine and Kubernetes
+bq: for working with BigQuery
+Language support for Java, Go, Python, Node.js, PHP, and Ruby
+Web preview functionality
+Built-in authorization for access to resources and instances
+
+Cloud SDK: gsutil, gcloud, bq
+
+OAuth2 used for all modes of Authentication
+
+1.4. Module 1: Labs and Demos
+---------------------------
+
+1.4.1 Video: Lab 1: Console and Cloud Shell (Overview and Objectives)
+---
+Objectives:
+	Access to GCP
+	Create bucket using console
+	Create bucket using cloud shell
+	Cloud Shell features
+
+1.4.2 Video: Getting Started with Google Cloud Platform and Qwiklabs
+---
+ALready gone through in other course
+
+1.4.3 Graded External Tool: Graded External ToolLab 1: Console and Cloud Shell
+---
+Create bucket via console
+Create bucket via cloud shell
+Access all features of cloud shell
+copy local file on GCP -- copy GCP storage file in bucket: gsutil cp filename gs://bucket_id
+Environment Variables
+	cloud config set project qwiklabs-gcp-8b6434687fadc93a
+	gcloud compute regions list
+
+	MY_REGION=asia-east1
+	echo $MY_REGION
+	asia-east1
+
+	INFRACLASS_REGION=asia-east1
+	echo $INFRACLASS_REGION
+	asia-east1
+
+	mkdir infraclass
+	touch infraclass/config
+	echo INFRACLASS_REGION=$INFRACLASS_REGION >> ~/infraclass/config
+	INFRACLASS_PROJECT_ID=qwiklabs-gcp-8b6434687fadc93a
+	echo INFRACLASS_PROJECT_ID=$INFRACLASS_PROJECT_ID >> ~/infraclass/config
+	
+	Adding environment variables in .profile file will make them permanent ass cloud shell session lasts only 1 hour
+
+1.4.4 Video: Lab 1: Console and Cloud Shell (Review)
+---
+Just a review of what we did
+
+1.4.5 Video: Demo: Projects
+---
+	- Creating a project
+	- identiy current project
+		pratikaambani_gcp_user@cloudshell:~$ gcloud config list
+		[component_manager]
+		disable_update_check = True
+		[compute]
+		gce_metadata_read_timeout_sec = 5
+		[core]
+		account = pratikaambani.gcp.user@gmail.com
+		disable_usage_reporting = False
+		project =
+		[metrics]
+		environment = devshell
+	- gcloud config list | grep project
+	- Ideal way is storing project id in shell environment:
+		export PROJECT_ID_1=my-networking-playground-24807
+		pratikaambani_gcp_user@cloudshell:~ (my-networking-playground-24807)$ gcloud config set project $PROJECT_ID_1
+		Updated property [core/project].
+	switching between projects
+
+1.4.6 Video: Lab 2: Infrastructure Preview (Overview and Objectives)
+---
+Objectives:
+	- Use cloud launcher to build Jenkins CI Environment
+	- Verify that you manage services from Jenkins UI
+	- Administer the service from VM host through SSH
+
+1.4.7 Graded External Tool: Graded External ToolLab 2: Infrastructure Preview
+---
+
+Task 1: Use Marketplace to build a deployment
+Marketplace - Jenkins - Jenkins Certified by Bitnami - Launch on Compute Engine - Deploy
+
+Deployment Manager:
+	While clicked on Deploy, Deployment Manager is acquiring a virtual machine instance and installing and configuring software for you. You will see jenkins-1 has been deployed when the process is complete
+	Deployment Manager is a GCP service that uses templates written in a combination of YAML, python, and Jinja2 to automate the allocation of GCP resources and perform setup tasks. Behind the scenes a virtual machine has been created. A startup script was used to install and configure software, and network Firewall Rules were created to allow traffic to the service.
+
+Task 2: Examine the deployment
+
+	click More about the software to view additional software details. Look at all the software that was installed.
+	Copy the Admin user and Admin password values to a text editor. Admin user: user. Admin password: kQRP9CeHskXX
+	Click Visit the site: http://104.155.149.149/jenkins/ and Log in
+	Customize Jenkins - Click Install suggested plugins - click Restart
+	
+	click Manage Jenkins. Look at all of the actions 
+
+Task 3: Administer the service
+	Now you have seen that the software is installed and working properly. In the next task you will open an SSH terminal session to the VM where the service is hosted, and verify that you have administrative control over the service.
+	
+	Start SSH 
+	Shut down all services: sudo /opt/bitnami/ctlscript.sh stop
+	Jenkins is stopped now
+	Restart service: sudo /opt/bitnami/ctlscript.sh restart
+	Jenkins is up now
+
+Task 4: Review
+Just a review of what we did
+
+1.4.8 Video: Lab 2: Infrastructure Preview (Review)
+---
+Just a review of what we did
+
+1.5. Review
+---------
+
+1.5.1 Quiz: Module 1 Quiz
+---
+Done - 3 questions
+
+1.5.2 Video: Module 1 Review
+---
+Networking and Infra is next
+
+--------------------------------
+| Module 2: Virtual Networking |
+--------------------------------
+GCP uses a software defined network or STN. It's built on a global fibre infrastructure that makes GCP one of the world's largest and fastest networks. One way to view GCP is as a collection of network costed services. Thinking about resources as services rather than as hardware, will help you understand the options that are available and their behavior.
+
+* Objectives
+	Recall that a key distinguishing feature of networking in GCP is that network topology is not dependent on address layout.
+	Differentiate the three different types of networks offered in GCP (default, auto, custom).
+	Explain that firewall rules applied by tags enable advanced flexible access management.
+	Design a maintenance server to gain access to and verify internal connectivity to an application server.
+
+2.1 Overview
+------------
+
+2.1.1 Video: Module Overview (Intro)
+------------------------------
+VPN
+Projects, Networks, Subnetworks
+IP Addresses
+Routes and rules
+Billing
+Lab
+Common Network Designs
+Lab
+
+2.2 Virtual Networking
+----------------------
+
+2.2.1 Video: Google Cloud Platform (GCP) VPC
+-----
+With GCP VPC, you can provision your GCP resources, connect them to each other and isolate them from one another in a virtual private cloud. 
+You can also define fine-grained networking policies within GCP, and between GCP and on premises or other public clouds. 
+
+Networks come in three different flavors: 
+	default, auto mode and custom mode
+Subnetworks allow you to divide or segregate your environment. 
+Regions and zones represent Google's data centers and they provide continuous data protection and high availability. 
+VPC provides IP addresses for internal and external use along with granular IP address range selections. 
+
+2.2.2 Video: Projects, networks, and subnetworks
+-----
+Projects >> Network >> Subnetworks
+
+
+
+
+Projects:
+	Key organizer of infrastructure resources. 
+	Associates objects and services with billing. 
+	Projects actually contain entire networks, up to five networks per project. 
+	These networks do not have IP ranges, but are simply a construct of all of the individual IP addresses, or services that are within that network. 
+	
+Network:
+	GCP's networks are global, spanning all available regions across the world. 
+	So, you can have one network that literally exists anywhere in the world - Asia, Europe, Americas - all simultaneously. 
+	Inside of a network, you can segregate your resources with subnetworks. 
+	Three different types of networks: default, auto mode, and custom mode. 
+	While an auto mode network can be converted to a custom mode network, a custom mode network cannot be converted to anything else. 
+	Essentially, once custom always custom. 
+
+	Example:
+		Check Image: ECIF-2.2.2.1.jpg - How networks can isolate systems in GCP. 
+		On this slide we have an example of a project that contains five networks. 
+		All of these networks span multiple regions across the world as you can see on the right hand side. 
+		Each network contains separate virtual machines. 
+		Since VMs A and B are on the same network, Network one, they can communicate over internal IP addresses, even though they're in different regions. 
+		Essentially, your virtual machines, even if they exist in different locations across the world, take advantage of Google's global fibre network. 
+		Those virtual machines are going to appear as though they're sitting in the same rack when it comes to a Network Configuration Protocol. 
+		VMs C and D on the other hand, are not in the same network. Therefore, these VMs must communicate over external IPs, even though they're in the same region. 
+		The traffic between VMs C and D isn't actually touching the Internet, but is going through the Google Edge routers which has different billing and security ramifications that we're going to explore. 
+		
+		Check Image: ECIF-2.2.2.3.jpg
+		To better understand the slide, let me define regions and zones. 
+		A region is a specific geographical location where you can run your resources. Each region has one or more zones. 
+		For example, the US Central One region denotes a region in the central United States that has zones US Central 1A, US Central 1B, US Central 1C, and US Central 1F. 
+		This slide has a region, Region one, with two zones, Zone A, and Zone B. Subnetworks can extend across zones within the same region such as subnet-1. 
+		The subnet is simply an IP address range, so you can carve up IP addresses within that range. 
+		Notice that the first address in the range 10.0.0.1 is reserved for the router address. The last address in the range, 10.0.0.255, is reserved for the broadcast address. 
+		Even though the two virtual machines in this example are across different zones, they will still communicate with each other using the same subnet IP address. 
+		Essentially, a single firewall rule will apply to both VMs even though they are in different zones. 
+		
+		Check Image: ECIF-2.2.2.4.jpg
+		In an on-premises environment, you might design subnetworks in the traditional way that is based on the stacks of routers or switches within your environment. 
+		Essentially, a top-down hierarchy, as you can see on the right hand side, where you have a master network 10.0, and you've carved it up into your core switches and core routers specifically into 10.1 and 10.5. 
+		Each of these might represent different environments such as marketing, ERP, or development. 
+		In GCP, you just simply set up a network, and you create multiple subnets for marketing, ERP and development. 
+		As you can see, networks do not have IP ranges. So, subnetworks don't need to fit into an address hierarchy. 
+		While subnetworks can be used to manage resources, there are other ways of managing resources like Cloud IAM, labels, tags, and managed instance groups.
+
+2.2.3 Video: IP addresses #beforeExam
+-----
+In GCP, each virtual machine can get two IP addresses assigned. 
+	Internal : 
+		Which is going to be assigned via DHCP internally
+		Every VM that starts up and any service that depends on virtual machines gets an internal IP address. 
+			Example: Google App Engine and Kubernetes Engine. 
+		When you create VMs in GCP, their symbolic name is registered with an internal DNS service that translates the name to the internal IP address. 
+		DNS is scoped to the network, so it can translate web URLs and VM names of hosts in the same network, but it can't translate hostnames from VMs in a different network. 
+	
+	External :
+		Which is optional. 
+		Assign an external IP address if your device or machine is externally facing. 
+		That IP address can:
+			either be assigned from a pool, making it ephemeral, 
+			or it can be assigned a reserved external IP address, making it static. 
+		Note: You're billed for reserving external IP addresses even when they're not attached to a running VM. 
+		
+		The external IP address is mapped to the VM's internal address transparently by VPC. 
+		Regardless of whether you use an ephemeral or static IP address, the external address is unknown to the OS of the VM. 
+			Example: running "ifconfig" within a VM in GCP which only returns the internal IP address. 
+		
+		DNS Resolution:	
+			internal addresses: 
+				Each instance has a hostname that can be resolved to an internal IP address. 
+				This hostname is the same as the instance name. 
+				There are also internal FQDN for an instance that uses the format hostname.c.project-id.internal.
+					Example: guestbook-test.c.guestbook-151617.internal
+				If you delete and recreate an instance, the internal IP address can change. 
+				This change can disrupt connections from other Google Compute Engine resources, which must obtain the new IP address before they can connect again. 
+				However, the DNS name always points to a specific instance no matter what the internal IP address is. 
+				
+				Each instance has a metadata server that also acts as a DNS Resolver for that instance. The metadata server handles all DNS queries for local network resources and routes all other queries to Google's public DNS servers for public name resolution. 
+				Instance is not aware of any external IP address assigned to it. 
+				the network stores a look-up table that matches the external IP address with the internal IP address of the relevant instance
+				
+			external addresses: 
+				Instances with external IP addresses can allow connections from hosts outside of the project. 
+				Users can do so directly using the external IP address. 
+				Public DNS records pointing to instances are not published automatically. However, admins can publish these using existing DNS servers. 
+		
+		Google Cloud DNS:
+			Domain names can be hosted on GCP using Google Cloud DNS. 
+			This is a managed service that is definitely worth considering, if you don't want to create your own BIND server and another VM. 
+				
+		Alias IP Ranges:
+			Lets you assign a range of internal IP addresses as aliases to a virtual machine's primary network interface. 
+			This is useful if you have multiple services running on a VM and you want to assign each service a different IP address. 
+			You can configure multiple IP addresses representing containers or applications hosted on a VM without having to define a separate network interface. 
+			You just draw out the alias IP range from the local subnets primary or secondary CIDR ranges. 
+			This diagram provides a basic illustration of primary and secondary CIDR ranges and VM alias IP ranges. Configuring alias IP ranges describes commands for setting up a subnet with secondary ranges and for assigning alias IP addresses to VMs.
+
+2.2.4 Video: Routes and rules #beforeExam #uparThiGayu
+-----
+Route: Mapping of an IP Range to a destination
+
+Every network has:
+	Routes that let instances in network to send traffic directly to each other
+	Default route that directs packets to destinations that are outside the network
+
+Packet has a route to destination doesn't mean it will go there, firewall rules must allow the packet
+
+Check Image: ECIF-2.2.4.1.jpg
+Check Image: ECIF-2.2.4.2.jpg
+Check Image: ECIF-2.2.4.3.jpg
+Check Image: ECIF-2.2.4.4.jpg
+Now that we covered GCP networks at a high level, let's go deeper by exploring IP addresses. In GCP, each virtual machine can get two IP addresses assigned. One of them is an internal IP address, which is going to be assigned via DHCP internally. Every VM that starts up and any service that depends on virtual machines gets an internal IP address. Example of such services are Google App Engine and Kubernetes Engine which are explored in other courses. When you create VMs in GCP, their symbolic name is registered with an internal DNS service that translates the name to the internal IP address. DNS is scoped to the network, so it can translate web URLs and VM names of hosts in the same network, but it can't translate hostnames from VMs in a different network. The other IP address is the external IP address which is optional. In essence, you can assign an external IP address if your device or machine is externally facing. That IP address can either be assigned from a pool, making it ephemeral, or it can be assigned a reserved external IP address, making it static. Keep in mind that you're billed for reserving external IP addresses even when they're not attached to a running VM. Regardless of whether you use an ephemeral or static IP address, the external address is unknown to the OS of the VM. The external IP address is mapped to the VM's internal address transparently by VPC. I'm illustrating this here by running IF config within a VM in GCP which only returns the internal IP address. Let's explore this further by looking at DNS resolution for both internal and external addresses. Let's start with internal addresses. Each instance has a hostname that can be resolved to an internal IP address. This hostname is the same as the instance name. There are also internal fully qualified domain name{s}, or FQDN for an instance that uses the format hostname.c.project-id.internal as shown on the slide. If you delete and recreate an instance, the internal IP address can change. This change can disrupt connections from other Google Compute Engine resources, which must obtain the new IP address before they can connect again. However, the DNS name always points to a specific instance no matter what the internal IP address is. Each instance has a metadata server that also acts as a DNS Resolver for that instance. The metadata server handles all DNS queries for local network resources and routes all other queries to Google's public DNS servers for public name resolution. I previously mentioned that an instance is not aware of any external IP address assigned to it. Instead, the network stores a look-up table that matches the external IP address with the internal IP address of the relevant instance. Now let's look at external addresses. Instances with external IP addresses can allow connections from hosts outside of the project. Users can do so directly using the external IP address. Public DNS records pointing to instances are not published automatically. However, admins can publish these using existing DNS servers. Domain names can be hosted on GCP using Google Cloud DNS. This is a managed service that is definitely worth considering, if you don't want to create your own BIND server and another VM. Another networking feature of GCP is alias IP ranges. Alias IP ranges lets you assign a range of internal IP addresses as aliases to a virtual machine's primary network interface. This is useful if you have multiple services running on a VM and you want to assign each service a different IP address. In essence, you can configure multiple IP addresses representing containers or applications hosted on a VM without having to define a separate network interface. You just draw out the alias IP range from the local subnets primary or secondary CIDR ranges. This diagram provides a basic illustration of primary and secondary CIDR ranges and VM alias IP ranges. Configuring alias IP ranges describes commands for setting up a subnet with secondary ranges and for assigning alias IP addresses to VMs.
+
+2.2.5 Video: Billing
+-----
+Check Image: ECIF-2.2.5.1.jpg
+Check Image: ECIF-2.2.5.2.jpg
+Check Image: ECIF-2.2.5.3.jpg
+
+2.2.6 Video: Lab 1: Virtual Networking (Overview and Objectives)
+-----
+Check Image: ECIF-2.2.6.1.jpg
+Check Image: ECIF-2.2.6.2.jpg
+
+2.2.7 Graded External Tool: Graded External ToolLab 1: Virtual Networking
+-----
+
+Task 1: Create the network topology
+
+2c460cbe62017d3a.png
+
+Task 2: Create the VM instances
+
+e4e8f0bf4ac565ca.png
+
+Task 3: Work with routes and firewall rules
+
+5352a6e0c6f9aea5.png
+
+The scoping and connectivity relationships between zones, regions, networks, and subnets are different from networking in other public clouds.
+
+You have been provided with a project in Qwiklabs. The project ID is a unique name across all Google Cloud projects. It is referred to later in this lab as PROJECT_ID.
+
+Note: In most labs in this class, you choose any region and any zone for the purposes of the lab. In this lab, you are given specific regions and zones because you will construct and explore very specific networking relationships.
+
+Before you click the Start Lab button
+Read these instructions. Labs are timed and you cannot pause them. The timer, which starts when you click Start Lab, shows how long Cloud resources will be made available to you.
+
+This Qwiklabs hands-on lab lets you do the lab activities yourself in a real cloud environment, not in a simulation or demo environment. It does so by giving you new, temporary credentials that you use to sign in and access the Google Cloud Platform for the duration of the lab.
+
+What you need
+To complete this lab, you need:
+
+Access to a standard internet browser (Chrome browser recommended).
+Time to complete the lab.
+Note: If you already have your own personal GCP account or project, do not use it for this lab.
+
+Task 1: Create the network topology
+Explore the default network
+The default network is created automatically for you with each new project. The default network layout is not ideal for managing resources. The main benefit is that it is a fast way to get a project set up and running. The default network is great for prototyping solutions and for training purposes.
+
+In the Google Cloud Platform (GCP) Console, on the Navigation menu (7a91d354499ac9f1.png), click VPC network > VPC networks.
+Notice the default network. It was created automatically for you with a subnetwork in each region.
+
+Example:
+
+asia-east1 | default | 10.140.0.0/20 | 10.140.0.1
+
+For more information, see:
+
+IP Addresses: https://cloud.google.com/compute/docs/ip-addresses/
+
+Subnets and CIDR ranges: https://cloud.google.com/compute/docs/alias-ip/#subnets_and_cidr_ranges
+
+In the left pane, click Routes.
+Notice that a route was created for each subnetwork, and one global route was created to enable traffic to the internet.
+
+Create an auto-mode network and subnets
+In the left pane, click VPC networks.
+Click Create VPC network.
+Specify the following:
+Property	Value (type value or select option as specified)
+Name	learnauto
+Description	Learn about auto-mode networks
+Subnet creation mode	Automatic
+When you click Automatic, the list of subnetworks to be created is automatically displayed.
+
+For Firewall rules, select all listed firewall rules.
+At the bottom of the page are two links labeled Equivalent REST or command line. Click REST to see POST commands for API programming automation of this process.
+Click Close.
+Click command line to see commands you could use for automation of this process. You could use these commands to create the network by clicking RUN IN CLOUD SHELL—but don't do it.
+Note: These commands tend to include options that are not required. They may not work in a bash script without being altered. Don't rely on them. You should consider these more of a suggestion. If you need to automate with scripts, plan to craft your own commands from examples in the documentation.
+
+Click Close.
+
+Click Create.
+
+Click REFRESH occasionally until the networks are created and appear in the list.
+
+Explore the auto-mode network
+In the left pane, click Routes.
+Notice that a route has been created for each subnetwork, and one route was created to enable traffic from anywhere, including the internet. Traffic is delivered via the most specific matching route: traffic intended for any of the listed subnets gets delivered via virtual network to the host. These routes take precedence over the route that matches all traffic.
+
+Click Destination IP ranges to sort the list of routes.
+Notice that there is an identical subnetwork and route in the learnauto network as there is in the default network. It is possible to have VMs with duplicate Internal IP addresses in the two networks.
+
+In the left pane, click Firewall rules.
+Verify that firewall rules were created for the learnauto network and its subnetworks.
+
+If you delete your default network, you can always recreate it as an auto network using the name "Default."
+
+Create a custom-mode network
+In this subtask, you create a custom-mode network named learncustom with three subnetworks:
+
+(subnet-1a) 192.168.5.0/24
+(subnet-1b) 192.168.3.0/24, in the same region
+(subnet-2) 192.168.7.0/24 in a different region
+513cf3e1aae95e8a.png
+
+In the left pane, click VPC networks.
+Click Create VPC network.
+Specify the following:
+Property	Value (type value or select option as specified)
+Name	learncustom
+Description	Learn about custom networks
+Subnet creation mode	Custom
+Use the dialog to add three subnets as follows.
+
+For the first subnet, specify the following:
+Property	Value (type value or select option as specified)
+Name	subnet-1a
+Region	us-central1
+IP address range	192.168.5.0/24
+Click Add subnet.
+For the second subnet, specify the following:
+Property	Value (type value or select option as specified)
+Name	subnet-1b
+Region	us-central1
+IP address range	192.168.3.0/24
+Click Add subnet.
+For the third subnet, specify the following:
+Property	Value (type value or select option as specified)
+Name	subnet-2
+Region	us-west1
+IP address range	192.168.7.0/24
+Click Create.
+
+Explore the routes and firewall rules
+Did creating the custom network automatically create routes?
+
+In the left pane, click Routes.
+Click Network in the table header to sort by network name. Routes should be displayed for each subnetwork.
+Did creating the custom network automatically create firewall rules?
+
+In the left pane, click Firewall rules.
+
+Click Network in the table header to sort by network name. No default firewall rules were created for the custom network. You will have to manually add default rules in the next step.
+
+Create firewall rules for the learncustom network
+Notice that for the other networks, the default network and the learnauto network, GCP automatically created default firewall rules allowing SSH traffic (tcp:22), icmp traffic, and rdp (tcp:3389) traffic for Windows VMs. Add a firewall rule to provide the same access for the learncustom network.
+
+Click Create firewall rule.
+Specify the following, and leave the remaining settings as their defaults:
+Property	Value (type value or select option as specified)
+Name	allow-ssh-icmp-rdp-learncustom
+Network	learncustom
+Target tags	allow-defaults
+Source IP ranges	0.0.0.0/0
+Protocols and ports	Specified protocols and ports
+For tcp, specify ports 22 and 3389.
+
+Specify the icmp protocol.
+
+Make sure that the source filter address includes the final "/0". If you specify 0.0.0.0 instead of 0.0.0.0/0, the filter defaults to 0.0.0.0/32, which is an exact host address that doesn't exist.
+
+Click Create.
+Click Check my progress to verify the objective.
+Create the network topology
+
+Create an overlapping subnet
+In this subtask, you attempt to modify the network by adding a subnet with an overlapping address range but in a different region. What do you predict will happen?
+
+In the left pane, click VPC networks.
+Click learncustom.
+Click Add subnet.
+Specify the following, leaving all other values with their defaults:
+Property	Value (type value or select option as specified)
+Name	subnet-3
+Region	europe-west1
+IP address range	192.168.5.0/24
+The IP address range label is displayed in red with the following error message: "This IP address range overlaps with a subnet you already added. Enter an address range that doesn't overlap."
+
+Click CANCEL.
+
+Task 2: Create the VM instances
+To explore the Cloud Virtual Network, you create five micro VMs in different locations in the network. You will not install any additional software on them. They will not run any applications. You will just use them to explore the connectivity across the topologies in the network.
+
+e4e8f0bf4ac565ca.png
+
+Name	Network	Region	Zone
+learn-1	default	us-west1	us-west1-a
+learn-2	learnauto	us-west1	us-west1-a
+learn-3	learncustom	us-central1	us-central1-a
+learn-4	learncustom	us-central1	us-central1-b
+learn-5	learncustom	us-west1	us-west1-a
+Create the learn-1 VM
+On the Navigation menu (7a91d354499ac9f1.png), click Compute Engine > VM instances.
+Click Create.
+Specify the following, and leave the remaining settings as their defaults:
+Property	Value (type value or select option as specified)
+Name	learn-1
+Region	us-west1
+Zone	us-west1-a
+Machine type	micro (1 shared vCPU)
+Click Management, security, disks, networking, sole tenancy to access the advanced options.
+
+Click Networking. The default network interface should already be selected.
+
+Click Create.
+
+Create the learn-2 VM
+Click Create instance.
+Specify the following, and leave the remaining settings as their defaults:
+Property	Value (type value or select option as specified)
+Name	learn-2
+Region	us-west1
+Zone	us-west1-a
+Machine type	micro (1 shared vCPU)
+Click Management, security, disks, networking, sole tenancy to access the advanced options.
+Click Networking.
+Click the pencil icon to edit Network interfaces.
+Specify the following, and leave the remaining settings as their defaults:
+Property	Value (type value or select option as specified)
+Network	learnauto
+Subnetwork	learnauto
+Click Done.
+
+Click Create.
+
+Create the learn-3 VM
+Click Create instance.
+Specify the following, and leave the remaining settings as their defaults:
+Property	Value (type value or select option as specified)
+Name	learn-3
+Region	us-central1
+Zone	us-central1-a
+Machine type	micro (1 shared vCPU)
+Click Management, security, disks, networking, sole tenancy to access the advanced options.
+Click Networking.
+Click the pencil icon to edit Network interfaces.
+Specify the following, and leave the remaining settings as their defaults:
+Property	Value (type value or select option as specified)
+Network	learncustom
+Subnetwork	subnet-1a
+Click Done.
+
+Click Create.
+
+Create the learn-4 VM
+Click Create instance.
+Specify the following, and leave the remaining settings as their defaults:
+Property	Value (type value or select option as specified)
+Name	learn-4
+Region	us-central1
+Zone	us-central1-b
+Machine type	micro (1 shared vCPU)
+Click Management, security, disks, networking, sole tenancy to access the advanced options.
+Click Networking.
+Click the pencil icon to edit Network interfaces.
+Specify the following, and leave the remaining settings as their defaults:
+Property	Value (type value or select option as specified)
+Network	learncustom
+Subnetwork	subnet-1b
+Click Done.
+
+Click Create.
+
+Create the learn-5 VM
+Click Create instance.
+Specify the following, and leave the remaining settings as their defaults:
+Property	Value (type value or select option as specified)
+Name	learn-5
+Region	us-west1
+Zone	us-west1-a
+Machine type	micro (1 shared vCPU)
+Click Management, security, disks, networking, sole tenancy to access the advanced options.
+Click Networking.
+Click the pencil icon to edit Network interfaces.
+Specify the following, and leave the remaining settings as their defaults:
+Property	Value (type value or select option as specified)
+Network	learncustom
+Subnetwork	subnet-2
+Click Done.
+
+Click Create.
+
+Verify that all the test VMs are running
+On the VM instances page, verify that all 5 instances are running.
+Click Check my progress to verify the objective.
+Create the VM instances
+
+Task 3: Work with routes and firewall rules
+In this task, you connect via SSH to the VMs and use ping to test connectivity between VMs. This helps you understand how the Cloud Virtual Network topology behaves.
+
+Google Cloud Platform (GCP) Virtual Private Cloud (VPC) networks have an internal DNS service that allows you to use instance names instead of instance IP addresses to refer to Compute Engine virtual machine (VM) instances.
+
+Each instance has a metadata server that also acts as a DNS resolver for that instance. DNS lookups are performed for instance names. The metadata server itself stores all DNS information for the local network and queries Google's public DNS servers for any addresses outside of the local network.
+
+An instance is not aware of any external IP address assigned to it. Instead, the network stores a lookup table that matches external IP addresses with the internal IP addresses of the relevant instances.
+
+To break out of the ping command at any time, press Ctrl+C.
+
+ping from learn-1 and learn-2
+On the VM instances page, for learn-1, click SSH.
+
+Run the following command:
+
+ping learn-1
+
+Notice how DNS translates for you. This should execute and display no packet loss.
+
+Now try to reach learn-2:
+
+ping learn-2
+
+Can you explain why this fails?
+
+It is because DNS is scoped to network. The VM learn-2 is not in the default network where learn-1 is located. So the symbolic name can't be translated.
+
+Locate the internal IP address and the external IP address for learn-2.
+
+Try to ping learn-2's internal IP address:
+
+ping <learn-2's internal IP>
+
+Did this work?
+
+In a few cases you may try to ping the internal IP of the other machine and it succeeds! Do you know why this would be the case?
+
+Because ... the internal IP of the machine you are using could be the same as the internal IP of the VM in the other network. In this case, the ping would succeed because you are actually pinging your own local VM's interface, not the one on the other VM in the other network. You can't ping an internal IP address that exists in a separate network than your own.
+
+When you create a new auto-mode network, the IP ranges will be identical to the ranges in the default network. The first address in the range is always reserved for the gateway address. So it is actually likely that the first VM in a zone will have the same address as the first VM in the corresponding zone in another network.
+
+If it didn't work... learn-1 is in the default network and learn-2 is in the learnauto network. Even though both VMs are located in the same region, us-west1, and in the same zone, us-west1-a, they cannot communicate over internal IP.
+
+Try to ping learn-2's external IP address:
+
+ping <learn-2's external IP>
+
+This works.
+
+traceroute from learn-1
+From the learn-1 SSH terminal, install traceroute:
+
+sudo apt-get install traceroute
+
+Verify that traceroute is working by tracing the route to a public website:
+
+sudo traceroute google.com -I
+
+Did it work? Yes.
+
+Now use traceroute to find the path to learn-2's external IP:
+
+sudo traceroute <learn-2's external IP> -I
+
+ping to learn-3
+You already know that learn-3 is in a different network from learn-1, so the internal IP for learn-3 will not be reachable.
+
+Try to ping learn-3's external IP address:
+
+ping <learn-3's external IP>
+
+Press Ctrl+C to stop the command.
+Why didn't this work? You were able to reach learn-2's external IP; why not learn-3's?
+
+Recall that learn-2 is in an auto-mode network, so firewall rules were automatically created that enabled ingress traffic to reach its external IP. However, learn-3 is in a custom-mode network, and no firewall rules were established. You created a firewall rule to permit access.
+
+Take another look at that firewall rule.
+
+In the GCP Console, on the Navigation menu (7a91d354499ac9f1.png), click VPC network > Firewall rules.
+Notice that the default firewall rules were established to apply to all targets. You created the firewall rule with tighter security. It will only permit traffic to VMs that have the Target tag allow-defaults.
+
+On the Navigation menu (7a91d354499ac9f1.png), click Compute Engine > VM instances.
+
+Click learn-3 to access details about the VM.
+
+Click edit.
+
+For Network tags, type allow-defaults.
+
+Click Save.
+
+Return to the SSH terminal for learn-1 (or reconnect if needed).
+
+Try again to ping learn-3's external IP address:
+
+ping <learn-3's external IP>
+
+The firewall rule and network tags can take time to take effect; if the last step didn't work, wait a few minutes and try again.
+
+Edit the firewall rule
+You already know that learn-3 is in a different network from learn-1, so the internal IP for learn-3 will not be reachable.
+
+Open an SSH terminal to learn-3.
+
+Try the following:
+
+ping learn-4
+ping learn-5
+sudo apt-get install traceroute
+sudo traceroute learn-5 -I
+
+Can you explain all the behaviors?
+
+DNS translation works for both learn-4 and learn-5 because all of these VMs are in the same network as learn-3, the learncustom network. Pinging the IP addresses will work after the firewall rules have been added.
+
+In the GCP Console, in the left pane, click VM instances.
+Try to connect via SSH to learn-4.
+The firewall rule for the learncustom network only delivers traffic to VMs with the target tag allow-defaults.
+
+In the GCP Console, on the Navigation menu (7a91d354499ac9f1.png), click VPC network > Firewall rules.
+
+Click allow-ssh-icmp-rdp-learncustom to access the firewall rule details.
+
+Click Edit.
+
+For Targets, click All instances in the network.
+
+Click Save.
+
+Try the commands again:
+
+ping learn-4
+ping learn-5
+sudo apt-get install traceroute
+sudo traceroute learn-5 -I
+
+Everything should work this time.
+
+Verify that you can now connect via SSH to learn-4.
+
+Convert an auto-mode network to a custom-mode network
+In this section, you convert an auto-mode network to a custom-mode network to gain more fine-grained control over the subnetworks.
+
+A new policy for network learnauto will be implemented. There will no longer be assets in us-central1 region. New projects instead shift planned assets from us-central1 to a new subnetwork in us-west1 region named new-uswest.
+
+To implement the policy, you delete the learnauto us-central1 subnetwork and create the new subnetwork in us-west1 to allow for the work that was originally planned for the us-central1 region.
+
+In the GCP Console, in the left pane, click VPC networks.
+Click learnauto to view network details.
+Notice that there is no option to select the subnets. You can only delete the entire network.
+
+You can't delete the subnetwork because this network is an auto-mode network. You will have to convert it to a custom-mode network to gain the ability to delete the subnetwork.
+
+Return to the VPC networks page.
+
+For learnauto, in the Mode column, switch from Auto to Custom.
+
+In the confirmation dialog, click OK.
+
+Delete the learnauto subnet and create a new subnet
+Click learnauto to view network details.
+Click learnauto for the us-central1 subnet.
+Click Delete subnet.
+In the confirmation dialog, click Delete.
+Reflecting the new tighter policies, the new subnetwork is CIDR /26. How many VMs can that support?/26 = 64 addresses, minus broadcast, subnet, and gateway = 61 VMs.
+
+Return to the VPC networks page and click learnauto to return to the network details.
+Click Add subnet.
+Specify the following, and leave the remaining settings as their defaults:
+Property	Value (type value or select option as specified)
+Name	new-uswest
+Region	us-west1
+IP address range	10.133.5.0/26
+Click Add.
+Click Check my progress to verify the objective.
+Convert an auto-mode network to a custom-mode network and create a new subnet
+
+Expand a subnet
+The projects in the new-uswest subnet have been a success; however, the original range of /26 was too restrictive. Expand the subnet to support at least 500 VMs.
+
+In the left pane, click VPC networks.
+
+Click learnauto to view network details.
+
+On the Google Cloud Platform menu, click Activate Cloud Shell (d587b8a4aba3880f.png)to open Cloud Shell. If prompted, click Start Cloud Shell.
+
+To increase the address range, run the following command:
+
+gcloud compute networks subnets \
+expand-ip-range new-uswest  \
+--prefix-length 23 \
+--region us-west1
+
+When prompted, type Y to continue.
+
+There is no refresh button on the VPC network details page to see the result; in the left pane, click VPC networks.
+
+Click Refresh until you see that the range has expanded.
+
+Delete resources that are no longer needed
+If you end the lab now, the lab infrastructure will clean up and delete all the resources. However, in this section, you delete objects so that you can explore the dependent relationship in deleting. Objects must be deleted in a specific order. Before you can delete networks and subnets, you must delete all VMs and firewall rules.
+
+On the Navigation menu (7a91d354499ac9f1.png), click Compute Engine > VM instances.
+Select all the VMs, and then click Delete.
+In the confirmation dialog, click Delete.
+On the Navigation menu (7a91d354499ac9f1.png), click VPC network > Firewall rules.
+Delete all firewall rules that are part of the learnauto and learncustom networks.
+In the left pane, click VPC networks.
+Click learncustom to view network details.
+Click Delete VPC network.
+In the confirmation dialog, click Delete.
+Repeat steps 7–9 for the learnauto network.
+Do not delete the Default network.
+
+Review the delete project procedure
+You do not have the IAM role necessary to delete the project. The following steps illustrate what the activity would look like if you could perform it.
+
+However, if you were to delete the project, the process would look like this:
+
+In the Console, navigate to Navigation menu > IAM & admin > Settings.
+
+Click Delete Project.
+
+To shut down the project, you would need to type in the Project ID and click Shut down.
+
+Task 4: Review
+In this lab you created networks and subnetworks of many different varieties, started VMs in each location, and then explored the network relationship between them.
+
+End your lab
+When you have completed your lab, click End Lab. Qwiklabs removes the resources you’ve used and cleans the account for you.
+
+You will be given an opportunity to rate the lab experience. Select the applicable number of stars, type a comment, and then click Submit.
+
+The number of stars indicates the following:
+
+1 star = Very dissatisfied
+2 stars = Dissatisfied
+3 stars = Neutral
+4 stars = Satisfied
+5 stars = Very satisfied
+You can close the dialog box if you don't want to provide feedback.
+
+For feedback, suggestions, or corrections, please use the Support tab.
+
+Last Tested Date: August 09, 2019
+
+Last Updated Date: August 09, 2019
+
+Copyright 2019 Google LLC All rights reserved. Google and the Google logo are trademarks of Google LLC. All other company and product names may be trademarks of the respective companies with which they are associated.
+
+
+
+2.2.8 Video: Lab 1: Virtual Networking (Review)
+-----
+Just a review
+
+
+2.3 Common Network Designs
+--------------------------
+2.3.1 Video: Common network designs
+-----
+Projects >> Networks >> Subnetworks >> Regions >> Zones
+How do all these elements work together? 
+
+Availability:
+	One subnetwork: Simplified security
+	Multiple zones: Increased availability
+
+Globalization:
+	Multiple regions
+	Increased availability through globalization
+	Subnetworks cannot span regions
+	No security
+
+Cross project VPC Network peering
+	Multiple projects
+	Multiple networks
+
+Bastion host isolation
+	Instance used as jump host
+	
+NAT Gateway host isolation
+
+2.3.2 Video: Lab 2: Bastion Host (Overview and Objectives)
+-----
+
+Create Bastion Host
+
+Create App web server to represent a service 
+
+1.23.195.66
+
+You restricted access to the webserver VM by removing the external IP address.
+
+You created a bastion host named bastion to gain access to the webserver VM over its internal IP. Normally, you would harden the bastion host by restricting the source IPs that can access the bastion host, by editing the firewall rules just as you did earlier in this lab. When you're not using the bastion host, you can shut it down.
+
+2.3.3 Graded External Tool: Graded External ToolLab 2: Bastion Host
+-----
+Done
+
+2.3.4 Video: Lab 2: Bastion Host (Review)
+-----
+Just review
+
+2.4 Review
+----------
+2.4.1 Quiz: Module 2 Quiz
+-----
+Done - 3 questions
+2.4.2 Video: Module 2 Review
+-----
+Done
+
+
+------------------------------
+| Module 3: Virtual Machines |
+------------------------------
+Virtual machine instances, or VMs, are the most common infrastructure component. They're provided by part of GCP called Compute Engine.
+
+* Objectives:
+	Explain that in Compute Engine, a VM is a networked service that simulates the features of a computer (with metadata, images, persistent disks, IP addresses, and virtual CPUs).
+	Recognize the boundaries for separation and isolation within the network and services.
+	Explain inferred instance discounting.
+	Recall that persistent disks are encrypted by default.
+	Use Compute Engine to create and customize VM instances.
+
+
+3.1 Overview
+------------
+
+3.1.1 Video: Module Overview (Intro)
+-----
+VM:
+	VM is similar to, but not identical to a hardware computer. 
+	VMs consists of virtual CPU, some amount of memory, disk storage, and an IP address. 
+
+Compute Engine:
+	Compute Engine is very flexible and offers many options including some that can't actually exist in hardware. 
+	Examples:
+		A micro VM uses a CPU that it shares with other virtual machines enabling you to get a VM with less capacity at a lower cost. 
+		Some VMs offer "burst capability," meaning that the virtual CPU would run above its rated capacity for a brief period using the available, shared physical CPU. 
+		The main VM options are CPU, memory, and disks
+
+Steps:
+	basics of Compute Engine
+	lab: creating virtual machines
+	different CPU and memory compute options that enable you to create different configurations
+	Images and the different disk options available with Compute Engine
+	Compute Engine actions
+	lab: that explores many of the features and services covered in this module
+
+
+3.2 Compute Engine
+------------------
+
+3.2.1 Video: Compute Engine
+-----
+Check Image: ECIF-3.2.1.1.jpg
+
+Compute Engine:
+	IaaS
+	Predefined or custom machine types:
+		Options to choose: 
+			vCPUs and Memory
+			Disks: HDD, SSD, Local SSD
+			Networking
+			Linux or Windows
+
+Compute:
+	Provides number of machine types: HIGH CPU, Memory, Standard, shared core machine types
+	
+	Network throughput scales at 2Gb/vCPU
+	Max throughput of 16 Gb or 8 vCPU
+	
+	A vCPU == 1 hyperthreaded core
+	2 vCPU == 1 Physical core
+	
+
+Storage:
+	
+	Persistent Disks:
+		Standard, SSD, local SSD
+		Standard and SSD PDs scale in performance for each GB of space allocated
+
+	Resize disks, migrate instance doesn't require downtime
+
+Networking:
+	Robust features
+	inbound/outbound firewall rules:
+		IP based
+		Instance tags
+	Regional HTTPS LB
+	Network LB
+		Doesn't require prewarming
+	Global and multi-regional subnetworks
+
+3.2.2 Video: Demo: Compute Engine
+-----
+
+Compute Engine - Create -
+	machine types: micro, customize
+	boot disks:
+		SSD Persistent Disk
+		Standard Persistent Disk
+	Expand Mgmt
+		Disks: 
+			additional disks
+				create disk - all 3 types: Local SSD/SSD/Std
+			Size: 100GB - estimation
+
+3.2.3 Video: Pricing and discounts
+-----
+
+Price per billing(minimum 1 minute), sustained user discounting
+
+Preemptible instances:
+	lives most 24 hours
+	Can be preempted with 30 second notification via API
+	upto 80% discount
+	
+We can customize amount of memory and CPU
+
+VM Charges and discounts:
+	billied for minimum 1 minute
+	per second charges
+	lower price for preemptible instances
+	Scaled discounts on sustained use
+	Committed use discounts
+	Always free usage quotas
+	
+3.2.4 Video: VM access and lifecycle
+-----
+Linux:SSH
+	from console
+	requires firewall to allow 22 port
+	SSH from computer: third party client and generate key pair
+
+Windows:RDP
+	requires Windows password
+	requires firewall to allow 3389 port
+	RDP Clients
+		chrome extension, 3rd party apps
+		Linux freerdp, remmina
+	Powershell terminal
+	
+VM Lifecycle
+Check Image: ECIF-3.2.4.jpg
+
+Changing VM state from running
+reset
+restart
+reboot
+stop
+shutdown
+delete
+preemption
+
+Availability Policy: Automatic changes
+
+	Automatic restart
+	On host maintenance
+	Live migration
+
+Terminated VM
+	No charge for stopped VM
+	
+	Actions:
+		Change machine type
+		Add/Remove attached disks, change auto delete settings
+		Modify instance tags
+		Modify custom VM or project wide metadata
+		Remove/Set new static IP
+		Modify VM availability policy
+
+		Can't change image of a stopped VM
+
+3.2.5 Video: Lab 1 Creating Virtual Machines (Overview and Objectives)
+-----
+
+Objectives:
+	Create several standard VMs
+	Create advanced VMs
+	
+3.2.6 Graded External Tool: Graded External ToolLab 1 Creating Virtual Machines
+-----
+Done
+
+
+3.3 Working with Virtual Machines
+---------------------------------
+
+3.3.1 Video: Compute options
+-----
+
+Creating VM:
+	Console,
+	Shell,
+	REST
+	
+Machine Types:
+	Standard
+	High Memory
+	High CPU
+	Shared Core:
+		F1 Micro
+		G1 small
+		
+Heavy discounts on custom machines
+
+Preemptible instance:
+	Lower price
+	Terminated anytiime
+		no charge if terminated in 10 minutes
+		24 hours max
+		Only 30 sec terminate warning
+	No live migrate, no auto restart
+	
+3.3.2 Video: Images
+-----
+Contents of image:
+	Boot loader
+	OS
+	File system structure
+	SW
+	Customization
+
+Image Storage:
+	Tar and gzip file
+	private area of cloud storage managed by the image service
+
+Types:
+	Public: 
+		Google, 3rd party, premium images
+		Linux:
+			CentOS, CoreOS, Debian, RHEL, SUSE< Ubuntu, openSUSE, FreeBSD
+		Windows:
+			Windows server 2016, 2016-r2, 2008-r2
+	Custom: 
+		from VM: preconfigured and installed SW
+		Import from op-prem, workstation, another cloud
+		Management features:
+			image sharing
+			image family
+			deprecation
+	
+You also have the option of importing images from your own premises or workstation or from another cloud provider. 
+This is a no cost service that is as simple as installing an agent.
+
+3.3.3 Video: Disk options
+-----
+
+Boot Disk:
+	Vm comes with single persistent disk
+	Image is loaded onto root disk during first boot
+		Bootable: You can attach to a VM and boot from it
+		Durable: can survive VM terminate
+	Some OS images are customized for Compute Engine
+
+Persistent Disk:
+	Attached to VM through network interface
+	Durable storage: can survive VM terminate
+	Bounded to zone: cant be moved between zones
+	Bootable: You can attach to a VM and boot from it
+	Snapshots: incremental backups
+	
+	Features:
+		HDD or SSD options
+		Dynamically resizing: even running and attached
+		van be attached in readonly mode to multiple VMs
+		Checksum builtin,
+		
+Local SSDs:
+	Physically attached to VM - not available on shared core
+		more IOPS, lower latency, higher throughput than persistent disk
+		SCSI or NVMe interface
+			NVMe requires NVMe-enabled image
+			NVMe is faster than SCSI
+	375-GB disk upo 8, total of 3TB
+	upto 680K read IOPS and upto 360 IOPS
+	Data survives a reset but not a VM stop or terminate
+		VM-specific, cannot be reatteched to a different VM
+	Can use your own encryption keys
+
+RAM Disk:
+	tmpfs: if we wanna store data in-memory
+	Faster than local disk, slower than memory
+	Very volatile - erase on stop or restart
+	May need a larger machine type if RAM was sized for the applicationUse persistent disk to backup RAM disk data
+	
+Disk options:
+	Check Image: ECIF-3.3.3.jpg
+
+Maximum Disks
+
+Number of Cores			Disk Number Limit
+Shared core				16
+1 core					32
+2-4 cores				64
+8+ cores				128
+
+
+Persistent disk management differences
+
+Cloud Persistent Disk									Computer Hardware Disk
+---------------------									-----------------------
+Single file system is best								Partitioning
+Resize(grow) disks										Repartition disk
+resize file system										Reformat
+Built-in redundancy										Redundant disk arrays
+	built in snapshot service							Subvolume management ans snapshots
+Automatic encryption prior to write-use your keys		Encrypt files before write to disk
+
+3.3.4 Video: Common Compute Engine actions
+-----
+
+Moving an instance to new zone:
+	Moving within region:
+		Automatic process
+		gcloud compute instances move
+		update references to VM, not automatic
+	Moving between regions:
+		Snapshot all persistent disks on source VM
+		Create new persistent disks in destination zone restored from snapshots
+		Create new VM in destination zone and attach new persistent disks
+		Assign static IP to new VM
+		Update references to VM
+		Delete snapshot, original disks, and original VM
+		
+Snapshot:
+	To backup critical data into a durable storage solution to meet application, availability and recovery requirements. 
+	These snapshots are stored in cloud storage
+	Snapshots can also be used to migrate data between zones. 
+	This can also be used to simply transfer data from one zone to another. 
+		Example: you might want to minimize latency by migrating data to a drive that can be locally attached in the zone where it is used. 
+		Example: To transfer data from a standard HDD persistent disk to a SSD persistent disk, to improve disk performance
+	
+Persistent disk snapshots:
+	Snapshots are available only to persistent disks and not to local SSDs. 
+	Snapshots are different from public images and custom images, which are used primarily to create instances or configure instance templates, in that snapshots are useful for periodic backup of the data on your persistent disks. 
+	Snapshots are incremental and automatically compressed, so you can create regular snapshots on a persistent disk faster and at a much lower cost than if you regularly created a full image of the disk. 
+	This is the safest and most reliable way to ensure that your disk buffers are cleared which improves snapshot consistency. 
+	Specifically, when connected to your instance using SSH, stop any applications that are reading or writing data to the persistent disk and either freeze a file system or unmount the file system. To freeze, use the command, sudo fsfreeze and to unmount, use sudo unmount as shown on the slide. 
+	
+Resize persistent disk:
+	The main benefit of increasing storage capacity is to improve I/O performance 
+	This can be achieved while the disk is attached to a running VM without having to create a snapshot. 
+	While you can grow disks in size, you can never shrink them
+
+3.3.5 Video: Lab 2 Working with Virtual Machines (Overview and Objectives)
+-----
+
+Objectives:
+	Setup application server
+	install and configure software
+	configure network access
+	Schedule regular backups
+
+3.3.6 Graded External Tool: Graded External ToolLab 2 Working with Virtual Machines
+-----
+
+3.3.7 Video: Lab 2 Working with Virtual Machines (Review)
+-----
+
+----------
+3.4 Review
+----------
+
+3.4.1 Quiz: Module 3 Quiz
+-----
+Done - 3 questions
+
+3.4.2 Video: Module 3 Review
+-----
+Done
+
+3.4.3 Video: Essential Cloud Infrastructure: Foundation Course Outro
+-----
+Done
